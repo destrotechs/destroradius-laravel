@@ -139,6 +139,7 @@ class userController extends Controller
         $c->type=$request->get('type');
         $c->name=$request->get('name');
         $c->email=$request->get('email');
+        $c->cleartextpassword=$request->get('password');
         $c->gender=$request->get('gender');
         $c->created_by=Auth::user()->email;
 
