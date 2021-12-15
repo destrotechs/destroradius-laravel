@@ -10,7 +10,7 @@
                 <hr>
                 <div class="loader" id="ld">
                     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <!-- <span class="visually-hidden">Loading...</span> -->
                     </div>
                 <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
                   <span class="visually-hidden">Loading...</span>
@@ -72,6 +72,7 @@
                     $("#timer").addClass("d-block");
                     $(".myfrm").hide();
                     $(".procpar").show();
+                    $(".mn").hide();
                     var req=$.ajax({
                         method:'POST',
                         url:" {{ route('buybundle.post') }} ",
@@ -85,14 +86,14 @@
                     //     },40000);
                     req.done(function(data){
                         if(data=='error'){
-
                             $("#timer").empty().removeClass('d-block').fadeOut();
-                        $(".btn-danger").empty().html('Failed!');
-                        $(".mn").hide();
-                        $("h4").empty().html("<i class='fa fa-times fa-4x'></i>").addClass('text-danger');
-                        $("h5").hide();
-                        $("#retry").show();
-                        $(".err").html("Your transaction could not be completed, check your phone number and try again").addClass("alert alert-danger p-3");
+                            $(".btn-danger").empty().html('Failed!');
+                            $(".mn").hide();
+                            $("h4").empty().html("<i class='fa fa-times fa-4x'></i>").addClass('text-danger');
+                            $("h5").hide();
+                            $("#retry").show();
+                            $("#ld").hide();
+                            $(".err").html("Your transaction could not be completed, check your phone number and try again").addClass("alert alert-danger p-3");
 
                         }else{
                             $("#timer").empty().removeClass('d-block').fadeOut();;
