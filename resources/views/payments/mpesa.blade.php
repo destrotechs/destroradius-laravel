@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 <div class="row d-flex justify-content-center">
-    <div class="col-md-7">
+    <div class="col-md-12">
         <div class="procpar" style="display: none;">
     <div class="card" id="proc">
         <div class="card-body">
@@ -26,8 +26,12 @@
     </div>
 </div>
         <div class="card mn">
-            <div class="card-header d-flex justify-content-center"><img height="250" width="250" src="{{ asset('images/mp.png') }}" class="rounded-circle"></div>
-            <div class="card-body">
+            <div class="dropdown-divider mt-2"></div>
+            <div class="card-body row">
+                <div class="col-md-4 mt-5">
+                <img height="250" width="250" src="{{ asset('images/mp.png') }}" class="rounded-circle">
+                </div>
+                <div class="col-md-8">
                 <form>
                     <label>Package</label>
                     <select class="form-control" name="package" id="package">
@@ -50,6 +54,8 @@
                     <button type="button" class="btn btn-primary btn-md sub" name="submit">Process Payment</button>
                     {{ csrf_field() }}
                 </form>
+                </div>
+                
             </div>
         </div>
     </div>
