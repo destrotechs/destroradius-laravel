@@ -193,7 +193,6 @@ class inventoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'address' => 'required',
-            'zipcode'=>'required',
             'email'=>'required',
             'contact'=>'required',
             'phone'=>'required',
@@ -210,7 +209,7 @@ class inventoryController extends Controller
             $s->contact=$request->get('contact');
             $s->phone=$request->get('phone');
             $s->email=$request->get('email');
-            $s->zipcode=$request->get('zipcode');
+            $s->zipcode=$request->get('zipcode') || "00000";
             $s->description=$request->get('description');
 
             $s->save();
