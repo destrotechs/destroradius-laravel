@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Customer;
+use DB;
 use Illuminate\Http\Request;
 
 
@@ -77,18 +78,23 @@ class RegisterController extends Controller
 
     public function showCustomerRegisterForm()
     {
-        return view('clients.register', ['url' => 'customers']);
+        $zones = DB::table('zones')->get();
+        return view('clients.register', ['url' => 'customers'],compact('zones'));
     }
     protected function createCustomer(Request $request)
     {
         // $this->validator($request->all())->validate();
-        // $writer = Customer::create([
-        //     'name' => $request['name'],
-        //     'email' => $request['email'],
-        //     'password' => Hash::make($request['password']),
-        // ]);
-        // return redirect()->intended('customer/login');
+        $writer = Customer::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'phone'=>$request['phone'],
+            'username'=>$request['username'],
+            'zone'=>$request['zone'],
+            'gender'=>$request['gender'],
+            'cleartextpassword'=>$request['password'],
+            'password' => Hash::make($request['password']),
+        ]);
+        return redirect()->intended('customer/login');
 
-        dd($request->all());
     }
 }

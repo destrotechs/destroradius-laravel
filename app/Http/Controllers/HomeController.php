@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Log;
 use DB;
 use Illuminate\Http\Request;
+// use App\Charts\SalesChart;
 
 class HomeController extends Controller
 {
@@ -30,8 +31,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-       
-        return view('home');
+        $month = date('m');
+       $total_users = DB::table('customers')->whereMonth('created_at', $month)->count();
+       $total_online_users = DB::table('radacct')->where('acctstoptime','=',NULL)->count();
+       $total_sales = DB::table('transactions')->count();
+
+
+
+       return view('home',compact('total_users','total_online_users','total_sales'));
     }
     public function getManagerDashboard(){
         return view('managers.dashboard');

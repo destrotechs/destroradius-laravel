@@ -17,6 +17,9 @@
   <!-- Argon CSS -->
   <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
   <link rel="stylesheet" href="{{asset('assets/css/argon.css?v=1.2.0')}}" type="text/css">
+  <script src="https://unpkg.com/chart.js@^2.9.3/dist/Chart.min.js"></script>
+  <!-- Chartisan -->
+  <script src="https://unpkg.com/@chartisan/chartjs@^2.1.0/dist/chartisan_chartjs.umd.js"></script>
 </head>
 
 <body>
@@ -238,14 +241,14 @@
               </a>
               <div class="collapse p-2" id="finance">
                 <ul class="nav nav-sm flex-column">
-                  
+
                   <li class="nav-item">
                     <a href="{{route('sales.all')}}" class="nav-link">
                       <span class="fas fa-plus-circle"></span>&nbsp;
                       <span class="sidenav-normal"> Sales </span>
                     </a>
                   </li>
-                 
+
                   <li class="nav-item">
                     <a href="{{route('manager.payment')}}" class="nav-link">
                       <span class="fas fa-bars"></span>&nbsp;
@@ -264,14 +267,14 @@
               </a>
               <div class="collapse p-2" id="account">
                 <ul class="nav nav-sm flex-column">
-                  
+
                   <li class="nav-item">
                     <a href="{{route('user.accounting')}}" class="nav-link">
                       <span class="fas fa-plus-circle"></span>&nbsp;
                       <span class="sidenav-normal"> User accounting </span>
                     </a>
                   </li>
-                 
+
                   <li class="nav-item">
                     <a href="{{route('nas.accounting')}}" class="nav-link">
                       <span class="fas fa-bars"></span>&nbsp;
@@ -297,7 +300,7 @@
           </h6>
           <!-- Navigation -->
           <ul class="navbar-nav mb-md-3">
-            
+
             <li class="nav-item">
               <a class="nav-link" href="#inventory" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
                 <i class="fas fa-globe text-orange"></i>
@@ -345,7 +348,7 @@
 
               </div>
             </li>
-            
+
           </ul>
           @endif
           <hr class="my-3">
@@ -379,7 +382,7 @@
                       <span class="sidenav-normal">Last-Connection attempts</span>
                     </a>
                   </li>
-                  
+
                 </ul>
       </div>
     </div>
@@ -394,7 +397,7 @@
           <ul class="navbar-nav align-items-center  ml-md-auto ">
             <li class="nav-item d-xl-none">
               <!-- Sidenav toggler -->
-              
+
               <div class="pr-3 sidenav-toggler sidenav-toggler-dark text-dark" data-action="sidenav-pin" data-target="#sidenav-main">
                 <div class="sidenav-toggler-inner text-dark">
                   <i class="sidenav-toggler-line"></i>
@@ -467,7 +470,7 @@
                     </span>
                     <small>Reports</small>
                   </a>
-                  
+
                 </div>
               </div>
             </li>
@@ -507,7 +510,7 @@
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        
+
                   <i class="ni ni-user-run"></i>
                   <span>Logout</span>
                 </a>
@@ -537,7 +540,7 @@
             @yield('buttons')
           </div>
           <!-- Card stats -->
-          
+
         </div>
       </div>
     </div>

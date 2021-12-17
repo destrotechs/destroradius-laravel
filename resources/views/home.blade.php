@@ -20,7 +20,8 @@
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">CPU traffic</h5>
                       <span class="h2 font-weight-bold mb-0"><?php
-                        
+                        $load = sys_getloadavg();
+                        echo $load[0]."%";
                       ?></span>
                     </div>
                     <div class="col-auto">
@@ -29,7 +30,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
@@ -40,7 +41,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                      <span class="h2 font-weight-bold mb-0">2,356</span>
+                      <span class="h2 font-weight-bold mb-0">{{$total_users}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -48,7 +49,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
@@ -59,7 +60,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
-                      <span class="h2 font-weight-bold mb-0">924</span>
+                      <span class="h2 font-weight-bold mb-0">{{ $total_sales }}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
@@ -67,7 +68,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
@@ -78,7 +79,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Online users</h5>
-                      <span class="h2 font-weight-bold mb-0">49,65%</span>
+                      <span class="h2 font-weight-bold mb-0">{{ $total_online_users }}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -86,7 +87,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
@@ -96,8 +97,8 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header"><h4>Devices</h4></div>
-                <div class="card-body">
-      
+                <div class="card-body" id="chart">
+
                 </div>
             </div>
         </div>
@@ -105,7 +106,7 @@
             <div class="card">
                 <div class="card-header"><h4>Usage Statistics</h4></div>
                 <div class="card-body">
-                    
+
                 </div>
             </div>
         </div>
@@ -116,5 +117,14 @@
 @stop
 
 @section('js')
+<script>
+    const chart = new Chartisan({
+      el: '#chart',
+      url: "@chart('package_sales_chart')",
+      hooks:new ChartisanHooks()
+      .colors()
+      .datasets([{type:'line',fill:false,color:'red'}])
+    });
+  </script>
     <script> console.log('Hi!'); </script>
 @stop

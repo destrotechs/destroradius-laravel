@@ -44,6 +44,7 @@
                 <span class="sidenav-normal"> Packages </span>
               </a>
             </li>
+            @if(isset(Auth::guard('customer')->user()->username ))
             <li class="nav-item">
             <a href="{{route('user.balance')}}" class="nav-link">
                 <span class="fas fa-check-square"></span>&nbsp;
@@ -68,18 +69,25 @@
                 <span class="sidenav-normal"> Transactions </span>
               </a>
             </li>
+            @endif
             @if(!isset(Auth::guard('customer')->user()->username ))
             <li class="nav-item">
-                <a href="{{route('get.customer.login')}}" class="nav-link">
-                    <span class="fas fa-money-check"></span>&nbsp;
-                    <span class="sidenav-normal"> Login </span>
+                <a href="{{route('get.customer.register')}}" class="nav-link btn btn-primary btn-sm">
+                    <span class="fas fa-user-plus"></span>&nbsp;
+                    <span class="sidenav-normal"> Create Account </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{route('get.customer.login')}}" class="nav-link btn btn-success btn-sm mt-1">
+                    <span class="fas fa-sign-in-alt"></span>&nbsp;
+                    <span class="sidenav-normal">  Login </span>
                 </a>
             </li>
             @endif
             @if(isset(Auth::guard('customer')->user()->username ))
             <li class="nav-item">
             <a href="{{route('user.logout')}}" class="nav-link btn btn-danger btn-md">
-                <span class="fas fa-sign-out"></span>&nbsp;
+                <span class="fas fa-sign-out-alt"></span>&nbsp;
                 <span class="sidenav-normal"> Logout </span>
                 </a>
             </li>
