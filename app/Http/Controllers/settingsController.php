@@ -42,7 +42,7 @@ class settingsController extends Controller
     	]);
     	$rate=DB::table('managercommissionrates')->updateOrInsert(
     		['managerid'=>$request->get('managerid')],
-    		['rate'=>$request->get('rate')]
+    		['rate'=>$request->get('rate'),'type'=>'ticket']
     	);
     	if ($rate) {
     		return redirect()->back()->with('success','manager commission rate updated successfully');
