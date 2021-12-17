@@ -31,7 +31,7 @@
                 <div class="col-md-4 mt-5">
                 <img height="250" width="250" src="{{ asset('images/mp.png') }}" class="rounded-circle">
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-8 border p-3 br-2">
                 <form>
                     <label>Package</label>
                     <select class="form-control" name="package" id="package">
@@ -55,7 +55,7 @@
                     {{ csrf_field() }}
                 </form>
                 </div>
-                
+
             </div>
         </div>
     </div>
