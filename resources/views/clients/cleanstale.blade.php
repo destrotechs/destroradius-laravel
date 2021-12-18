@@ -1,4 +1,4 @@
-@extends('layouts.clients')
+@extends('layouts.customers')
 @section('content')
 @if (session('error'))
     <div class="alert alert-danger">
@@ -16,7 +16,7 @@
 	<div class="message"></div>
 	<form id="cleanconnections">
 		<div id="err"></div>
-		
+
 		<label>Username</label>
 		<input type="text" class="form-control" name="username" value="@if(isset(Auth::user()->username )){{ Auth::user()->username }}@else {{ '' }}@endif" id="username">
 		<small>Enter the username here and click clean connection</small>
@@ -25,7 +25,7 @@
 		{{ csrf_field() }}
 	</form>
 	<br>
-	
+
 </div>
 <div class="dropdown-divider"></div>
 	<p class="alert alert-info">This page is usefull if you have trouble in signing in to access internet and you are sure that your plan is still active.</p>
@@ -39,7 +39,7 @@
 			$("#err").empty().removeClass('alert alert-danger');
 		})
 		$("#cleanconnections").submit(function(e){
-			var username=$("#username").val();			
+			var username=$("#username").val();
 			var _token=$("input[name='_token']").val();
 			if(username!=" " && username!="NULL"){
 				var req = $.ajax({

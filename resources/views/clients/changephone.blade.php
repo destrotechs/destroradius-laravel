@@ -1,4 +1,4 @@
-@extends('layouts.clients')
+@extends('layouts.customers')
 @section('content')
 <div class="card">
 	<div class="card-header"><h4>Change Phone Number</h4></div>

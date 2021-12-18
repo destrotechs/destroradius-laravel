@@ -1,4 +1,4 @@
-@extends('layouts.clients')
+@extends('layouts.customers')
 @section('content')
 <div class="procpar" style="display: none;">
 	<div class="card" id="proc">
@@ -81,7 +81,7 @@
 			var phone=$("input[name='phone']").val();
 			var _token=$("input[name='_token']").val();
 			if(phone!=''){
-				if (confirm("Are you sure you want to purchase "+package+ "at "+amount)) {
+				if (confirm("Are you sure you want to purchase "+package+ " at "+amount)) {
 					if(confirm("A prompt will be sent to your phone,input your M-Pesa pin to proceed")){
 					$(".btn-success").empty().html('processing, please wait...').addClass('btn-danger');
 					$("#timer").html( 0 + ":" + 45);

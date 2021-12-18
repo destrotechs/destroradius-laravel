@@ -39,9 +39,9 @@ New Tickets
         			<input type="text" name="ticketsnum" class="form-control total" placeholder="ticket number">
         		</div>
 				<div class="col">
-					
+
 				</div>
-        		
+
         	</div>
         	<hr>
 			<div class="printable">
@@ -109,7 +109,7 @@ New Tickets
 					$(".warn").empty().removeClass("alert alert-warning");
 					cost=data;
 				}
-				
+
 			})
 
 			// alert();
@@ -119,7 +119,7 @@ New Tickets
 				var num=parseInt($(this).val());
 				if(package!="" && num!=0 && num!=""){
 				//generate tickets
-				generateTicket(num,package,cost);	
+				generateTicket(num,package,cost);
 				}else{
 					$(".tickets").empty();
 					alert("please select a package first");
@@ -134,7 +134,7 @@ New Tickets
 			$(".tickets").printArea(options);
 			$("#saveticketsform").submit();
 
-			
+
 		})
 		function generateTicket(num,package,cost){
 			if(num!="" && num!=NaN){
@@ -142,7 +142,7 @@ New Tickets
 					var username=generateUsername();
 					var password=generatePassword();
 					var serialnumber=generateSerialNum();
-					var ticket='<div class="card p-1 m-1"><div class="card-header"><h5>Ticket '+parseInt(i+1)+'</h5></div><div class="card-body"><ul class="list-group list-group-flush"><li class="list-group-item">Username : '+username+'</li><li class="list-group-item">Password : '+password+'</li><li class="list-group-item">Serial Number: '+serialnumber+'</li></ul><input name="username[]" type="hidden" value="'+username+'"><input name="password[]" type="hidden" value="'+password+'"><input name="cost[]" type="hidden" value="'+cost+'"><input name="serialnumber[]" type="hidden" value="'+serialnumber+'"><input name="plan[]" type="hidden" value="'+package+'"></div></div>';
+					var ticket='<div class="card m-1"><div class="card-header"><h5>Ticket '+parseInt(i+1)+'</h5></div><div class="card-body"><ul class="list-group list-group-flush"><li class="list-group-item">Username : '+username+'</li><li class="list-group-item">Password : '+password+'</li><li class="list-group-item">Serial Number: '+serialnumber+'</li></ul><input name="username[]" type="hidden" value="'+username+'"><input name="password[]" type="hidden" value="'+password+'"><input name="cost[]" type="hidden" value="'+cost+'"><input name="serialnumber[]" type="hidden" value="'+serialnumber+'"><input name="plan[]" type="hidden" value="'+package+'"></div></div>';
 					$(".tickets").append(ticket);
 					$(".sub").show();
 					$("#print1").show();
@@ -150,8 +150,8 @@ New Tickets
 			}else{
 				$(".tickets").empty();
 			}
-			
-			
+
+
 		}
 		function generateUsername(){
 			var text = "";

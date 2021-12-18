@@ -16,6 +16,7 @@
   <!-- Page plugins -->
   <!-- Argon CSS -->
   <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
+
   <link rel="stylesheet" href="{{asset('assets/css/argon.css?v=1.2.0')}}" type="text/css">
   <script src="https://unpkg.com/chart.js@^2.9.3/dist/Chart.min.js"></script>
   <!-- Chartisan -->

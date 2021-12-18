@@ -1,4 +1,4 @@
-@extends('layouts.clients')
+@extends('layouts.customers')
 @section('content')
 
 <h4>Bundle Balance</h4><br>
@@ -19,7 +19,7 @@
 	</table><br>
 	<form id="checkbalance">
 		<div id="err"></div>
-		
+
 		<label>Username</label>
 		<input type="text" class="form-control" name="username" placeholder="username" id="username">
 		<small>Enter the username here and click check</small>
@@ -28,7 +28,7 @@
 		{{ csrf_field() }}
 	</form>
 	<br>
-	
+
 </div>
 </div>
 
@@ -40,7 +40,7 @@
 			$("#err").empty().removeClass('alert alert-danger');
 		})
 		$("#checkbalance").submit(function(e){
-			var username=$("#username").val();			
+			var username=$("#username").val();
 			var _token=$("input[name='_token']").val();
 			if(username!=""){
 				var req = $.ajax({
