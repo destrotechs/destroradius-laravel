@@ -31,7 +31,7 @@
       <!-- Brand -->
       <div class="sidenav-header  align-items-left">
         <a class="navbar-brand" href="javascript:void(0)">
-        <img src="{{asset('images/u2.png')}}"> DestroRadius
+        <img src="{{asset('images/u2.png')}}"> {{ env('APP_NAME') }}
         </a>
       </div>
       <div class="navbar-inner">

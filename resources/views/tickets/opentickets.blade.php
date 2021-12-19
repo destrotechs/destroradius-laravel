@@ -48,6 +48,11 @@ Open Tickets
 							</tr>
 						@endforelse
 					</tbody>
+                    <tfoot>
+                        <tr>
+                        <td colspan="9">{!! $tickets->links() !!}</td>
+                        </tr>
+                    </tfoot>
 				</table>
 			</div>
 		</div>

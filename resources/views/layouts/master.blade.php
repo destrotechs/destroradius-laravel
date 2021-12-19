@@ -30,7 +30,7 @@
       <!-- Brand -->
       <div class="sidenav-header  align-items-left">
         <a class="navbar-brand" href="javascript:void(0)">
-        <img src="{{asset('images/u2.png')}}"> DestroRadius
+        <img src="{{asset('images/u2.png')}}"> {{ env('APP_NAME') }}
         </a>
       </div>
       <div class="navbar-inner">
@@ -490,7 +490,7 @@
               </a>
               <div class="dropdown-menu  dropdown-menu-right ">
                 <div class="dropdown-header noti-title">
-                  <h6 class="text-overflow m-0">Welcome!</h6>
+                  <h6 class="text-overflow m-0">Welcome {{Auth::user()->name}}!</h6>
                 </div>
                 <a href="{{route('manager.profile')}}" class="dropdown-item">
                   <i class="ni ni-single-02"></i>
@@ -500,14 +500,14 @@
                   <i class="ni ni-settings-gear-65"></i>
                   <span>Settings</span>
                 </a>
-                <a href="#!" class="dropdown-item">
+                {{-- <a href="#!" class="dropdown-item">
                   <i class="ni ni-calendar-grid-58"></i>
                   <span>Activity</span>
                 </a>
                 <a href="#!" class="dropdown-item">
                   <i class="ni ni-support-16"></i>
                   <span>Support</span>
-                </a>
+                </a> --}}
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

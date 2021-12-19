@@ -38,9 +38,6 @@ New Tickets
         			<label>Number of Tickets</label>
         			<input type="text" name="ticketsnum" class="form-control total" placeholder="ticket number">
         		</div>
-				<div class="col">
-
-				</div>
 
         	</div>
         	<hr>
@@ -55,32 +52,7 @@ New Tickets
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Create Tickets
-        </button>
-      </h2>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-        <form method="post" action="{{ route('save.auto.tickets') }}" id="saveticketsform">
-        	<div class="form-row">
-        		<div class="col">
-        			<label>Ticket ID</label>
-        			<input type="text" name="ticketid" class="form-control" placeholder="ticket id">
-        		</div>
-        		<div class="col">
-        			<label for="validdays">Valid Days</label>
-                <input name="validdays" type="digit" class="form-control">
-        		</div>
-        	</div>
-        	{{ csrf_field() }}
-        </form>
-      </div>
-    </div>
-  </div>
+
 </div>
 	</div>
 </div>

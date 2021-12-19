@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
 	<div class="card-header">
-		<h4>Bundle Plans here</h4>
+		<h4>Internet Access Plans</h4>
 	</div>
 	<div class="card-body">
 		@forelse($packages->chunk(3) as $package)
