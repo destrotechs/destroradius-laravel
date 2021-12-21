@@ -94,18 +94,11 @@
           </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header text-center"><h4>Package Sales</h4></div>
                 <div class="card-body" id="sales_chart">
 
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text center"><h4>Usage Statistics</h4></div>
-                <div class="card-body">
 
                 </div>
             </div>

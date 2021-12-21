@@ -16,11 +16,20 @@ class PackageSalesChart extends BaseChart
      * and never a string or an array.
      */
     public function handler(Request $request): Chartisan
+
     {
-        $packages = DB::table('packages')->pluck('packagename');
+        $package_names = array();
+        $packages = DB::table('packages')->get();
+
+        $sales = array();
+
+        foreach($packages as $p){
+            array_push($package_names,$p->packagename);
+            $times_bought = DB::table('payments')->where('packagebought','=',$p->packagename)->count();
+            array_push($sales,$times_bought);
+        }
         return Chartisan::build()
-            ->labels(['First', 'Second', 'Third'])
-            ->dataset('Sample', [1, 2, 3])
-            ->dataset('Sample 2', [3, 2, 1]);
+        ->labels($package_names)
+        ->dataset('Sales', $sales);
     }
 }
