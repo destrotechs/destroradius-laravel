@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                        <i class="ni ni-chart-pie-35"></i>
+                        <i class="fa fa-users"></i>
                       </div>
                     </div>
                   </div>
@@ -96,15 +96,15 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header"><h4>Devices</h4></div>
-                <div class="card-body" id="chart">
+                <div class="card-header text-center"><h4>Package Sales</h4></div>
+                <div class="card-body" id="sales_chart">
 
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header"><h4>Usage Statistics</h4></div>
+                <div class="card-header text center"><h4>Usage Statistics</h4></div>
                 <div class="card-body">
 
                 </div>
@@ -119,12 +119,11 @@
 @section('js')
 <script>
     const chart = new Chartisan({
-      el: '#chart',
+      el: '#sales_chart',
       url: "@chart('package_sales_chart')",
       hooks:new ChartisanHooks()
       .colors()
       .datasets([{type:'line',fill:false,color:'red'}])
     });
   </script>
-    <script> console.log('Hi!'); </script>
 @stop
