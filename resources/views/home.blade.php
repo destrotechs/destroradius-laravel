@@ -96,6 +96,17 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
+                <div class="card-header text-center"><h4>Monthly Sales</h4></div>
+                <div class="card-body" id="monthly_sale">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
                 <div class="card-header text-center"><h4>Package Sales</h4></div>
                 <div class="card-body" id="sales_chart">
 
@@ -118,5 +129,15 @@
       .colors()
       .datasets([{type:'line',fill:false,color:'red'}])
     });
+    const chart2 = new Chartisan({
+      el: '#monthly_sale',
+      url: "@chart('monthly_sales')",
+      hooks:new ChartisanHooks()
+      .colors()
+      .datasets([{type:'line',fill:false,color:'red'}])
+    });
+  </script>
+  <script>
+
   </script>
 @stop
