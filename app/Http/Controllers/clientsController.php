@@ -153,7 +153,9 @@ class clientsController extends Controller
                 }
 
                 $status = self::purchasePackage($username,$password,$package,$amount,$phone);
+                //send message on success
                 return $status;
+
             }else{
                 return "error";
             }
