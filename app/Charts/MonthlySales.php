@@ -7,6 +7,7 @@ namespace App\Charts;
 use Chartisan\PHP\Chartisan;
 use ConsoleTVs\Charts\BaseChart;
 use Illuminate\Http\Request;
+use DB;
 
 class MonthlySales extends BaseChart
 {
@@ -17,20 +18,20 @@ class MonthlySales extends BaseChart
      */
     public function handler(Request $request): Chartisan
     {
-        $months = array('1','2','3','4','5','6','7','8','9','10','11','12');
+        $months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 
         $month_sales = array();
         $total_sale = 0;
-        for($i=0;$i<count($months);$i++){
-            $sale = DB::table('payments')->whereMonth('created_at',$months[$i])->get();
-            if (count($sale)>0){
+        for($i=0;$i<12;$i++){
+            $sale = DB::table('payments')->get();
+            if(count($sales)>0){
                 foreach($sale as $s){
-                    $total_sale+=$s->amount;
+                    if($s->created_at->format('d')==$months[$i]){
+                        $total_sale+=$s->amount;
+                    }
                 }
-            }else{
-                $total_sale = 0;
             }
-
+            
             array_push($month_sales,$total_sale);
         }
         return Chartisan::build()
