@@ -137,6 +137,9 @@ Route::post('/users/changepackage','userController@changeCustomerPackage')->name
 Route::get('/logging/{en}','settingsController@Logging')->name('logging');
 Route::post('/users/online','userController@getOnlineUser')->name('getonlineusers');
 Route::post('/user/remove','userController@deleteuser')->name('removeuser');
+Route::get('/user/customlimits','userController@getUserLimit')->name('getuserlimits');
+Route::get('/user/customlimits/{id}','userController@deleteUserLimit')->name('deleteuserlimit');
+Route::post('/user/customlimits','userController@postUserLimit')->name('postuserlimits');
 //packages get routes
 
 

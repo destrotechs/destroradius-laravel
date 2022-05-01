@@ -97,19 +97,22 @@ class Mpesa
 		$curl_response=curl_exec($curl);
 
         /*
-            mpesa returns status code '0' if the request was accepted, another
+            mpes/a returns status code '0' if the request was accepted, another
             value for specific error.
             you can check the documentation for the error codes
 
             www.developer.safaricom.co.ke/Documentation
         */
         // dd($curl_response);
-        $request_status_code = json_decode($curl_response, true) ['ResponseCode']; //we are decoding because mpesa returns a json response
+        $res_array = json_decode($curl_response,true); //we are decoding because mpesa returns a json response
 
         //check if request succeeded and query the checkoutid to use to query status of transaction
+        // dd($res_array);
+        $request_status_code = $res_array["ResponseCode"];
 
         if($request_status_code == 0){
-            $checkoutrequestid=json_decode($curl_response, true)['CheckoutRequestID'];
+            $checkoutrequestid=$res_array['CheckoutRequestID'];
+            // dd($checkoutrequestid);
 
             return $checkoutrequestid;
 
@@ -148,7 +151,10 @@ class Mpesa
 
         // return $curl_response;
         //transaction result with status code 0 for success,anything else means transaction failed
-        $transaction_resultCode=json_decode($curl_response, true)['ResultCode'];
+        $res_array=json_decode($curl_response, true);
+        // dd($res_array);
+
+        $transaction_resultCode = $res_array['ResultCode'];
 
         if($transaction_resultCode == 0){
             return "success";

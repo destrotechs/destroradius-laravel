@@ -6,7 +6,7 @@ last connection attempts
 <div class="card">
 	<div class="card-header">last connection attempts</div>
 	<div class="card-body">
-		<table class="table table-bordered table-sm">
+		<table class="table table-responsivetable-bordered table-sm">
 			<thead>
 				<tr>
 					<th>Username</th>

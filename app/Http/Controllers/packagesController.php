@@ -99,13 +99,10 @@ class packagesController extends Controller
             ]);
         if($expireafter>0 && $quota>0){
             $newcheckgroup=DB::table('radgroupcheck')->insert([
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-Session','op'=>':=','value'=>$expireafter],
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota]
             ]);
             $newgroupreply=DB::table('radgroupreply')->insert([
                  ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],
-                 ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-Session','op'=>':=','value'=>$expireafter],
-            ]);
         }
 
         }else{

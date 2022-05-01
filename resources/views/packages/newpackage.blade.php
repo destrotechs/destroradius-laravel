@@ -27,9 +27,9 @@ New Package
             <form action="{{ route('package.save') }}" method="post" class="form-group">
                 {{ csrf_field() }}
                 <label for="uploadspeed">Package Name</label>
-                <input type="text" name="packagename" class="form-control" placeholder="package name ...">
+                <input type="text" required name="packagename" class="form-control" placeholder="package name ...">
                 <label for="bandwidth">Users</label>
-                <select name="users" class="form-control users">
+                <select name="users" required class="form-control users">
                     <option value="">Select who will use the package</option>
                     <option value="hotspot">HotSpot</option>
                     <option value="pppoe">PPPOE</option>
@@ -50,7 +50,7 @@ New Package
                     @endforelse
                 </select>
                 <label for="bandwidth">Bandwidth/Speed unit</label>
-                <select name="bandwidth" class="form-control unit">
+                <select name="bandwidth" required class="form-control unit">
                     <option value="">Select Bandwidth unit</option>
                     <option value="M">Mbps</option>
                     <option value="K">Kbps</option>
@@ -58,17 +58,17 @@ New Package
 
                 <p class="p-1 text-danger mes"></p>
                 <label for="uploadspeed">Upload Speed</label>
-                <input type="digit" name="uploadspeed" class="form-control up" placeholder="1 or 2 ...">
+                <input type="digit" required name="uploadspeed" class="form-control up" placeholder="1 or 2 ...">
                 <label for="uploadspeed">Download Speed</label>
                 <input type="hidden" name="upbandwidth" id="upbnd">
                 <input type="hidden" name="downbandwidth" id="downbnd">
-                <input type="digit" name="downloadspeed" class="form-control down" placeholder="1 or 2 ...">
+                <input type="digit" required name="downloadspeed" class="form-control down" placeholder="1 or 2 ...">
                 <label>Max Number of Devices</label>
-                <input type="digit" name="numberofdevices" class="form-control">
+                <input required type="digit" name="numberofdevices" class="form-control">
                 <div class="form-row">
                     <div class="col">
                         <label>Measure</label>
-                        <select class="form-control" name="period">
+                        <select class="form-control" name="period" required>
                             <option value="">select duration measure ...</option>
                             <option value="min">Minutes</option>
                             <option value="hour">Hours</option>
@@ -79,12 +79,12 @@ New Package
                     </div>
                     <div class="col">
                         <label for="validdays">Duration</label>
-                        <input name="validdays" type="digit" class="form-control">
+                        <input name="validdays" type="digit" class="form-control" required>
                     </div>
                 </div>
 
                 <label for="validdays">Maximum Usage Quota (MBS)</label>
-                <input placeholder="use 0 for no limit" name="quota" type="text" class="form-control quota">
+                <input required placeholder="use 0 for no limit" name="quota" type="text" class="form-control quota">
                 <label>Description</label>
                 <textarea class="form-control" name="description"></textarea>
                 <hr>

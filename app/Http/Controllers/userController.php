@@ -479,7 +479,7 @@ class userController extends Controller
                 $p_table = strtolower($ld->pref_table);
                 if($p_table =="reply"){
                     $new_reply_rec = DB::table('radreply')->insert([
-                        'username'=>$username,'attribute'=>$ld->limitname,'op'=>$ld->op,'value'=>$limitvalue[$key],
+                        'username'=>$username,'attribute'=>$ld->limitname,'op'=>$ld->op,'value'=>$limitvalue[$key]==NULL?$ld->limitmeasure:$limitvalue[$key],
                     ]);
                 }else if($p_table == 'check'){
                     $new_reply_rec = DB::table('radcheck')->insert([
@@ -539,5 +539,21 @@ class userController extends Controller
             return redirect()->route('user.all')->with("success","customer removed successfully");
         }
         return redirect()->back()->with("error","customer could not be removed, try again!");
+    }
+    public function getUserLimit(){
+        $limits = DB::table('custom_limits')->get();
+        return view('users.userlimits',compact('limits'));
+    }
+    public function postUserLimit(Request $request){
+        $limits = DB::table('custom_limits')->updateOrInsert(
+            ['limitname'=>$request->get('limitname'),'pref_table'=>$request->get('pref_table')],
+            ['limitmeasure'=>$request->get('limitmeasure'),'op'=>$request->get('op')]
+        );
+        return redirect()->back()->with("success","limit changes applied successfully");
+    }
+    public function deleteUserLimit($id){
+        $limits = DB::table('custom_limits')->where('id','=',$id)->delete();
+
+        return redirect()->back()->with("success","limit has been deleted successfully");
     }
 }

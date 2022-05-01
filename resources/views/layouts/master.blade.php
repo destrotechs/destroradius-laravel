@@ -17,7 +17,7 @@
   <!-- Argon CSS -->
   <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
 
-  <link rel="stylesheet" href="{{asset('assets/css/argon.css?v=1.2.0')}}" type="text/css">
+  <link rel="stylesheet" href="{{asset('assets/css/argon.css')}}" type="text/css">
   <script src="https://unpkg.com/chart.js@^2.9.3/dist/Chart.min.js"></script>
   <!-- Chartisan -->
   <script src="https://unpkg.com/@chartisan/chartjs@^2.1.0/dist/chartisan_chartjs.umd.js"></script>
@@ -95,6 +95,12 @@
                     <a href="{{route('geteditcustomer')}}" class="nav-link">
                       <span class="fas fa-edit text-success"></span>&nbsp;
                       <span class="sidenav-normal"> Edit user </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('getuserlimits') }}" class="nav-link">
+                      <span class="fas fa-edit text-success"></span>&nbsp;
+                      <span class="sidenav-normal"> User Limits</span>
                     </a>
                   </li>
                   {{-- <li class="nav-item">

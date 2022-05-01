@@ -15,7 +15,7 @@
 @endif
     <div class="card">
     <div class="card-body">
-        <table class="table table-sm table-responsive">
+        <table class="table table-responsivetable-sm table-responsive">
             <thead>
                 <?php $num=0;?>
                 <tr>
@@ -54,7 +54,7 @@
                 @endforelse
 
             </tbody>
-            <tfoot class="table-footer">
+            <tfoot class="table table-responsive-footer">
                 {!! $customers->links() !!}
             </tfoot>
         </table>

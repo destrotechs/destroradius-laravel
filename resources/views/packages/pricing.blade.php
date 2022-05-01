@@ -48,7 +48,7 @@ Package pricing
 	</div>
 	<div class="card card-body col-md-7">
 		<h5>Priced Packages</h5><hr>
-		<table id="example2" class="table table-bordered table-sm">
+		<table id="example2" class="table table-responsivetable-bordered table-sm">
 			<thead>
 				<tr>
 					<th>#</th>

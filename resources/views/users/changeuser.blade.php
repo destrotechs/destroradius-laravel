@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content_header')
-
+User Information
 @endsection
 @section('content')
 @if (session('error'))
@@ -43,7 +43,7 @@
                     <div class="card">
                       <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
-                          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             Per user limits
                           </button>
                         </h2>
@@ -52,7 +52,7 @@
                     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <div class="card-body">
                             @if(count($preplyattributes)>0 || count($pcheckattributes)>0)
-                            <table class="table table-sm table-bordered table-striped">
+                            <table class="table table-responsivetable-sm table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Limit Name</th>
@@ -66,7 +66,7 @@
                                     <tr>
                                         <input name="table" value="reply" type="hidden">
                                         <input type="hidden" name="attr_id" value="{{ $ra->id }}">
-                                        <td><input type="text" name="limit" value="{{ $ra->attribute }}"></td>
+                                        <td><input type="text" name="limit" value="{{ $ra->attribute }}" readonly></td>
                                         <td><input type="text" name="limitvalue" value="{{ $ra->value }}"></td>
                                         <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-save"></i></button><a href="{{ route('replydeleteattr',['id'=>$ra->id]) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a></td>
                                     </tr>
@@ -79,7 +79,7 @@
                                     <tr>
                                         <input name="table" value="check" type="hidden">
                                         <input type="hidden" name="attr_id" value="{{ $ca->id }}">
-                                        <td><input type="text" name="limit" value="{{ $ca->attribute }}"></td>
+                                        <td><input type="text" name="limit" value="{{ $ca->attribute }}" readonly></td>
                                         <td><input type="text" name="limitvalue" value="{{ $ca->value }}"></td>
                                         <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-save"></i></button>
                                             <a href="{{ route('checkdeleteattr',['id'=>$ca->id]) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a></td>
@@ -221,7 +221,7 @@
                         <select name="limit[]" class="form-control limit">
                             <option value="">Choose limit...</option>
                             @forelse($customlimits as $cl)
-                            <option value="{{ $cl->id }}">{{ $cl->limitname }} | {{ $cl->limitmeasure }} |</option>
+                            <option value="{{ $cl->id }}">{{ $cl->limitname }} | {{ $cl->limitmeasure }} |{{ $cl->pref_table }}</option>
                             @empty
                             <option value="">No limits available</option>
                             @endforelse

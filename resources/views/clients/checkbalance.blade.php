@@ -4,7 +4,7 @@
 <h4>Bundle Balance</h4><br>
 <div class="card">
 <div class="card-body">
-	<table class="table table-bordered table-striped table-responsive" style="display: none;">
+	<table class="table table-responsivetable-bordered table-striped table-responsive" style="display: none;">
 		<thead>
 			<tr>
 				<th id="user" colspan="3"></th>

@@ -14,7 +14,7 @@ Sales
     </div>
 @endif
     <div class="card card-body">
-        <table class="table table-bordered table-sm">
+        <table class="table table-responsivetable-bordered table-sm">
             <thead>
                 <tr>All sales</tr>
                 <?php $num=0;?>

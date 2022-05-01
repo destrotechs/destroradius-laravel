@@ -21,7 +21,7 @@
 <div class="card">
     <div class="card-header"><h5>Available Packages</h5></div>
     <div class="card-body">
-        <table class="table table-sm">
+        <table class="table table-responsivetable-bordered table-responsives table-sm">
             <thead>
                 <?php $num=0;?>
                 <tr>
@@ -52,7 +52,7 @@
                         @endif
                         <td>{{ $p->numberofdevices}}</td>
                         <td>{{ $p->users }} users</td>
-                        <td><a href="{{ route('packages.edit',['id'=>$p->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="{{ route('packages.delete',['id'=>$p->id]) }}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a></td>
+                        <td><a href="{{ route('packages.edit',['id'=>$p->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="#" class="btn btn-danger btn-sm trash" id="{{ $p->id }}"><i class="fas fa-trash"></i></a></td>
                     </tr>
                 @empty
                     <tr>
@@ -64,4 +64,23 @@
         </table>
     </div>
 </div>
+@endsection
+@section('js')
+<script type="text/javascript">
+  $(document).ready(function(){
+    // route('deleteplan',['id'=>$c->id])
+    $(".trash").click(function(){
+      var id = $(this).attr("id");
+      if(confirm("Are you sure you want to delete this package?")){
+        $.ajax({
+          method:'GET',
+          url:'delete/'+id,
+          success:function(res){
+            window.location.reload()
+          }
+        })
+      }
+    })
+  })
+</script>
 @endsection

@@ -48,7 +48,7 @@ New product
 	<?php $num=0;?>
 	<div class="col-md-5">
 		<div class="card">
-			<table class="table table-sm table-bordered">
+			<table class="table table-responsivetable-sm table-bordered">
 				<thead>
 					<tr>
 						<th>#</th>

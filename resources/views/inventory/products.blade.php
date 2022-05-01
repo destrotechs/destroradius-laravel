@@ -19,7 +19,7 @@ Products
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example2" class="table table-bordered table-hover">
+              <table id="example2" class="table table-responsivetable-bordered table-hover">
               	<?php $num=0;?>
                 <thead>
 					<tr>

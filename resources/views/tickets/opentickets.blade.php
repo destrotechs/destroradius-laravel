@@ -13,7 +13,7 @@ Open Tickets
 		<div class="card">
 			<div class="card-header"><h5>Available Tickets</h5></div>
 			<div class="card-body">
-				<table class="table table-bordered">
+				<table class="table table-responsivetable-bordered">
 					<thead>
 						<tr>
 							<td>#</td>

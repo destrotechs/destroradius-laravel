@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<table class="table table-bordered table-sm table striped">
+		<table class="table table-responsivetable-bordered table-sm table striped">
 			<thead>
 				<tr>
 					<th colspan="7">{{ Auth::guard('customer')->user()->name }}&nbsp; Transactions</th>

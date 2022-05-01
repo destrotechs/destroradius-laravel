@@ -115,8 +115,8 @@
 							$("#timer").empty().removeClass('d-block').fadeOut();;
 							$(".btn-danger").empty().html('completed').removeClass('btn-danger').addClass("btn-success");
 							$("#ld").hide();
-							$("h4").empty().html("<i class='fa fa-check fa-4x'></i>").addClass('text-success');
-							$(".err").html(data).addClass("bg-success text-white p-3");
+							$("h4").empty().html(data).addClass('text-success');
+							$(".err").html("<i class='fa fa-check-circle fa-4x'></i>").addClass("text-success p-3");
 							// setTimeout(function(){
 							// window.location.replace('http://hewanet.wifi/login');
 							// },5000);

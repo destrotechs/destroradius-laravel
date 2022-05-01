@@ -7,6 +7,7 @@ use DB;
 use Auth;
 use App\Payment;
 use Morris\Mpesa\Mpesa;
+use App\Message;
 class clientsController extends Controller
 {
     public function getLogin(Request $request){
@@ -39,7 +40,7 @@ class clientsController extends Controller
             $mbsused=($totaldownbs+$totalupbs);
 
             $totalbytesrecord=($totalbytesrecord/(1024*1024));
-            $mbsused=2;
+            $mbsused=0;
             $remainder=$totalbytesrecord-$mbsused;
 
              echo '<tr><td>'.round($totalbytesrecord,2).' MBs</td><td>'.round($mbsused,2).' MBs</td><td>'.round($remainder,2).' MBs</td></tr>';
@@ -122,6 +123,9 @@ class clientsController extends Controller
 
         $checkoutid = $payment->processRequest($phone,$amount);
 
+        $username = '';
+        $password = '';
+
         if ($checkoutid!='failed!'){
             sleep(30);
 
@@ -129,18 +133,18 @@ class clientsController extends Controller
 
             if($status == 'success'){
                 //read mpesa transaction details
-                $details = $payment->getTransactionDetails();
+                // $details = $payment->getTransactionDetails();
 
-                $cust_trans = new Payment();
+                // $cust_trans = new Payment();
 
-                $cust_trans->phonenumber = $phone;
-                $cust_trans->transactionid= $details[1];
-                $cust_trans->packagebought=$package;
-                $cust_trans->amount = $amount;
-                $cust_trans->username = $username;
-                $cust_trans->transactiondate= $details[2];
+                // $cust_trans->phonenumber = $phone;
+                // $cust_trans->transactionid= $details[1];
+                // $cust_trans->packagebought=$package;
+                // $cust_trans->amount = $amount;
+                // $cust_trans->username = $username;
+                // $cust_trans->transactiondate= $details[2];
 
-                $cust_trans->save();
+                // $cust_trans->save();
 
                 $permitted_chars_username = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     	        $permitted_chars_password = '23456789abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
@@ -154,7 +158,20 @@ class clientsController extends Controller
 
                 $status = self::purchasePackage($username,$password,$package,$amount,$phone);
                 //send message on success
-                return $status;
+                if($status == 'success'){
+                    $message = "You have succesfully bought HEWANET ".$package.". Username : ".$username." Password : ".$password;
+                    $mess = new Message();
+                    $sent = $mess->sendSMS($phone,$message);
+
+                    if ($sent){
+                        return "success";
+                    }else{
+                        return 'error';
+                    }
+
+                }else{
+                    return "error";
+                }
 
             }else{
                 return "error";
@@ -166,7 +183,7 @@ class clientsController extends Controller
 
 
     }
-    public function purchasePackage(Request $request,$username,$password,$package,$amount,$phone){
+    public static function purchasePackage($username,$password,$package,$amount,$phone){
 
         if(isset($username)){
           $user_exist = DB::table('radcheck')->where('username','=',$username)->count();
@@ -197,7 +214,24 @@ class clientsController extends Controller
                         ['username'=>$username],
                         ['groupname'=>$package,'priority'=>10]
                     );
-                    if($user_pack){
+
+                   $packageinfo = DB::table('packages')->where('packagename','=',$package)->get();
+                    $durmeasure = '';
+                    $num = 0;
+
+                    foreach($packageinfo as $p){
+                        $durmeasure = $p->durationmeasure;
+                        $num = $p->validdays;
+                    }
+
+                    $disconnecttime = self::calculateTime($durmeasure,$num);
+
+                    $user_rep = DB::table('radreply')->updateOrInsert(
+                        ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],
+                        ['op'=>':=','value'=>$disconnecttime],
+                    );
+
+                    if($user_rep){
                         return "success";
                     }else{
                         return "error";
@@ -249,6 +283,24 @@ class clientsController extends Controller
             );
 
             $add_cus_group = DB::table('radusergroup')->insert(['username'=>$username,'groupname'=>$package,'priority'=>10]);
+
+             //add date to disconnect
+
+            $packageinfo = DB::table('packages')->where('packagename','=',$package)->get();
+            $durmeasure = '';
+            $num = 0;
+
+            foreach($packageinfo as $p){
+                $durmeasure = $p->durationmeasure;
+                $num = $p->validdays;
+            }
+
+            $disconnecttime = self::calculateTime($durmeasure,$num);
+
+            $user_rep = DB::table('radreply')->updateOrInsert(
+                ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],
+                ['op'=>':=','value'=>$disconnecttime],
+            );
 
             if($add_cus && $add_cus_group){
                 $update = true;
@@ -385,14 +437,44 @@ class clientsController extends Controller
     }
     public static function calculateTime($timemeasure,$num){
         $year=date("Y");
-        $month=date("m");
-        $day=date("d");
+        $month=date("n");
+        $day=date("j");
         $hour=date("H");
         $min=date("i");
-        $sec=date("sa");
+        $sec=date("s");
 
-        $packageValidDate = mktime($hour,$min,$sec,$month,$day+$num,$year);
+        $duration = 0;
+
+        $packageValidDate = '';
+
+        switch($timemeasure){
+            case 'month':
+                $packageValidDate = mktime($hour,$min,$sec,($month+$num),$day,$year);
+
+            break;
+            case 'day':
+                $packageValidDate = mktime($hour,$min,$sec,$month,($day+$num),$year);
+
+            break;
+            case 'week':
+                $packageValidDate = mktime($hour,$min,$sec,$month,($day+$num),$year);
+
+            break;
+            default:
+                $packageValidDate = mktime($hour,$min,$sec,$month,$day+$num,$year);
+
+        }
+
         $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
+        $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
 
         return $dateToDisconnect;
 

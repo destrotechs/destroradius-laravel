@@ -14,7 +14,7 @@
     </div>
 @endif
     <div class="card card-body">
-        <table class="table table-sm">
+        <table class="table table-responsivetable-sm">
             <thead>
                 <tr>All managers</tr>
                 <?php $num=0;?>
