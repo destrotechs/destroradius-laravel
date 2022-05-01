@@ -24,10 +24,12 @@ class MonthlySales extends BaseChart
         $total_sale = 0;
         for($i=0;$i<12;$i++){
             $sale = DB::table('payments')->get();
-            if(count($sales)>0){
+            if(count($sale)>0){
                 foreach($sale as $s){
-                    if($s->created_at->format('d')==$months[$i]){
+                    if(explode("/",$s->transactiondate)[1]==$months[$i]){
                         $total_sale+=$s->amount;
+                    }else{
+                        $total_sale=0;
                     }
                 }
             }
