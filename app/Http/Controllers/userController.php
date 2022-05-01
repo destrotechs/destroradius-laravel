@@ -146,6 +146,8 @@ class userController extends Controller
 
         $c->save();
         $customerid=$c->id;
+        $log=" Created New user ".$username." on ".date("Y:m:d h:i:s");
+        $logwrite=Log::createTxtLog($user,$log);
         //calculate validdays for this customer
         if($request->get('package')!="none"){
             $customerdays=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('validdays');
@@ -302,6 +304,7 @@ class userController extends Controller
         }
     }
     public function getUserChange($username){
+
         if($username){
 
             $userdetails=DB::table('customers')->where('username','=',$username)->leftJoin('zones','zones.id','=','customers.zone')->get();
@@ -473,6 +476,8 @@ class userController extends Controller
         $limit = $request->get('limit');
         $limitvalue = $request->get('limitvalue');
         $username = $request->get('username');
+        $log=" Edited user ".$username." on ".date("Y:m:d h:i:s");
+        $logwrite=Log::createTxtLog($user,$log);
         foreach ($limit as $key=>$l){
             $limit_details = DB::table('custom_limits')->where('id','=',$l)->get();
             foreach($limit_details as $ld){
