@@ -68,12 +68,12 @@ Pay Via Mpesa
 <script type="text/javascript">
     $(document).ready(function(){
         $(".sub").click(function(e){
-            var package=$("input[name='package']").val();
+            var package=$("#package").val();
             var amount=$("input[name='amount']").val();
             var phone=$("input[name='phone']").val();
             var _token=$("input[name='_token']").val();
             if(phone!=''){
-                if (confirm("Are you sure you want to purchase "+package+ "at "+amount)) {
+                if (confirm("Are you sure you want to purchase "+package+ " at "+amount)) {
                     if(confirm("A prompt will be sent to your phone,input your M-Pesa pin to proceed")){
                     $(".btn-success").empty().html('processing, please wait...').addClass('btn-danger');
                     $("#timer").html( 0 + ":" + 45);
@@ -103,8 +103,9 @@ Pay Via Mpesa
                             $("#timer").empty().removeClass('d-block').fadeOut();;
                             $(".btn-danger").empty().html('completed').removeClass('btn-danger').addClass("btn-success");
                             $(".mn").hide();
-                            $("h4").empty().html("<i class='fa fa-check fa-4x'></i>").addClass('text-success');
-                            $(".err").html(data).addClass("bg-success text-white p-3");
+                            $(".loader").hide();
+                            $("h4").empty().html(data).addClass('text-success');
+                            $(".err").html("<i class='fa fa-check-circle fa-4x'></i>").addClass("text-success p-3");
                         }
 
                     })

@@ -71,7 +71,7 @@ class Mpesa
 			'Password'=>$this->password,
 			'Timestamp'=>$this->timestamp,
 			'TransactionType'=>$this->transactiontype,
-			'Amount'=>$amount,
+			'Amount'=>1,
 			'PartyA'=>$phone,
 			'PartyB'=>$this->partyB,
 			'PhoneNumber'=>$phone,
