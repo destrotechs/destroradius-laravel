@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('content_header')
+Pay Via Mpesa
+@endsection
 @section('content')
 <div class="row d-flex justify-content-center">
     <div class="col-md-12">
@@ -49,7 +52,7 @@
                     <input type="text" name="phone" class="form-control">
                     <br>
                     <label>Amount</label>
-                    <input name="amount" class="form-control" type="text">
+                    <input name="amount" readonly class="form-control amnt" type="text">
                     <br>
                     <button type="button" class="btn btn-primary btn-md sub" name="submit">Process Payment</button>
                     {{ csrf_field() }}
@@ -84,12 +87,7 @@
                         url:" {{ route('buybundle.post') }} ",
                         data:{phone:phone,package:package,amount:amount,_token:_token},
                     });
-                    // req.done(function(data){
-                    //  alert(data);
-                    // })
-                    // setTimeout(function(){
-                    //         location.reload();
-                    //     },40000);
+                
                     req.done(function(data){
                         if(data=='error'){
                             $("#timer").empty().removeClass('d-block').fadeOut();
@@ -107,9 +105,6 @@
                             $(".mn").hide();
                             $("h4").empty().html("<i class='fa fa-check fa-4x'></i>").addClass('text-success');
                             $(".err").html(data).addClass("bg-success text-white p-3");
-                            // setTimeout(function(){
-                            // window.location.replace('http://hewanet.wifi/login');
-                            // },5000);
                         }
 
                     })
@@ -120,6 +115,23 @@
                 $(".err").html("Enter a valid phone number and select a bundle plan").addClass("alert alert-danger");
             }
             e.preventDefault();
+        })
+        $("#package").change(function(){
+            var package = $(this).val();
+            var _token=$("input[name='_token']").val();
+
+            if(package){
+                $.ajax({
+                    method:'POST',
+                    url:"{{ route('get.package.cost') }}",
+                    data:{package:package,_token:_token},
+                    success:function(data){
+                        $(".amnt").val(data);
+                    }
+                })
+            }else{
+                $(".amnt").val('');
+            }
         })
         function startTimer() {
           var presentTime = document.getElementById('timer').innerHTML;

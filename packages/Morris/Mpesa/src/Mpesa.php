@@ -8,7 +8,7 @@ class Mpesa
         money platform implemented and widely used in kenyan market. it involves
         sending and receiving money via safaricom service provider.
         also used to pay for goods  and services in kenyan context. allowed in
-        the whole country
+        the whole country. Below code is for Lipa na Mpesa online, Known as TILL number.
 
 
     */
@@ -48,13 +48,6 @@ class Mpesa
 		$curl_response=curl_exec($curl);
         // dd($curl_response);
 		return $this->accesstoken=json_decode($curl_response, true) ['access_token'];
-        // $ch = curl_init('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials');
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . base64_encode($this->consumer_key.':'.$this->secret_key)]);
-        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        // curl_setopt($ch, CURLOPT_HEADER, false);
-        // $response = curl_exec($ch);
-        // // dd($response);
-        // dd(json_decode($response));
     }
     public function getTimestamp(){
         $this->timestamp=date("yymdhis");
@@ -78,7 +71,7 @@ class Mpesa
 			'Password'=>$this->password,
 			'Timestamp'=>$this->timestamp,
 			'TransactionType'=>$this->transactiontype,
-			'Amount'=>'1',
+			'Amount'=>$amount,
 			'PartyA'=>$phone,
 			'PartyB'=>$this->partyB,
 			'PhoneNumber'=>$phone,
@@ -97,7 +90,7 @@ class Mpesa
 		$curl_response=curl_exec($curl);
 
         /*
-            mpes/a returns status code '0' if the request was accepted, another
+            mpesa returns status code '0' if the request was accepted, another
             value for specific error.
             you can check the documentation for the error codes
 
