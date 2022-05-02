@@ -465,6 +465,7 @@ class userController extends Controller
                 $rad_reply = DB::table('radreply')->updateOrInsert(
                     ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$dateToDisconnect]
                 );
+                
                 //remove from radusergroup
                 $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id)->delete();
 
