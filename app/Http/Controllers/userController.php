@@ -144,7 +144,8 @@ class userController extends Controller
 
         $c->save();
         $customerid=$c->id;
-        $log=" Created New user ".$username." on ".date("Y:m:d h:i:s");
+        $user = Auth::user()->email;
+        $log=" Created New user ".$request->get('username');
         $logwrite=Log::createTxtLog($user,$log);
         //calculate validdays for this customer
         if($request->get('package')!="none"){
@@ -426,7 +427,9 @@ class userController extends Controller
     public function changeCustomerPackage(Request $request){
         $package = $request->get('package');
         $username = $request->get('username');
-
+        $user = Auth::user()->email;
+        $log="Changed ".$username." Package to ".$package;
+        $logwrite=Log::createTxtLog($user,$log);
 
         $package_id = DB::table('packages')->where('packagename','=',$package)->pluck('id');
         $user_id = DB::table('customers')->where('username','=',$username)->pluck('id');
@@ -465,7 +468,7 @@ class userController extends Controller
                 $rad_reply = DB::table('radreply')->updateOrInsert(
                     ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$dateToDisconnect]
                 );
-                
+
                 //remove from radusergroup
                 $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id)->delete();
 

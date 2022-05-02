@@ -1,6 +1,7 @@
-@extends('adminlte::page')
+{{-- @extends('adminlte::page') --}}
+@extends('layouts.master')
 @section('content_header')
-    <h4>Services Status</h4>
+ Services Status
 @endsection
 @section('content')
     <div class="card card-body">

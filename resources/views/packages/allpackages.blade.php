@@ -21,7 +21,7 @@
 <div class="card">
     <div class="card-header"><h5>Available Packages</h5></div>
     <div class="card-body">
-        <table class="table table-bordered table-sm">
+        <table class="table table-responsivetable-sm table-responsive">
             <thead>
                 <?php $num=0;?>
                 <tr>

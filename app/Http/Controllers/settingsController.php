@@ -22,13 +22,17 @@ class settingsController extends Controller
     	return view('settings.managercommissionrates');
     }
     public function getindex(){
-    	$logging=$this->logs_enabled;
+        $logging = 0;
+    	$settings=DB::table('settings')->count();
+        if($settings>0){
+        $logging=DB::table('settings')->pluck('logs_enabled')[0];
+        }
     	$managers=User::all();
     	$managerrates=DB::table('users')->join('managercommissionrates','managercommissionrates.managerid','=','users.id')->get();
     	return view('settings.systemsettings',compact('logging','managerrates','managers'));
     }
     public function Logging($en){
-    	$ef=DB::table('settings')->update(['logs_enabled'=>$en]);
+    	$ef=DB::table('settings')->updateOrInsert(['logs_enabled'=>$en]);
     	if ($ef) {
     		return redirect()->back()->with('success','settings applied successfully');
     	}else{

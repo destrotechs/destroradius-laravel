@@ -49,7 +49,7 @@ class servicesController extends Controller
         }
     }
     public function getLastConnAttempts(){
-        $attempts=DB::table('radpostauth')->orderBy('id','desc')->paginate(15);
+        $attempts=DB::table('radpostauth')->orderBy('id','desc')->paginate(10);
         return view('services.lastconnection',compact('attempts'));
     }
 }

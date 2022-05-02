@@ -17,12 +17,21 @@ last connection attempts
 			</thead>
 			<tbody>
 				@forelse($attempts as $a)
-				<tr>
+				@if($a->reply=='Access-Accept')
+				<tr class="bg-success text-white fw-bold p-2">
 					<td>{{ $a->username }}</td>
 					<td>{{ $a->pass }}</td>
 					<td>{{ $a->reply }}</td>
 					<td>{{ $a->authdate }}</td>
 				</tr>
+				@else
+				<tr class="bg-danger fw-bold text-white p-2">
+					<td>{{ $a->username }}</td>
+					<td>{{ $a->pass }}</td>
+					<td>{{ $a->reply }}</td>
+					<td>{{ $a->authdate }}</td>
+				</tr>
+				@endif
 				@empty
 				<tr>
 					<td colspan="4" class="alert alert-danger">No connections have been tried yet</td>
