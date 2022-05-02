@@ -1,6 +1,6 @@
-@extends('adminlte::page')
+@extends('layouts.master')
 @section('content_header')
-<h4>Edit Package</h4>
+Edit Package
 @endsection
 @section('content')
 @if (session('success'))

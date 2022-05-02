@@ -102,7 +102,7 @@ class packagesController extends Controller
                 ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota]
             ]);
             $newgroupreply=DB::table('radgroupreply')->insert([
-                 ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],
+                 ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],]);
         }
 
         }else{

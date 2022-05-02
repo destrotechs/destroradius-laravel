@@ -66,8 +66,6 @@ class userController extends Controller
         $totaltime=0;
         $package="";
         foreach ($customers as $c) {
-
-
             $p=DB::table('radusergroup')->where('username','=',$c->username)->get();
             foreach($p as $pack){
                 $package=$pack->groupname;
@@ -429,9 +427,18 @@ class userController extends Controller
         $package = $request->get('package');
         $username = $request->get('username');
 
+
         $package_id = DB::table('packages')->where('packagename','=',$package)->pluck('id');
         $user_id = DB::table('customers')->where('username','=',$username)->pluck('id');
+        if($username){
+                $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');
 
+                $radcheckuser = DB::table('radcheck')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$pass[0]],
+                );
+        }
+
+        
         if ($package == 'nopackage'){
             $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id)->delete();
 
@@ -448,6 +455,16 @@ class userController extends Controller
 
             }
             else{
+                $delete_user_replies = DB::table('radreply')->where('username','=',$username)->delete();
+
+                //get valid days for the said package and add disconnect time
+                $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
+                $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
+                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0]);
+
+                $rad_reply = DB::table('radreply')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$dateToDisconnect]
+                );
                 //remove from radusergroup
                 $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id)->delete();
 
@@ -472,6 +489,51 @@ class userController extends Controller
         }
 
     }
+    public static function calculateTime($timemeasure,$num){
+        $year=date("Y");
+        $month=date("n");
+        $day=date("j");
+        $hour=date("H");
+        $min=date("i");
+        $sec=date("s");
+
+        $duration = 0;
+
+        $packageValidDate = '';
+
+        switch($timemeasure){
+            case 'month':
+                $packageValidDate = mktime($hour,$min,$sec,($month+$num),$day,$year);
+
+            break;
+            case 'day':
+                $packageValidDate = mktime($hour,$min,$sec,$month,($day+$num),$year);
+
+            break;
+            case 'week':
+                $packageValidDate = mktime($hour,$min,$sec,$month,($day+$num),$year);
+
+            break;
+            default:
+                $packageValidDate = mktime($hour,$min,$sec,$month,$day+$num,$year);
+
+        }
+
+        $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
+        $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
+
+        $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
+
+        return $dateToDisconnect;
+
+    }
+    
     public function perUserLimit(Request $request){
         $limit = $request->get('limit');
         $limitvalue = $request->get('limitvalue');

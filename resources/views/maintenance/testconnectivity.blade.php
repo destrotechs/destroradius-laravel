@@ -29,7 +29,7 @@
 </div>
 </div>
 <div class="col-md-5 card card-body p-4">
-	<div class="bg-success text-white res" style="display: none;"></div>
+	<div class="bg-info p-3 text-white res" style="display: none;"></div>
 	<center><p class="card-text mt-5" style="opacity: 0.1;">Test result appear here</p></center>
 </div>
 </div>
