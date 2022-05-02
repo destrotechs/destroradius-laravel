@@ -120,10 +120,10 @@ class userController extends Controller
         $request->validate([
             'username'=>'required|unique:customers|unique:radcheck',
             'password'=>'required|min:6',
-            'zoneid'=>'required',
+            // 'zoneid'=>'required',
             'phone'=>'required|numeric',
-            'package'=>'required',
-            'nasid'=>'required',
+            // 'package'=>'required',
+            // 'nasid'=>'required',
         ]);
 
 
@@ -446,6 +446,7 @@ class userController extends Controller
             $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id)->delete();
 
             $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
+            $remove_radusergroup = DB::table('radreply')->where('username','=',$username)->delete();
 
             echo "user activated on non-regulated mode";
 
@@ -515,7 +516,7 @@ class userController extends Controller
 
             break;
             case 'week':
-                $packageValidDate = mktime($hour,$min,$sec,$month,($day+$num),$year);
+                $packageValidDate = mktime($hour,$min,$sec,$month,($day+(7*$num)),$year);
 
             break;
             default:
