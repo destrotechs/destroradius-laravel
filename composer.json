@@ -18,6 +18,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.5",
         "paypal/paypal-checkout-sdk": "1.0.1",
+        "pear2/net_routeros": "*@beta",
         "spatie/laravel-permission": "^4.0"
     },
     "require-dev": {
