@@ -45,8 +45,10 @@
         },
         "classmap": [
             "database/seeds",
-            "database/factories",
-            "app\\PEAR2_Net_RouterOS-1.0.0b6\\src\\PEAR2\\"
+            "database/factories"
+        ],
+        "files":[
+            "app/PEAR2_Net_RouterOS-1.0.0b6/src/PEAR2/Autoload.php",
         ]
     },
     "autoload-dev": {
