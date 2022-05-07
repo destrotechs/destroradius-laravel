@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use PEAR2\Net\RouterOS;
-require_once 'PEAR2_Net_RouterOS-1.0.0b6/src/PEAR2/Autoload.php';
+use App\PEAR2_Net_RouterOS-1.0.0b6\src\PEAR2\Autoload;
 class paymentsController extends Controller
 {
     public function selectPayOption(){
