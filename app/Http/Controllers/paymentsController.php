@@ -8,7 +8,7 @@ class paymentsController extends Controller
 {
     public function selectPayOption(){
         try {
-            $client = new RouterOS\Client('ADDRESS', 'LOGIN', 'PASSWORD');
+            $client = new Client('ADDRESS', 'LOGIN', 'PASSWORD');
             $responses = $client->sendSync(new RouterOS\Request('/ip/hotspot/active/print'));
 
             foreach ($responses as $response) {
