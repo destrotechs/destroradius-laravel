@@ -41,14 +41,12 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Morris\\Mpesa\\": "packages/Morris/Mpesa/src"
+            "Morris\\Mpesa\\": "packages/Morris/Mpesa/src",
+            "Morris\\RouterOS\\": "packages/PEAR2_Net_RouterOS-1.0.0b6/src/PEAR2",
         },
         "classmap": [
             "database/seeds",
             "database/factories"
-        ],
-        "files":[
-            "app/PEAR2_Net_RouterOS-1.0.0b6/src/PEAR2/Autoload.php",
         ]
     },
     "autoload-dev": {
