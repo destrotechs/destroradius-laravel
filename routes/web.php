@@ -45,6 +45,7 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::get('/managers/new','managerController@newManager')->name('manager.new.get');
 
 	Route::get('/inventory/items','inventoryController@render_items')->name('inventory.items');
+	Route::get('/inventory/categories','inventoryController@render_categories')->name('inventory.categories');
 	Route::get('/inventory/products','inventoryController@render_products')->name('inventory.products');
 	Route::get('/inventory/products/new','inventoryController@render_product_new')->name('inventory.products.new');
 	Route::get('/inventory/items/new','inventoryController@render_item_new')->name('inventory.item.new');

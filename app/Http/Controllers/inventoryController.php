@@ -23,12 +23,15 @@ class inventoryController extends Controller
     public function render_items(){
     	$items=Item::paginate(15);
     	return view('inventory.items',compact('items'));
+    }public function render_categories(){
+        $items=DB::table('item_categories')->paginate(15);
+        return view('inventory.category',compact('items'));
     }
     public function render_products(){
     	$products=Product::paginate(15);
     	return view('inventory.products',compact('products'));
     }
-    public function render_product_new(){
+    public function render_product_new(){   
     	$products=DB::table('products')->orderBy('id','desc')->limit(5)->get();
     	return view('inventory.newproduct',compact('products'));
     }

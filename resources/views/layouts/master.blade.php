@@ -328,6 +328,12 @@
                     </a>
                   </li>
                   <li class="nav-item">
+                    <a href="{{route('inventory.categories')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> Item Categories</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="{{route('inventory.products.new')}}" class="nav-link">
                       <span class="fas fa-plus-circle"></span>&nbsp;
                       <span class="sidenav-normal"> new product</span>

@@ -32,7 +32,7 @@ class settingsController extends Controller
     	return view('settings.systemsettings',compact('logging','managerrates','managers'));
     }
     public function Logging($en){
-    	$ef=DB::table('settings')->updateOrInsert(['logs_enabled'=>$en]);
+    	$ef=DB::table('settings')->update(['logs_enabled'=>$en]);
     	if ($ef) {
     		return redirect()->back()->with('success','settings applied successfully');
     	}else{
