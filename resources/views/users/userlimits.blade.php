@@ -15,7 +15,7 @@ Custom/User Limits
 @endif
 <div class="card">
 	<div class="card-body">
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <thead>
                 <tr>
                     <th colspan="5">Available Limits</th>

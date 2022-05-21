@@ -30,7 +30,7 @@ function check_service($sname) {
 }
 
 ?>
-	<table class="table table-responsivetable-bordered table-striped">
+	<table class="table table-sm table-responsivetable-bordered table-striped">
 		<thead>
 			<tr>
 				<th>Service</th>

@@ -79,7 +79,7 @@ system settings
 		</div>
 			</div>
 			<div class="col-md-7">
-				<table class="table table-responsivetable-bordered">
+				<table class="table table-sm table-responsivetable-bordered">
 					<thead>
 						<tr><th colspan="4">Manager commission rates</th></tr>
 						<tr>

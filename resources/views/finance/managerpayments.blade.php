@@ -35,7 +35,7 @@ Manager payments
 			</div>
 		</form>
 		<div class="dropdown-divider"></div>
-			<table class="table table-responsivetable-sm table-bordered">
+			<table class="table table-sm table-responsivetable-sm table-bordered">
 				<thead>
 					<tr>
 						<th>#</th>

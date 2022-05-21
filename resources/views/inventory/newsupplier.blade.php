@@ -63,7 +63,7 @@ New supplier
 		</div>
 	</div>
 	<div class="col-md-5">
-			<table class="table table-responsivebg-white table-sm table-bordered">
+			<table class="table table-sm table-responsivebg-white table-sm table-bordered">
 				<?php $num=0;?>
 				<thead>
 					<tr>

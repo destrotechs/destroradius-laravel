@@ -7,7 +7,7 @@ Paid users
 	<div class="card-header">Paid Users</div>
 	<div class="card-body">
 		<?php $num=0;?>
-		<table class="table table-responsivetable-bordered table-md">
+		<table class="table table-sm table-responsivetable-bordered table-md">
 			<thead>
 				<tr>
 					<th colspan="4">Paid Users</th>

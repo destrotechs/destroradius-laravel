@@ -52,7 +52,7 @@ User Information
                     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <div class="card-body">
                             @if(count($preplyattributes)>0 || count($pcheckattributes)>0)
-                            <table class="table table-responsivetable-sm table-bordered table-striped">
+                            <table class="table table-sm table-responsivetable-sm table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Limit Name</th>

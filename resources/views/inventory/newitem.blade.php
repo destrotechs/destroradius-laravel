@@ -84,7 +84,7 @@ New item
 	<?php $num=0;?>
 	<div class="col-md-5">
 		<div class="card">
-			<table class="table table-responsivetable-sm table-responsive">
+			<table class="table table-sm table-responsivetable-sm table-responsive">
 				<thead>
 					<tr>
 						<th>#</th>
