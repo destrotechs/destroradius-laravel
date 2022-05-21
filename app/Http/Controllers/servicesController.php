@@ -52,4 +52,12 @@ class servicesController extends Controller
         $attempts=DB::table('radpostauth')->orderBy('id','desc')->paginate(10);
         return view('services.lastconnection',compact('attempts'));
     }
+    public function getSysLogs(){
+        $path=base_path()."/app.logs";
+        $logfile=fopen($path,'r');
+        $log = fread($logfile,filesize($path));
+        $logs = explode("\\n", $log);
+        fclose($logfile);
+        return view('services.syslogs',compact('logs'));
+    }
 }

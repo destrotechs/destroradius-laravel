@@ -599,6 +599,7 @@ class userController extends Controller
 
         $customeroncustomers = DB::table('customers')->where('username','=',$username)->count();
         $id = DB::table('customers')->where('username','=',$username)->pluck('id');
+        
         if($customerexist > 0 || $customeroncustomers > 0){
             DB::table('customers')->where('id','=',$id[0])->delete();
             DB::table('radcheck')->where('username','=',$username)->delete();
@@ -608,6 +609,10 @@ class userController extends Controller
             if($del_ac=='yes'){
                 DB::table('radacct')->where('username','=',$username)->delete();
             }
+            $user = Auth::user()->email;
+            $log="Deleted user ".$request->get('username');
+            $logwrite=Log::createTxtLog($user,$log);
+            
             return redirect()->route('user.all')->with("success","customer removed successfully");
         }
         return redirect()->back()->with("error","customer could not be removed, try again!");

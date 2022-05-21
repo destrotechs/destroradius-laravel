@@ -42,6 +42,8 @@ Route::middleware(['role:admin'])->group(function(){
 
 	Route::get('/services/restart/{service}','servicesController@restartService')->name('restart.service');
 
+	Route::get('/system/logs','servicesController@getSysLogs')->name('service.logs');
+
 	Route::get('/managers/new','managerController@newManager')->name('manager.new.get');
 
 	Route::get('/inventory/items','inventoryController@render_items')->name('inventory.items');

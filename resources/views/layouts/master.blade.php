@@ -390,6 +390,12 @@
                       <span class="sidenav-normal">Last-Connection attempts</span>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{route('service.logs')}}" class="nav-link">
+                      <span class="fas fa-plus-circle"></span>&nbsp;
+                      <span class="sidenav-normal">System Logs</span>
+                    </a>
+                  </li>
 
                 </ul>
       </div>
