@@ -46,6 +46,10 @@ Route::middleware(['role:admin'])->group(function(){
 
 	Route::get('/inventory/items','inventoryController@render_items')->name('inventory.items');
 	Route::get('/inventory/categories','inventoryController@render_categories')->name('inventory.categories');
+	Route::post('/inventory/categories','inventoryController@post_category')->name('category.new');
+	Route::post('/inventory/subcategories','inventoryController@post_sub_category')->name('sub_category.new');
+	Route::get('/inventory/sub_categories/{category}','inventoryController@render_sub_categories')->name('inventory.categories.get');
+	Route::get('/inventory/sub_categories/{category?}','inventoryController@render_sub_categories')->name('inventory.categories.get');
 	Route::get('/inventory/products','inventoryController@render_products')->name('inventory.products');
 	Route::get('/inventory/products/new','inventoryController@render_product_new')->name('inventory.products.new');
 	Route::get('/inventory/items/new','inventoryController@render_item_new')->name('inventory.item.new');

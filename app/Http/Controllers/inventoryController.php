@@ -28,8 +28,25 @@ class inventoryController extends Controller
         return view('inventory.category',compact('items'));
     }
     public function render_products(){
-    	$products=Product::paginate(15);
+    	$products=DB::table('items')->where('category_code','=','PR')->paginate(15);
     	return view('inventory.products',compact('products'));
+    }
+    public function render_sub_categories(Request $request,$category=""){
+        $cat = $category;
+        if ($request->ajax()){
+            $sub_cat = DB::table('item_sub_categories')->where('category_code','=',$category)->get();
+            return response()->json($sub_cat);
+        }else{
+            if ($category!=""){
+                $sub_cat = DB::table('item_sub_categories')->where('category_code','=',$category)->paginate(10);
+                return view('inventory.subcategories',compact('sub_cat','cat'));
+
+            }else{
+                $sub_cat = DB::table('item_sub_categories')->paginate(10);
+                return view('inventory.subcategories',compact('sub_cat','cat'));
+
+            }
+        }
     }
     public function render_product_new(){   
     	$products=DB::table('products')->orderBy('id','desc')->limit(5)->get();
@@ -37,7 +54,8 @@ class inventoryController extends Controller
     }
     public function render_item_new(){
     	$items=DB::table('items')->orderBy('id','desc')->limit(5)->get();
-    	return view('inventory.newitem',compact('items'));
+        $categories=DB::table('item_categories')->orderBy('id','desc')->get();
+    	return view('inventory.newitem',compact('items','categories'));
     }
     /*creating new item*/
     public function post_new_item(Request $request){
@@ -101,6 +119,28 @@ class inventoryController extends Controller
         		return redirect()->back()->with('error','new product could not be added, try again ...
         			');
         	}
+        }
+    }
+    public function post_category(Request $request){
+        $cat = DB::table('item_categories')->updateOrInsert(
+            ['category_code'=>$request->get('category_code')],
+            ['description'=>$request->get('description')]
+        );
+        if ($request->ajax() && $cat){
+            return response()->json(["message"=>"success"]);
+        }else{
+            return redirect()->back()->with("success","new category created");
+        }
+    }
+    public function post_sub_category(Request $request){
+        $sub_cat = DB::table('item_sub_categories')->updateOrInsert(
+            ['category_code'=>$request->get('category_code'),'sub_category_code'=>$request->get('sub_category_code')],
+            ['description'=>$request->get('description')]
+        );
+        if ($request->ajax() && $sub_cat){
+            return response()->json(["message"=>"success"]);
+        }else{
+            return redirect()->back()->with("success","new subcategory created");
         }
     }
     public function edit_item(Request $request,$id){
