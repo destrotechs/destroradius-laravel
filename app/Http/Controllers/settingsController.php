@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Setting;
 use DB;
 use App\User;
+use Auth;
+USE App\Log;
 use App\Manager;
 use Illuminate\Http\Request;
 
@@ -37,10 +39,14 @@ class settingsController extends Controller
         if (Auth::user()->role_id==1){
             if ($log>0){
             $ef=DB::table('settings')->update(['logs_enabled'=>$en]);
-        }else{
-            $ef=DB::table('settings')->insert(['logs_enabled'=>$en]);
+            }else{
+                $ef=DB::table('settings')->insert(['logs_enabled'=>$en]);
 
-        }
+            }
+            $user=Auth::user()->email;
+            $enable = $en==1? " Enabled logging":" Disabled logging";
+            $log=$enable;
+            $logwrite=Log::createTxtLog($user,$log);
             if ($ef) {
                 return redirect()->back()->with('success','settings applied successfully');
             }else{
