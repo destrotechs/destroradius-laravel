@@ -42,7 +42,7 @@ Categories
                       <td>{{ $c->category_code }}</td>
                       <td>{{ $c->description }}</td>
                       <td><a href="#"><i class="fas fa-edit"></i>&nbsp;</a>&nbsp;<a href="#"><i class="fas fa-trash text-danger"></i>&nbsp;</a>
-                        <a href="{{ route('inventory.categories.get',['category'=>$c->category_code]) }}" class="btn btn-primary btn-sm" type="button" id="{{ $c->category_code }}">sub-categories</a>
+                        <a href="{{ route('inventory.sub_categories.get',['category'=>$c->category_code]) }}" class="btn btn-primary btn-sm" type="button" id="{{ $c->category_code }}">sub-categories</a>
                       </td>
                     </tr>
                   @empty

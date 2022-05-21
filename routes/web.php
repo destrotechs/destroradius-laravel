@@ -46,10 +46,8 @@ Route::middleware(['role:admin'])->group(function(){
 
 	Route::get('/inventory/items','inventoryController@render_items')->name('inventory.items');
 	Route::get('/inventory/categories','inventoryController@render_categories')->name('inventory.categories');
-	Route::post('/inventory/categories','inventoryController@post_category')->name('category.new');
-	Route::post('/inventory/subcategories','inventoryController@post_sub_category')->name('sub_category.new');
-	Route::get('/inventory/sub_categories/{category}','inventoryController@render_sub_categories')->name('inventory.categories.get');
-	Route::get('/inventory/sub_categories/{category?}','inventoryController@render_sub_categories')->name('inventory.categories.get');
+	
+	Route::get('/inventory/sub_categories/{category?}','inventoryController@render_sub_categories')->name('inventory.sub_categories.get');
 	Route::get('/inventory/products','inventoryController@render_products')->name('inventory.products');
 	Route::get('/inventory/products/new','inventoryController@render_product_new')->name('inventory.products.new');
 	Route::get('/inventory/items/new','inventoryController@render_item_new')->name('inventory.item.new');
@@ -96,6 +94,8 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::post('/inventory/supplier/edit','inventoryController@save_edit_supplier')->name('supplier.post.edit');
 	Route::post('/inventory/vendors/new','inventoryController@save_new_vendor')->name('vendor.post.new');
 	Route::post('/inventory/vendors/edit','inventoryController@save_edit_vendor')->name('vendor.post.edit');
+	Route::post('/inventory/categories','inventoryController@post_category')->name('category.new');
+	Route::post('/inventory/subcategories','inventoryController@post_sub_category')->name('sub_category.new');
 	//tickets pos
 	Route::post('/tickets/getcost','ticketsController@getPackageCost')->name('get.package.cost');
 	Route::post('/tickets/new/auto','ticketsController@saveAutoGenTickets')->name('save.auto.tickets');

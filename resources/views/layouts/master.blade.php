@@ -316,6 +316,18 @@
               <div class="collapse p-2" id="inventory">
                 <ul class="nav nav-sm flex-column">
                   <li class="nav-item">
+                    <a href="{{route('inventory.categories')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> Item Categories</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('inventory.sub_categories.get')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> Item Sub Categories</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                   <a href="{{route('inventory.item.new')}}" class="nav-link">
                       <span class="fas fa-plus-circle"></span>&nbsp;
                       <span class="sidenav-normal"> New item </span>
@@ -327,24 +339,7 @@
                       <span class="sidenav-normal"> view items </span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="{{route('inventory.categories')}}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> Item Categories</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{route('inventory.products.new')}}" class="nav-link">
-                      <span class="fas fa-plus-circle"></span>&nbsp;
-                      <span class="sidenav-normal"> new product</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{route('inventory.products')}}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> view products </span>
-                    </a>
-                  </li>
+                
                   <li class="nav-item">
                     <a href="{{route('inventory.suppliers')}}" class="nav-link">
                       <span class="fas fa-bars"></span>&nbsp;
