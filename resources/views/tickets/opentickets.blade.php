@@ -40,7 +40,7 @@ Open Tickets
 								<td>{{ $t->package }}</td>
 								<td>{{ $t->cost }}</td>
 								<td>{{ $t->assignedto }}</td>
-								<td><a href="{{ route('delete.ticket',['id'=>$t->id]) }}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>&nbsp;<a href="{{ route('sell.ticket',['id'=>$t->id]) }}" class="btn btn-success btn-sm"><i class="fas fa-check text-white"></i>&nbsp;sell</a></td>
+								<td><a href="#" class="btn btn-danger btn-sm trash" id="{{ $t->id }}"><i class="fas fa-trash"></i></a>&nbsp;<a href="#" id="{{ $t->id }}" class="btn btn-success btn-sm sell"><i class="fas fa-check text-white"></i>&nbsp;sell</a></td>
 							</tr>
 						@empty
 							<tr>
@@ -60,4 +60,37 @@ Open Tickets
 	</div>
 	{{-- <div class="col-md-5"></div> --}}
 </div>
+@endsection
+@section('js')
+<script type="text/javascript">
+  $(document).ready(function(){
+    // route('deleteplan',['id'=>$c->id])
+    $(".trash").click(function(){
+      var id = $(this).attr("id");
+      if(confirm("Are you sure you want to delete this ticket?")){
+        $.ajax({
+          method:'GET',
+          url:'delete/'+id,
+          success:function(res){
+            alert(res);
+            window.location.reload();
+          }
+        })
+      }
+    })
+    $(".sell").click(function(){
+      var id = $(this).attr("id");
+      if(confirm("Are you sure you want to close this ticket?")){
+        $.ajax({
+          method:'GET',
+          url:'close/'+id,
+          success:function(res){
+            alert(res);
+            window.location.reload();
+          }
+        })
+      }
+    })
+  })
+</script>
 @endsection

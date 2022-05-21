@@ -29,6 +29,8 @@ Items
                   <?php $num=0;?>
                   <tr>
                     <th>#</th>
+                    <th>Category</th>
+                    <th>Sub-Cateory</th>
                     <th>Name</th>
                     <th>Model</th>
                     <th>Type</th>
@@ -42,6 +44,8 @@ Items
                   <?php $num++;?>
                     <tr>
                       <td><?php echo $num;?></td>
+                      <td>{{ $i->category_code }}</td>
+                      <td>{{ $i->sub_category_code }}</td>
                       <td>{{ $i->name }}</td>
                       <td>{{ $i->model }}</td>
                       <td>{{ $i->type }}</td>

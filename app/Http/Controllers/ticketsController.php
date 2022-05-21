@@ -83,7 +83,7 @@ class ticketsController extends Controller
         return redirect()->route('tickets.open')->with("success","Tickets have been activated successfully");
 
     }
-    public function closeTicket($id){
+    public function closeTicket(Request $request,$id){
       $ticket=Ticket::find($id);
       $mid=Auth::user()->id;
       $cmrate=0;
@@ -91,28 +91,41 @@ class ticketsController extends Controller
       foreach ($rate as $key => $r) {
         $cmrate=$r->rate;
       }
-      //record transaction
-      $t= new Transaction;
-      $t->transaction_id=$ticket->id;
-      $t->amount=$ticket->cost;
-      $t->initiator=Auth::user()->email;
-      $t->description="ticket sold";
+      if($cmrate==0){
+        return "Manager has no commission rate assigned, selling a ticket is disabled";
+      }else{
+                  //record transaction
+          $t= new Transaction;
+          $t->transaction_id=$ticket->id;
+          $t->amount=$ticket->cost;
+          $t->initiator=Auth::user()->email;
+          $t->description="ticket sold";
 
-      $t->save();
+          $t->save();
 
 
-      //associate transaction with manager
-      $benefit=($cmrate/100)*$ticket->cost;
+          //associate transaction with manager
+          $benefit=($cmrate/100)*$ticket->cost;
 
-      DB::table('managertransactions')->insert(['transactionid'=>$ticket->serialnumber,'managerid'=>$mid,'commission'=>$benefit,'description'=>'ticket sold']);
+          DB::table('managertransactions')->insert(['transactionid'=>$ticket->serialnumber,'managerid'=>$mid,'commission'=>$benefit,'description'=>'ticket sold']);
 
-      //close ticket
-      $t=DB::table('tickets')->where('id','=',$id)->update(['status'=>'closed']);
-      return redirect()->back()->with("success","ticket sold and closed successfully");
+          //close ticket
+          $t=DB::table('tickets')->where('id','=',$id)->update(['status'=>'closed']);
+          if($request->ajax()){
+            echo "ticket closed successfully";
+          }else{
+            return redirect()->back()->with("success","ticket sold and closed successfully");
+          }
+      }
     }
-    public function deleteTicket($id){
+    public function deleteTicket(Request $request,$id){
       $ticket=Ticket::find($id);
       $ticket->delete();
+      if($request->ajax()){
+        echo "ticket deleted successfully";
+      }else{
+
       return redirect()->back()->with("success","ticket deleted successfully");
+      }
     }
 }
