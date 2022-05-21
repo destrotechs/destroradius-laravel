@@ -34,7 +34,7 @@ class HomeController extends Controller
         $month = date('m');
        $total_users = DB::table('customers')->whereMonth('created_at', $month)->count();
        $total_online_users = DB::table('radacct')->where('acctstoptime','=',NULL)->count();
-       $total_sales = DB::table('transactions')->count();
+       $total_sales = DB::table('payments')->count();
 
 
 
