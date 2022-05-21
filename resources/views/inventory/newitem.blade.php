@@ -41,39 +41,48 @@ New item
 				</div>
 				<div class="row">
   					<div class="col">
-						<label>Item Name</label>
-						<input type="text" class="form-control sm" placeholder="item name ..." name="itemname">
+						<label>Item Code</label>
+						<input type="text" class="form-control sm" placeholder="item Code ..." name="item_code" required>
 					</div>
+					<div class="col">
+						<label>Item Name</label>
+						<input type="text" class="form-control sm" placeholder="item name ..." name="itemname" required>
+					</div>
+					
+				</div>
+				<div class="row">
 					<div class="col">
 						<label>Item Type</label>
 						<input type="text" name="itemtype" class="form-control sm" placeholder="item type ...">
 					</div>
-				</div>
-				<div class="row">
 					<div class="col">
 						<label>Item Model</label>
 						<input type="text" name="itemmodel" class="form-control sm" placeholder="model ...">
 					</div>
+					
+				</div>
+				<div class="row">
 					<div class="col">
 						<label>Item Serial#</label>
 						<input type="text" name="itemserial" class="form-control sm" placeholder="serial of all same items separated by commas ...">
 					</div>
-				</div>
-				<div class="row">
 					<div class="col">
 						<label>Supplier</label>
 						<select class="form-control sm" name="supplierid">
 							<option value="">select supplier</option>
 						</select>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col">
 						<label>Quantity</label>
-						<input type="text" name="itemquantity" class="form-control sm" placeholder="e.g 20">
+						<input type="text" name="itemquantity" class="form-control sm" placeholder="e.g 20" required>
 					</div>
+				<div class="col">
+					<label>Cost</label>
+					<input type="text" name="cost" class="form-control sm" placeholder="e.g 20">
 				</div>
-				
-				<label>Cost</label>
-				<input type="text" name="cost" class="form-control sm" placeholder="e.g 20">
+				</div>
 				<label>Description</label>
 				<textarea type="text" class="form-control sm" name="description"></textarea>
 				<hr>
@@ -128,9 +137,25 @@ New item
 		$("#category").change(function(){
 			let category = $(this).val()
 			if (category!=""){
-				alert(category);
+				$.ajax({
+					url:"/inventory/sub_categories/"+category,
+					method:'GET',
+					success:function(data){
+						if (data.length>0){
+							data.map(function(sub_cat){
+								$("#subcategories").append("<option value="+ sub_cat['sub_category_code'] +">"+sub_cat['description']+"</option>")
+								// alert(sub_cat['sub_category_code']);
+							})
+						}else{
+							$("#subcategories").empty();
+						}
+					}
+				})
 			}
 		})
+		function createOption(sub_cat){
+
+		}
 	})
 </script>
 @endsection

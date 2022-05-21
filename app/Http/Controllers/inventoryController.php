@@ -60,10 +60,9 @@ class inventoryController extends Controller
     /*creating new item*/
     public function post_new_item(Request $request){
     	 $validator = Validator::make($request->all(), [
+            'category_code' => 'required',
+            'sub_category_code' => 'required',
             'itemname' => 'required',
-            'itemmodel' => 'required',
-            'itemserial'=>'required',
-            'itemtype'=>'required',
             'itemquantity'=>'required',
         ]);
 
@@ -73,8 +72,11 @@ class inventoryController extends Controller
                         ->withInput();
         }else{
         	$item=new Item;
-        	$item->name=$request->get('itemname');
-        	$item->model=$request->get('itemmodel');
+        	$item->category_code=$request->get('category_code');
+        	$item->sub_category_code=$request->get('sub_category_code');
+            $item->item_code=$request->get('item_code');
+            $item->name=$request->get('itemname');
+            $item->model=$request->get('itemmodel');
         	$item->serial=$request->get('itemserial');
         	$item->type=$request->get('itemtype');
         	$item->quantity=$request->get('itemquantity');
