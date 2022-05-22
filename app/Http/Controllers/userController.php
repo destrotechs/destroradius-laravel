@@ -543,6 +543,7 @@ class userController extends Controller
         $limit = $request->get('limit');
         $limitvalue = $request->get('limitvalue');
         $username = $request->get('username');
+        $user = Auth::user()->email;
         $log=" Edited user ".$username." on ".date("Y:m:d h:i:s");
         $logwrite=Log::createTxtLog($user,$log);
         foreach ($limit as $key=>$l){
@@ -575,17 +576,23 @@ class userController extends Controller
         }
         return redirect()->back()->with("success","limit updated successfully");
     }
-    public function deleteAttrcheck($id){
+    public function deleteAttrcheck(Request $request,$id){
         if($id){
             DB::table('radcheck')->where('id','=',$id)->delete();
+            if($request->ajax()){
+                return "Limit deleted successfully";
+            }
             return redirect()->back()->with("success","limit removed successfully");
         }else{
             return redirect()->back()->with("error","unknown id");
         }
     }
-    public function deleteAttrreply($id){
+    public function deleteAttrreply(Request $request,$id){
         if($id){
             DB::table('radreply')->where('id','=',$id)->delete();
+            if($request->ajax()){
+                return "Limit deleted successfully";
+            }
             return redirect()->back()->with("success","limit removed successfully");
         }
         else{

@@ -51,7 +51,7 @@ Items
                       <td>{{ $i->type }}</td>
                       <td>{{ $i->serial }}</td>
                       <td>{{ $i->quantity }}</td>
-                      <td><a href="{{ route('edit.item',['id'=>$i->id]) }}"><i class="fas fa-edit"></i>&nbsp;</a>&nbsp;<a href="{{ route('item.delete',['id'=>$i->id]) }}"><i class="fas fa-trash text-danger"></i>&nbsp;</a></td>
+                      <td><a href="{{ route('edit.item',['id'=>$i->id]) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i>&nbsp;</a>&nbsp;<a href="#" class="btn btn-danger btn-sm trash" id="{{ $i->id }}"><i class="fas fa-trash text-white"></i>&nbsp;</a></td>
                     </tr>
                   @empty
                   <tr>
@@ -68,4 +68,23 @@ Items
             </div>
             <!-- /.card-body -->
 </div>
+@endsection
+@section('js')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".trash").click(function(){
+            var id = $(this).attr("id");
+            if (confirm("Are you sure you want to delete this item?")){
+                $.ajax({
+                    method:'GET',
+                    url:'items/delete/'+id,
+                    success:function(res){
+                        alert(res);
+                        window.location.reload();
+                    }
+                })
+            }
+        })
+    })
+</script>
 @endsection

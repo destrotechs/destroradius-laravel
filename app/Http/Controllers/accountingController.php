@@ -49,7 +49,7 @@ class accountingController extends Controller
         }else{
             $totalsessiontime.=" Seconds";
         }
-        $output='<table class="table table-sm table-striped table-bordered table-sm"><thead><tr><th>ID</th><th>username</th><th>Ip Address</th><th>Start Time</th><th>End Time</th><th>Total Time</th><th>Uplaod</th><th>Download</th><th>Termination Cause</th><th>Nas IP address</th></tr></thead><tbody>';
+        $output='<table class="table table-responsive table-sm table-striped table-bordered table-sm"><thead><tr><th>ID</th><th>username</th><th>Ip Address</th><th>Start Time</th><th>End Time</th><th>Total Time</th><th>Uplaod</th><th>Download</th><th>Termination Cause</th><th>Nas IP address</th></tr></thead><tbody>';
         if (count($useraccounting)>0) {
            foreach ($useraccounting as $key => $o) {
             $timespent=$o->acctsessiontime;
@@ -168,10 +168,16 @@ class accountingController extends Controller
             $del_acc = DB::table('radacct')->where('username','=',$username)->delete();
 
             if($del_acc){
+                if ($request->ajax()){
+                    return "Accounting details removed successfully";
+                }
                 return redirect()->back()->with("success",$username." accounting details deleted successfully");
             }
 
         }else{
+            if ($request->ajax()){
+                    return "No accounting details found";
+                }
             return redirect()->back()->with("error",$username." accounting details are not available");
         }
     }

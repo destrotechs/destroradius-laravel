@@ -27,6 +27,10 @@ New Manager
 	<input type="email" class="form-control" name="email" placeholder="Manager name...">
 	<label for="exampleDataList" class="form-label">Password</label>
 	<input type="password" class="form-control" name="password" placeholder="********">
+	<div class="form-inline">
+		<label>Super Admin?</label>&nbsp;&nbsp;
+		<input type="checkbox" name="is_admin" value="1" class="form-check">
+	</div>
 	<hr>
 	<button type="submit" class="btn btn-success btn-md"><i class="fas fa-save"></i> &nbsp;Save</button>
 

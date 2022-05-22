@@ -127,7 +127,7 @@ Route::middleware(['role:admin'])->group(function(){
     Route::get('/payment/mpesa','paymentsController@getMpesa')->name('mpesa.payment');
 
 });
-Route::get('/users/accounting/del/{username}','accountingController@deleteAccountingRec')->name('deleteaccts');
+Route::get('/user/change/accounting/del/{username}','accountingController@deleteAccountingRec')->name('deleteaccts');
 Route::get('/tickets/close/{id}','ticketsController@closeTicket')->name('sell.ticket');
 Route::get('/nas/view','nasController@viewNas')->name('nas.view');
 //users routes
@@ -192,8 +192,8 @@ Route::get('/user/change/{username?}','userController@getUserChange')->name('get
 Route::post('/user/specificuser','userController@getUserToEdit')->name('getspecificuser');
 Route::post('/user/peruserlimit','userController@perUserLimit')->name('peruserlimit.post');
 Route::post('/user/editattribute','userController@editAttribute')->name('edit_attr.post');
-Route::get('/user/checkattr/del/{id}','userController@deleteAttrcheck')->name('checkdeleteattr');
-Route::get('/user/replyattr/del/{id}','userController@deleteAttrreply')->name('replydeleteattr');
+Route::get('/user/change/checkattr/del/{id}','userController@deleteAttrcheck')->name('checkdeleteattr');
+Route::get('/user/change/replyattr/del/{id}','userController@deleteAttrreply')->name('replydeleteattr');
 //post routes
 //nas post routes
 

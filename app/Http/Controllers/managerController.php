@@ -38,7 +38,7 @@ class managerController extends Controller
         	$manager->name=$request->get('fullname');
         	$manager->email=$request->get('email');
         	$manager->password=Hash::make($request->get('password'));
-            $manager->role_id=2;
+            $manager->role_id=$request->get('is_admin') || 2;
             $manager->city=$request->get('city');
             $manager->address=$request->get('address');
             $manager->phone=$request->get('phone');
@@ -73,7 +73,7 @@ class managerController extends Controller
             'email'=>'required|unique:managers,email',
             'password'=>'required|max:30|min:8',
             'city'=>'required',
-            'phone'=>'required|unique:users',
+            'phone'=>'required',
             'address'=>'required',
         ]);
 
@@ -81,7 +81,7 @@ class managerController extends Controller
             $manager->name=$request->get('fullname');
             $manager->email=$request->get('email');
             $manager->password=Hash::make($request->get('password'));
-            $manager->role_id=2;
+            $manager->role_id= $request->get('is_admin')?$request->get('is_admin'):2;
             $manager->city=$request->get('city');
             $manager->address=$request->get('address');
             $manager->phone=$request->get('phone');

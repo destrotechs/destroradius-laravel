@@ -28,7 +28,17 @@ Edit Manager
 	<input type="email" class="form-control" name="email" placeholder="Manager name..." value="{{ $m->email }}">
 	<label for="exampleDataList" class="form-label">Password</label>
 	<input type="password" class="form-control" name="password" placeholder="********" value="{{ $m->name }}">
-	
+	@if( $m->role_id==1)
+	<div class="form-inline">
+		<label>Super Admin?</label>&nbsp;&nbsp;
+		<input type="checkbox" name="is_admin" value="1" class="form-check" checked>
+	</div>
+	@else
+	<div class="form-inline">
+		<label>Super Admin?</label>&nbsp;&nbsp;
+		<input type="checkbox" name="is_admin" value="1" class="form-check">
+	</div>
+	@endif
 
 </div>
 
@@ -40,6 +50,8 @@ Edit Manager
 	<input type="text" class="form-control" name="city" placeholder="Manager's city..."  value="{{ $m->city }}">
 	<label for="exampleDataList" class="form-label">Address</label>
 	<input type="text" class="form-control" name="address" placeholder="Manager's address..."  value="{{ $m->address }}">
+	
+
 </div>
 </div>
 <hr>

@@ -208,10 +208,13 @@ class inventoryController extends Controller
         	}
         }
     }
-    public function item_delete($id){
+    public function item_delete(Request $request,$id){
     	$item=Item::find($id);
     	$res=$item->delete();
     	if ($res) {
+            if ($request->ajax()){
+                return 'Item deleted successfully';
+            }
     		return redirect()->back()->with('success','Item deleted successfully');
     	}else{
     		return redirect()->back()->with('error','item could not be deleted, try again');

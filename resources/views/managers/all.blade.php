@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('buttons')
+<div class="col-lg-6 col-5 text-right">
+  <a href="{{ route('manager.new.get') }}" class="btn btn-sm btn-neutral"><i class="fas fa-plus"></i>&nbsp; New Manager</a>
+</div>
+@endsection
 @section('content_header')
     All Managers
 @endsection
@@ -24,7 +29,7 @@
                     <th>Phone</th>
                     <th>Address</th>
                     <th>City</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,14 +59,13 @@
     $(document).ready(function(){
         $(".trash").click(function(){
             var id = $(this).attr("id");
-            alert(id);
             if (confirm("Are you sure you want to delete this manager?")){
                 $.ajax({
                     method:'GET',
                     url:'delete/'+id,
                     success:function(res){
                         alert(res);
-                        // window.location.reload();
+                        window.location.reload();
                     }
                 })
             }

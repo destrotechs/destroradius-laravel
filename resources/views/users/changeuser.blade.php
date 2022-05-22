@@ -50,7 +50,7 @@ User Information
                         </h2>
                       </div>
 
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <div class="card-body">
                             @if(count($preplyattributes)>0 || count($pcheckattributes)>0)
                             <table class="table table-sm table-responsivetable-sm table-bordered table-striped">
@@ -67,9 +67,9 @@ User Information
                                     <tr>
                                         <input name="table" value="reply" type="hidden">
                                         <input type="hidden" name="attr_id" value="{{ $ra->id }}">
-                                        <td><input type="text" name="limit" value="{{ $ra->attribute }}" readonly></td>
-                                        <td><input type="text" name="limitvalue" value="{{ $ra->value }}"></td>
-                                        <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-save"></i></button><a href="{{ route('replydeleteattr',['id'=>$ra->id]) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a></td>
+                                        <td><input class="form-control" type="text" name="limit" value="{{ $ra->attribute }}" readonly></td>
+                                        <td><input class="form-control" type="text" name="limitvalue" value="{{ $ra->value }}"></td>
+                                        <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-save"></i></button><a href="#" id="{{ $ra->id }}" class="btn btn-sm btn-danger trashr"><i class="fas fa-trash"></i></a></td>
                                     </tr>
                                     @csrf
                                     </form>
@@ -86,10 +86,10 @@ User Information
                                         @endif
                                         <input name="table" value="check" type="hidden">
                                         <input type="hidden" name="attr_id" value="{{ $ca->id }}">
-                                        <td><input type="text" name="limit" value="{{ $ca->attribute }}" readonly></td>
-                                        <td><input type="text" name="limitvalue" value="{{ $ca->value }}"></td>
+                                        <td><input class="form-control" type="text" name="limit" value="{{ $ca->attribute }}" readonly></td>
+                                        <td><input class="form-control" type="text" name="limitvalue" value="{{ $ca->value }}"></td>
                                         <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-save"></i></button>
-                                            <a href="{{ route('checkdeleteattr',['id'=>$ca->id]) }}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a></td>
+                                            <a href="#" id="{{ $ca->id }}" class="btn btn-sm btn-danger trashc"><i class="fas fa-trash"></i></a></td>
 
                                     </tr>
                                     </form>
@@ -105,7 +105,7 @@ User Information
                     <div class="card">
                         <div class="card-header" id="headingTwo">
                           <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                               Package Details
                             </button>
                           </h2>
@@ -146,11 +146,12 @@ User Information
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<button class="btn btn-primary btn-md" data-toggle="modal" data-target="#exampleModal">change package</button>
-				<a href="#" class="btn btn-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
-				<a href="{{ route('deleteaccts',['username'=>$username]) }}" class="btn btn-warning btn-md"><i class="fas fa-close"></i> Remove Accounting records</a>
-                <a href="#" class="btn btn-info btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-check"></i> Per user limits</a>
-                <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass]) }}" class="btn btn-info btn-md"><i class="fas fa-check"></i> Test User Connectivity</a>
+				<button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal">Change package</button>
+				
+                <a href="#" class="btn btn-outline-warning btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-exclamation-triangle"></i> Per user limits</a>
+                <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass]) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>
+                <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
+                <a href="#" id="{{ $username }}" class="btn btn-outline-warning btn-md trashrec"><i class="fas fa-close"></i> Remove Accounting records</a>
 
             </div>
 		</div>
@@ -244,7 +245,7 @@ User Information
 
                     </div>
                     <div class="col">
-                        <input name="limitvalue[]" class="form-control limitvalue" type="text">
+                        <input name="limitvalue[]" class="form-control limitvalue" type="text" placeholder="limit value...">
                     </div>
 
                 </div>
@@ -296,6 +297,45 @@ $(document).ready(function(){
         var inp = $("#addrow").clone();
         $(".rowsfield").append(inp);
         $(".rowsfield").append("<br>");
+    })
+    $(".trashc").click(function(){
+        var id = $(this).attr("id");
+        if (confirm("Are you sure you want to delete this limit?")){
+            $.ajax({
+                method:'GET',
+                url:'checkattr/del/'+id,
+                success:function(res){
+                    alert(res);
+                    window.location.reload();
+                }
+            })
+        }
+    })
+    $(".trashr").click(function(){
+        var id = $(this).attr("id");
+        if (confirm("Are you sure you want to delete this limit?")){
+            $.ajax({
+                method:'GET',
+                url:'replyattr/del/'+id,
+                success:function(res){
+                    alert(res);
+                    window.location.reload();
+                }
+            })
+        }
+    })
+    $(".trashrec").click(function(){
+        var user = $(this).attr("id");
+        if (confirm("Are you sure you want to delete user accounting records?")){
+            $.ajax({
+                method:'GET',
+                url:'accounting/del/'+user,
+                success:function(res){
+                    alert(res);
+                    // window.location.reload();
+                }
+            })
+        }
     })
 })
 </script>
