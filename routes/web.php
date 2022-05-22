@@ -152,7 +152,7 @@ Route::post('/user/customlimits','userController@postUserLimit')->name('postuser
 
 //maintenance get routes
 Route::get('/services/status','servicesController@servicesStatus')->name('services.status');
-Route::get('/services/testconnectivity','servicesController@testConnectivity')->name('services.testconnectivity');
+Route::get('/services/testconnectivity/{user?}/{cleart?}','servicesController@testConnectivity')->name('services.testconnectivity');
 
 Route::post('/services/testconn','servicesController@postTestConn')->name('testconn');
 

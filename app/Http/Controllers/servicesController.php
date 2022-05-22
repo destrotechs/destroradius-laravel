@@ -15,8 +15,8 @@ class servicesController extends Controller
         }
         $this->middleware('auth');
     }
-    public function testConnectivity(){
-        return view('maintenance.testconnectivity');
+    public function testConnectivity(Request $request,$user='',$cleart=''){
+        return view('maintenance.testconnectivity',compact('user','cleart'));
     }
     public function servicesStatus(){
         return view('maintenance.servicesstatus');

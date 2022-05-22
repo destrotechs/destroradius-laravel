@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('buttons')
+<div class="col-lg-6 col-5 text-right">
+  <a href="{{ route('inventory.supplier.new') }}" class="btn btn-sm btn-neutral"><i class="fas fa-plus-circle"></i>&nbsp; New Supplier</a>
+</div>
+@endsection
 @section('content_header')
 Suppliers
 @endsection
@@ -17,7 +22,7 @@ Suppliers
 </div>
 @endif
 		  <div class="card-header">
-		    Supliers <a class="btn btn-primary float-right" href="{{ route('inventory.supplier.new') }}"><i class="fas fa-plus"></i> &nbsp;New Supplier</a>
+		    Supliers
 		  </div>
 		  <?php $num=0;?>
             <!-- /.card-header -->

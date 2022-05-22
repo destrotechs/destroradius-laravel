@@ -10,9 +10,9 @@
 	<div class="card-body">
 		<form>
 			<label>Username</label>
-			<input type="text" name="username" id="username" class="form-control">
+			<input type="text" name="username" id="username" class="form-control" value="{{ $user }}">
 			<label>Password</label>
-			<input type="text" name="password" id="password" class="form-control">
+			<input type="text" name="password" id="password" class="form-control" value="{{ $cleart }}">
 			<label>Radius port</label>
 			<input type="text" name="radiusport" id="radiusport" readonly class="form-control" value="1812">
 			<label>Radius server Address</label>

@@ -27,6 +27,7 @@ User Information
 				  	@foreach($userdetails as $d)
 				  	<?php
 				  		$username = $d->username;
+
 				  	?>
 				    <li class="list-group-item"><b>Name :</b> {{ $d->name }}</li>
 				    <li class="list-group-item"><b>Username:</b> {{ $d->username }}</li>
@@ -77,6 +78,12 @@ User Information
                                     <form method="post" action="{{ route('edit_attr.post') }}">
                                     @csrf
                                     <tr>
+                                        @if($ca->attribute=='Cleartext-Password')
+
+                                        <?php
+                                            $pass = $ca->value;
+                                        ?>
+                                        @endif
                                         <input name="table" value="check" type="hidden">
                                         <input type="hidden" name="attr_id" value="{{ $ca->id }}">
                                         <td><input type="text" name="limit" value="{{ $ca->attribute }}" readonly></td>
@@ -113,7 +120,13 @@ User Information
                                 <li class="list-group-item"><b>Down Speed :</b> {{ $d->downloadspeed/(1024*1024) }} mbps</li>
                                 <li class="list-group-item"><b>Up Speed:</b> {{ $d->uploadspeed/(1024*1024) }} mbps</li>
                                 <li class="list-group-item"><b>Max time: </b>{{ $d->validdays }}{{ $d->durationmeasure }}</li>
-                                <li class="list-group-item"><b>Quota:</b> {{ $d->quota/(1024*1024) }}MBs</li>
+                                <li class="list-group-item"><b>Quota:</b> 
+                                    @if($d->quota!=0)
+                                    {{ $d->quota/(1024*1024) }}MBs
+                                    @else
+                                    {{ 'UNLIMITED' }}
+                                    @endif
+                                </li>
                                 <li class="list-group-item"><b>Time Spent  Online:</b> {{ $usertimespent/3600 }} Hours</li>
                                 <li class="list-group-item"><b>Used Bundles :</b> {{ $userquotaspent/(1024*1024) }}(MBs)</li>
                               @endforeach
@@ -137,6 +150,7 @@ User Information
 				<a href="#" class="btn btn-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
 				<a href="{{ route('deleteaccts',['username'=>$username]) }}" class="btn btn-warning btn-md"><i class="fas fa-close"></i> Remove Accounting records</a>
                 <a href="#" class="btn btn-info btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-check"></i> Per user limits</a>
+                <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass]) }}" class="btn btn-info btn-md"><i class="fas fa-check"></i> Test User Connectivity</a>
 
             </div>
 		</div>
