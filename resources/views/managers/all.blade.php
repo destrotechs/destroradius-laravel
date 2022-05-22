@@ -28,6 +28,7 @@
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Address</th>
+                    <th>Super Admin</th>
                     <th>City</th>
                     <th>Actions</th>
                 </tr>
@@ -40,6 +41,9 @@
                         <td>{{ $m->name }}</td>
                         <td>{{ $m->phone }} </td>
                         <td>{{ $m->address }}</td>
+                        <td>
+                            {{ $m->role_id==1?'YES':'NO' }}
+                        </td>
                         <td>{{ $m->city }}</td>
                         
                         <td><a href="{{ route('manager.edit',['id'=>$m->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="#" id="{{ $m->id }}" class="btn btn-danger btn-sm trash"><i class="fas fa-trash"></i></a></td>

@@ -5,6 +5,16 @@ Edit Manager
 
 @endsection
 @section('content')
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 <div class="card">
 <div class="card-header">Edit manager</div>
 <div class="card-body">
