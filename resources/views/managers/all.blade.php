@@ -37,7 +37,7 @@
                         <td>{{ $m->address }}</td>
                         <td>{{ $m->city }}</td>
                         
-                        <td><a href="{{ route('manager.edit',['id'=>$m->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="{{ route('manager.delete',['id'=>$m->id]) }}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a></td>
+                        <td><a href="{{ route('manager.edit',['id'=>$m->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="#" id="{{ $m->id }}" class="btn btn-danger btn-sm trash"><i class="fas fa-trash"></i></a></td>
                     </tr>
                 @empty
                     <tr>
@@ -48,4 +48,24 @@
 
         </table>
     </div>
+@endsection
+@section('js')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".trash").click(function(){
+            var id = $(this).attr("id");
+            alert(id);
+            if (confirm("Are you sure you want to delete this manager?")){
+                $.ajax({
+                    method:'GET',
+                    url:'delete/'+id,
+                    success:function(res){
+                        alert(res);
+                        // window.location.reload();
+                    }
+                })
+            }
+        })
+    })
+</script>
 @endsection

@@ -112,7 +112,7 @@ Route::middleware(['role:admin'])->group(function(){
 
 	Route::get('/manager/all','managerController@getAllManagers')->name('managers.all');
 	Route::get('/managers/edit/{id}','managerController@getManagerEdit')->name('manager.edit');
-	Route::get('/managers/delete/{id}','managerController@deleteManager')->name('manager.delete');
+	Route::get('/manager/delete/{id}','managerController@deleteManager')->name('manager.delete');
 	Route::post('/managers/edit/post','managerController@saveManagerChanges')->name('manager.edit.post');
 
 

@@ -56,12 +56,16 @@ class managerController extends Controller
         $manager=DB::table('users')->where('id','=',$id)->get();
         return view('managers.edit',compact('manager'));
     }
-    public function deleteManager($id){
+    public function deleteManager(Request $request,$id){
         $del=DB::table('users')->where('id','=',$id)->delete();
         $delzon=DB::table('zonemanagers')->where('managerid','=',$id)->delete();
         $delzon=DB::table('managercommissionrates')->where('managerid','=',$id)->delete();
+        if($request->ajax()){
+            return "Manager removed successfully";
+        }else{
 
-        return redirect()->back()->with('success',"manager removed successfully");
+            return redirect()->back()->with('success',"manager removed successfully");
+        }
     }
     public function saveManagerChanges(Request $request){
         $request->validate([

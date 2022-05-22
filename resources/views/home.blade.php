@@ -91,7 +91,7 @@
           </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header text-center"><h4>Monthly Sales</h4></div>
                 <div class="card-body" id="monthly_sale">
@@ -100,9 +100,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header text-center"><h4>Package Sales</h4></div>
                 <div class="card-body" id="sales_chart">
@@ -111,6 +109,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
+        
     </div>
 @stop
 @section('css')
