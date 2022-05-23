@@ -146,7 +146,7 @@ User Information
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal">Change package</button>
+				<button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-link" aria-hidden="true"></i>Change package</button>
 				
                 <a href="#" class="btn btn-outline-warning btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-exclamation-triangle"></i> Per user limits</a>
                 <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass]) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>

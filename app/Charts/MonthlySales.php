@@ -19,6 +19,7 @@ class MonthlySales extends BaseChart
     public function handler(Request $request): Chartisan
     {
         $months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+        $monthsw = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
         $month_sales = array();
         $total_sale = 0;
@@ -37,7 +38,7 @@ class MonthlySales extends BaseChart
             array_push($month_sales,$total_sale);
         }
         return Chartisan::build()
-            ->labels($months)
+            ->labels($monthsw)
             ->dataset('SaleTotals', $month_sales);
     }
 }
