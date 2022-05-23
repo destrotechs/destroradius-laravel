@@ -16,10 +16,15 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">CPU traffic</h5>
-                      <span class="h2 font-weight-bold mb-0"><?php
+                      <span class="h2 font-weight-bold mb-0">
+                         <?php
                         $load = sys_getloadavg();
-                        echo $load[0]."%";
-                      ?></span>
+                       
+                      ?>
+                        <div class="progress" style="height: 30px;">
+                          <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 25%;" aria-valuenow="{{ $load[0] }}" aria-valuemin="0" aria-valuemax="100">{{ $load[0] }}%</div>
+                        </div>
+                       </span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -162,6 +167,9 @@
 
       .tooltip(),
     });
+    window.setTimeout( function() {
+      window.location.reload();
+    }, 60000);
   </script>
   <script>
 

@@ -13,6 +13,7 @@ User Information
         {{ session('success') }}
     </div>
 @endif
+
 <div class="card">
 	<div class="card-header">User Details</div>
 	<div class="card-body">
@@ -21,7 +22,7 @@ User Information
 		?>
 		<div class="row">
 			<div class="col-md-4">
-				<div class="card">
+				<div class="card card-sm">
 					<div class="card-header"><h3>Personal Details</h3></div>
 				  <ul class="list-group list-group-flush">
 				  	@foreach($userdetails as $d)
