@@ -135,16 +135,7 @@ class clientsController extends Controller
                 //read mpesa transaction details
                 // $details = $payment->getTransactionDetails();
 
-                $cust_trans = new Payment();
-
-                $cust_trans->phonenumber = $phone;
-                $cust_trans->transactionid= 'N/A';
-                $cust_trans->packagebought=$package;
-                $cust_trans->amount = $amount;
-                $cust_trans->username = $username;
-                $cust_trans->transactiondate= date("Y/m/d");
-
-                $cust_trans->save();
+                
 
                 $permitted_chars_username = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     	        $permitted_chars_password = '23456789abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
@@ -156,6 +147,18 @@ class clientsController extends Controller
 		    		$password= substr(str_shuffle($permitted_chars_password), 0, 5);
                 }
 
+                $cust_trans = new Payment();
+
+                $cust_trans->phonenumber = $phone;
+                $cust_trans->transactionid= 'N/A';
+                $cust_trans->packagebought=$package;
+                $cust_trans->username=$username;
+                $cust_trans->amount = $amount;
+                $cust_trans->username = $username;
+                $cust_trans->transactiondate= date("Y/m/d");
+
+                $cust_trans->save();
+                
                 $status = self::purchasePackage($username,$password,$package,$amount,$phone);
                 //send message on success
                 if($status == 'success'){

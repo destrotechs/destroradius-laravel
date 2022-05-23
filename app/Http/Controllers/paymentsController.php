@@ -31,4 +31,8 @@ class paymentsController extends Controller
         $packages = DB::table('packages')->get();
         return view('payments.mpesa',compact('packages'));
     }
+    public function getAllPayments(Request $request){
+        $payments = DB::table('payments')->paginate(10);
+        return view('finance.payments',compact('payments'));
+    }
 }

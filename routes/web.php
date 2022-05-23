@@ -109,6 +109,7 @@ Route::middleware(['role:admin'])->group(function(){
 
 	Route::get('/sales/all','salesController@allSales')->name('sales.all');
 	Route::get('/Manager/payments','managerController@managersPayment')->name('manager.payment');
+	Route::get('/payments','paymentsController@getAllPayments')->name('payment.all');
 
 	Route::get('/manager/all','managerController@getAllManagers')->name('managers.all');
 	Route::get('/managers/edit/{id}','managerController@getManagerEdit')->name('manager.edit');

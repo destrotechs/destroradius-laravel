@@ -250,7 +250,7 @@
                 <ul class="nav nav-sm flex-column">
 
                   <li class="nav-item">
-                    <a href="{{route('sales.all')}}" class="nav-link">
+                    <a href="{{route('payment.all')}}" class="nav-link">
                       <span class="fas fa-plus-circle"></span>&nbsp;
                       <span class="sidenav-normal"> Sales </span>
                     </a>

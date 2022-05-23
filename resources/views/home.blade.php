@@ -156,8 +156,10 @@
       hooks:new ChartisanHooks()
       .colors()
       .legend()
+
       .datasets([{type:'bar',fill:false,color:'skyblue'}])
       .axis(true)
+
       .tooltip(),
     });
   </script>
