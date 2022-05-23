@@ -27,9 +27,14 @@ class ItemsChart extends BaseChart
         $items = array();
 
         foreach($c as $ct){
-            $num = DB::table('items')->where('category_code','=',$ct->category_code)->count();
+            $num = DB::table('items')->where('category_code','=',$ct->category_code)->get();
+            $total = 0;
+            foreach($num as $n){
+                $total = $total+$n->quantity;
+            }
+
             array_push($cat,$ct->description);
-            array_push($items,$num);
+            array_push($items,$total);
         }
         // echo (array)$sub_cat;
 
