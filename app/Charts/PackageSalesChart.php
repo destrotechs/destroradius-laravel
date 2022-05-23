@@ -30,6 +30,6 @@ class PackageSalesChart extends BaseChart
         }
         return Chartisan::build()
         ->labels($package_names)
-        ->dataset('Sales', $sales);
+        ->dataset('Number of Purchases', $sales);
     }
 }

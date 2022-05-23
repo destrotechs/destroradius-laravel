@@ -39,6 +39,6 @@ class MonthlySales extends BaseChart
         }
         return Chartisan::build()
             ->labels($monthsw)
-            ->dataset('SaleTotals', $month_sales);
+            ->dataset('Amount on Sales', $month_sales);
     }
 }

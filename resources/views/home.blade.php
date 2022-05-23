@@ -111,7 +111,14 @@
         </div>
     </div>
     <div class="row">
-        
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header text-center"><h4>Inventory Items</h4></div>
+            <div class="card-body" id="inv_chart">
+              
+            </div>
+          </div>
+        </div>
     </div>
 @stop
 @section('css')
@@ -119,23 +126,52 @@
 @stop
 
 @section('js')
+ <script src="https://unpkg.com/echarts/dist/echarts.min.js"></script>
+ <script src="https://unpkg.com/@chartisan/echarts/dist/chartisan_echarts.js"></script>
 <script>
     const chart = new Chartisan({
       el: '#sales_chart',
       url: "@chart('package_sales_chart')",
       hooks:new ChartisanHooks()
+      .legend()
       .colors()
-      .datasets([{type:'line',fill:false,color:'red'}])
+      .datasets([{type:'line',fill:true,color:'green'}])
+      .axis(true)
+      .tooltip()
+
     });
     const chart2 = new Chartisan({
       el: '#monthly_sale',
       url: "@chart('monthly_sales')",
       hooks:new ChartisanHooks()
       .colors()
-      .datasets([{type:'line',fill:false,color:'red'}])
+      .legend()
+      .datasets([{type:'bar',fill:false,color:'skyblue'}])
+      .axis(true)
+      .tooltip(),
+    });
+    const chart3 = new Chartisan({
+      el: '#inv_chart',
+      url: "@chart('items_chart')",
+      hooks:new ChartisanHooks()
+      .colors()
+      .legend()
+      .datasets([{type:'bar',fill:false,color:'skyblue'}])
+      .axis(true)
+      .tooltip(),
     });
   </script>
   <script>
 
   </script>
+   {{-- <script>
+        const chart = new Chartisan({
+            el: '#chart',
+            url: "@chart('my_chart')",
+            hooks: new ChartisanHooks()
+             .colors(['#4299E1','#FE0045','#C07EF1','#67C560','#ECC94B'])
+                .datasets('bar')
+                .axis(true)
+        });
+    </script> --}}
 @stop
