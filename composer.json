@@ -19,7 +19,8 @@
         "laravel/ui": "^2.5",
         "paypal/paypal-checkout-sdk": "1.0.1",
         "pear2/net_routeros": "*@beta",
-        "spatie/laravel-permission": "^4.0"
+        "spatie/laravel-permission": "^4.0",
+        "yajra/laravel-datatables-oracle": "^9.20"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use DB;
+use App\Payment;
 use Illuminate\Http\Request;
 class paymentsController extends Controller
 {
@@ -32,7 +33,21 @@ class paymentsController extends Controller
         return view('payments.mpesa',compact('packages'));
     }
     public function getAllPayments(Request $request){
-        $payments = DB::table('payments')->paginate(10);
-        return view('finance.payments',compact('payments'));
+        // $payments = DB::table('payments')->paginate(10);
+        // return view('finance.payments',compact('payments'));
+         if ($request->ajax()) {
+            $data = Payment::latest()->get();
+            // return Datatables::of($data)
+            //         ->addIndexColumn()
+            //         ->addColumn('action', function($row){
+            //             $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';return $btn;
+            //         })->rawColumns(['action'])->make(true);
+            //     }
+return datatables()->query(DB::table('payments'))->addColumn('action', function($row){
+                        $btn = '<a href="javascript:void(0)"onClick="show()" class="edit btn btn-primary btn-sm view">View</a>';return $btn;})->toJson();
+        }
+
+        return view('finance.payments');
+    
     }
 }

@@ -171,9 +171,7 @@
       window.location.reload();
     }, 60000);
   </script>
-  <script>
 
-  </script>
    {{-- <script>
         const chart = new Chartisan({
             el: '#chart',

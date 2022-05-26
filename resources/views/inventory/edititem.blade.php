@@ -20,6 +20,26 @@ Edit item
 				@csrf
 				<div class="row">
   					<div class="col">
+						<label>Category</label>
+						<select name="category_code" class="form-control" required id="category">
+							<option value="{{ $item->category_code }}">{{ $item->category_code }}</option>
+							@forelse($categories as $c)
+							<option value="{{ $c->category_code }}">{{ $c->description }}</option>
+							@empty
+							<option value="">No categories available</option>
+							@endforelse
+						</select>
+					</div>
+					<div class="col">
+						<label>SubCategory</label>
+						<select id="subcategories" name="sub_category_code" class="form-control" required>
+							<option value="{{ $item->sub_category_code }}">{{ $item->sub_category_code }}</option>
+							
+						</select>
+					</div>
+				</div>
+				<div class="row">
+  					<div class="col">
 						<label>Item Name</label>
 						<input type="text" class="form-control sm" placeholder="item name ..." name="itemname" value="{{ $item->name }}">
 					</div>
@@ -61,4 +81,32 @@ Edit item
 			</form>
 	</div>
 </div>
+@endsection
+@section('js')
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#category").change(function(){
+			let category = $(this).val()
+			if (category!=""){
+				$.ajax({
+					url:"/inventory/sub_categories/"+category,
+					method:'GET',
+					success:function(data){
+						if (data.length>0){
+							data.map(function(sub_cat){
+								$("#subcategories").append("<option value="+ sub_cat['sub_category_code'] +">"+sub_cat['description']+"</option>")
+								// alert(sub_cat['sub_category_code']);
+							})
+						}else{
+							$("#subcategories").empty();
+						}
+					}
+				})
+			}
+		})
+		function createOption(sub_cat){
+
+		}
+	})
+</script>
 @endsection

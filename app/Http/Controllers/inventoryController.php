@@ -21,7 +21,7 @@ class inventoryController extends Controller
         $this->middleware('auth');
     }
     public function render_items(){
-    	$items=Item::paginate(15);
+    	$items=DB::table('items')->join('item_categories','item_categories.category_code','=','items.category_code')->join('item_sub_categories','item_sub_categories.sub_category_code','=','items.sub_category_code')->select('items.*','item_categories.description as cat_desc','item_sub_categories.description as sub_desc')->paginate(15);
     	return view('inventory.items',compact('items'));
     }public function render_categories(){
         $items=DB::table('item_categories')->paginate(15);
@@ -147,7 +147,9 @@ class inventoryController extends Controller
     }
     public function edit_item(Request $request,$id){
     	$item=Item::find($id);
-    	return view('inventory.edititem',compact('item'));
+        $categories=DB::table('item_categories')->orderBy('id','desc')->get();
+
+    	return view('inventory.edititem',compact('item','categories'));
     }
     public function edit_product(Request $request,$id){
     	$product=Product::find($id);
@@ -155,10 +157,9 @@ class inventoryController extends Controller
     }
     public function save_edit_item(Request $request){
     	$validator = Validator::make($request->all(), [
+            'category_code' => 'required',
+            'sub_category_code' => 'required',
             'itemname' => 'required',
-            'itemmodel' => 'required',
-            'itemserial'=>'required',
-            'itemtype'=>'required',
             'itemquantity'=>'required',
         ]);
 

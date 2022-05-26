@@ -20,11 +20,11 @@ Items
 @endif
 <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Available Items</h3>
+              <h4 class="card-title">Inventory Items</h4>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example2" class="table table-sm table-responsivetable-bordered table-hover">
+              <table id="example2" class="table table-sm table-responsive table-bordered table-hover">
                 <thead>
                   <?php $num=0;?>
                   <tr>
@@ -44,8 +44,8 @@ Items
                   <?php $num++;?>
                     <tr>
                       <td><?php echo $num;?></td>
-                      <td>{{ $i->category_code }}</td>
-                      <td>{{ $i->sub_category_code }}</td>
+                      <td>{{ $i->cat_desc }}</td>
+                      <td>{{ $i->sub_desc }}</td>
                       <td>{{ $i->name }}</td>
                       <td>{{ $i->model }}</td>
                       <td>{{ $i->type }}</td>
