@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 USE App\Log;
 use App\Zone;
+use Alert;
 use App\PackagePrice;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,7 @@ class packagesController extends Controller
     }
 
     public function newPackage(Request $request){
+
         $zones=Zone::all();
         return view('packages.newpackage',compact('zones'));
     }
@@ -50,6 +52,7 @@ class packagesController extends Controller
         $quota=($request->get('quota'))*1024*1024;
         $package = new Package;
         $package->packagename=$request->get('packagename');
+        $package->poolname=$request->get('poolname');
         $package->uploadspeed=$uploadspeed;
         $package->downloadspeed=$downloadspeed;
         $package->users=$request->get('users');
@@ -97,29 +100,34 @@ class packagesController extends Controller
            
 
             ]);
-        if($expireafter>0 && $quota>0){
-            $newcheckgroup=DB::table('radgroupcheck')->insert([
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota]
-            ]);
-            $newgroupreply=DB::table('radgroupreply')->insert([
-                 ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],]);
-        }
+            if($expireafter>0 && $quota>0){
+                $newcheckgroup=DB::table('radgroupcheck')->insert([
+                    ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota]
+                ]);
+                $newgroupreply=DB::table('radgroupreply')->insert([
+                     ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],]);
+            }
 
-        }else{
+        }else if ($request->get('users')=='pppoe'){
             //create a group for pppoe user with the defined attributes
             $ppoecheck=DB::table('radgroupcheck')->insert([
                 ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Protocol','op'=>'==','value'=>'PPP'],
             ]);
 
             $ppoereply=DB::table('radgroupreply')->insert([
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Pool','op'=>'=','value'=>$request->get('poolname')],
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Pool','op'=>'=','value'=>$request->get('poolname').'_Pool'],
                 ['groupname'=>$request->get('packagename'),'attribute'=>'Mikrotik-Rate-Limit','op'=>'=','value'=>$request->get('uploadspeed').$request->get('bandwidth').'/'.$request->get('downloadspeed').$request->get('bandwidth').' '.($request->get('uploadspeed')+1).$request->get('bandwidth').'/'.($request->get('downloadspeed')+1).$request->get('bandwidth').' 40/40'],
             ]);
+             //create pppoe profile
+            DB::table('radusergroup')->insert([
+                'username'=>$packagename.'_Profile','groupname'=>$request->get('packagename'),'prio'=>'10']);
         }
         
         
 
         if($newpackage){
+            alert()->success('Success','Package created successfully');
+
             return redirect()->back()->with("success","Package created successfully!");
         }
         
@@ -137,7 +145,7 @@ class packagesController extends Controller
         $validdays=$request->get('validdays');
         $id=$request->get('id');
 
-        $packageupdate=DB::table('packages')->where('id','=',$id)->update(['packagename'=>$packagename,'uploadspeed'=>$uploadspeed,'downloadspeed'=>$downloadspeed,'users'=>$users,'quota'=>$quota,'numberofdevices'=>$numberofdevices,'validdays'=>$validdays,'packagezone'=>$request->get('packagezone'),'durationmeasure'=>$request->get('period')]);
+        $packageupdate=DB::table('packages')->where('id','=',$id)->update(['packagename'=>$packagename,'uploadspeed'=>$uploadspeed,'downloadspeed'=>$downloadspeed,'users'=>$users,'quota'=>$quota,'numberofdevices'=>$numberofdevices,'validdays'=>$validdays,'packagezone'=>$request->get('packagezone'),'durationmeasure'=>$request->get('period'),'poolname'=>$request->get('poolname')]);
         //update attributes on radgroupcheck and radgroupreply
         DB::table('radgroupreply')->where('groupname','=',$packagename)->delete();
 
@@ -179,19 +187,33 @@ class packagesController extends Controller
            
 
             ]);
-        if($expireafter>0 && $quota>0){
-            $newcheckgroup=DB::table('radgroupcheck')->insert([
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-Session','op'=>':=','value'=>$expireafter],
-            ]);
-            $newgroupreply=DB::table('radgroupreply')->insert([
-                 ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],
-                 ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-Session','op'=>':=','value'=>$expireafter],
-            ]);
-        }
+            if($expireafter>0 && $quota>0){
+                $newcheckgroup=DB::table('radgroupcheck')->insert([
+                    ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],
+                    ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-Session','op'=>':=','value'=>$expireafter],
+                ]);
+                $newgroupreply=DB::table('radgroupreply')->insert([
+                     ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$quota],
+                     ['groupname'=>$request->get('packagename'),'attribute'=>'Max-All-Session','op'=>':=','value'=>$expireafter],
+                ]);
+            }
         
-        }
+        }else{
+              $ppoecheck=DB::table('radgroupcheck')->insert([
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Protocol','op'=>'==','value'=>'PPP'],
+            ]);
 
+            $ppoereply=DB::table('radgroupreply')->insert([
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Pool','op'=>'=','value'=>$request->get('poolname').'_pool'],
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Mikrotik-Rate-Limit','op'=>'=','value'=>$request->get('uploadspeed').$request->get('bandwidth').'/'.$request->get('downloadspeed').$request->get('bandwidth').' '.($request->get('uploadspeed')+1).$request->get('bandwidth').'/'.($request->get('downloadspeed')+1).$request->get('bandwidth').' 40/40'],
+            ]);
+            //create pppoe profile
+            DB::table('radusergroup')->updateOrInsert(
+                ['username'=>$packagename.'_Profile','groupname'=>$packagename],['priority'=>10]
+            );
+        }
+        // alert()->success('Success','Package details updated successfully');
+        toast('Package details updated successfully!','success');
         return redirect()->route("packages.all")->with("success","Package details updated successfully");
     }
     public function allPackages(){
@@ -241,6 +263,7 @@ class packagesController extends Controller
               DB::table('package_prices')->where('packageid','=',$id)->delete();
               //finaly delete package from packages table
             DB::table('packages')->where('id','=',$id)->delete();
+            toast('package removed successfully','success');
 
             return redirect()->back()->with("success","package removed successfully");
 

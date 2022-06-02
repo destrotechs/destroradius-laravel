@@ -15,8 +15,8 @@
   <link rel="stylesheet" href="{{asset('assets/vendor/@fortawesome/fontawesome-free/css/all.min.css')}}" type="text/css">
   <!-- Page plugins -->
   <!-- Argon CSS -->
-  <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
 
+  <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
   <link rel="stylesheet" href="{{asset('assets/css/argon.css')}}" type="text/css">
   <script src="https://unpkg.com/chart.js@^2.9.3/dist/Chart.min.js"></script>
   <!-- Chartisan -->
@@ -25,7 +25,7 @@
 
 <body>
   <!-- Sidenav -->
-  <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-dark bg-dark" id="sidenav-main">
+  <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-white bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
       <!-- Brand -->
       <div class="sidenav-header  align-items-left">
@@ -255,6 +255,12 @@
                       <span class="sidenav-normal"> Sales </span>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{route('new.invoice')}}" class="nav-link">
+                      <span class="fas fa-plus-circle"></span>&nbsp;
+                      <span class="sidenav-normal"> New Invoice </span>
+                    </a>
+                  </li>
 
                   <li class="nav-item">
                     <a href="{{route('manager.payment')}}" class="nav-link">
@@ -413,18 +419,16 @@
               <!-- Sidenav toggler -->
 
               <div class="pr-3 sidenav-toggler sidenav-toggler-dark text-dark" data-action="sidenav-pin" data-target="#sidenav-main">
-                <div class="sidenav-toggler-inner text-dark">
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
+                <div class="sidenav-toggler-inner">
+                  <i class="fas fa-bars"></i>
                 </div>
               </div>
             </li>
-            <li class="nav-item d-sm-none">
+           {{--  <li class="nav-item d-sm-none">
               <a class="nav-link" href="#" data-action="search-show" data-target="#navbar-search-main">
                 <i class="ni ni-zoom-split-in"></i>
               </a>
-            </li>
+            </li> --}}
             <li class="nav-item dropdown">
               <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="ni ni-bell-55"></i>
@@ -560,6 +564,8 @@
     </div>
     <div class="container-fluid mt--6">
       @yield('content')
+      @include('sweetalert::alert')
+
     </div>
   <!-- Argon Scripts -->
   <!-- Core -->

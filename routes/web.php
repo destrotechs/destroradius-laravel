@@ -108,6 +108,7 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::post('/zones/edit','zonesController@saveEditedZone')->name('save.edit.zone');
 
 	Route::get('/sales/all','salesController@allSales')->name('sales.all');
+	Route::get('/invoices/new','salesController@newInvoice')->name('new.invoice');
 	Route::get('/Manager/payments','managerController@managersPayment')->name('manager.payment');
 	Route::get('/payments','paymentsController@getAllPayments')->name('payment.all');
 

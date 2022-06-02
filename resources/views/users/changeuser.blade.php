@@ -265,6 +265,19 @@ User Information
 	  </div>
 	</div>
   </div>
+
+<div class="position-relative top-0 end-0 p-3">
+  <div class="toast" id="liveToast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <strong class="me-auto">Bootstrap</strong>
+    <small>11 mins ago</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    Hello, world! This is a toast message.
+  </div>
+</div>
+</div>
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -282,8 +295,18 @@ $(document).ready(function(){
             });
 
             request.done(function(response){
-                alert(response);
-                location.reload();
+                if(response){
+                    $("#exampleModal").modal('hide');
+                    $(".toast-body").empty().html(response);
+                    showToast()
+                    setTimeout(function(){
+                        location.reload();
+                    },5000);
+
+                }
+                
+
+                // location.reload();
             });
         }else{
             alert("Please choose a package");
@@ -292,6 +315,12 @@ $(document).ready(function(){
         event.preventDefault()
     })
 
+    function showToast(){
+            var toastLiveExample = document.getElementById('liveToast');
+            var toast = new bootstrap.Toast(toastLiveExample,{delay:2000});
+
+            toast.show();
+    }
 
 
     $("#add").click(()=>{

@@ -25,7 +25,9 @@ class nasController extends Controller
         $id=Auth::user()->id;
         $myzones=DB::table('zonemanagers')->where('managerid',$id)->pluck('zoneid');
         if(Auth::user()->role_id==1){
-            $nas=DB::table('nas')->leftJoin('naszones','naszones.nasid','=','nas.id')->join('zones','zones.id','=','naszones.zoneid')->get();
+            $nas=DB::table('nas')->leftJoin('naszones','naszones.nasid','=','nas.id')->join('zones','zones.id','=','naszones.zoneid')
+            ->select('nas.*','zones.zonename')
+            ->get();
         }else{
             $nas=DB::table('nas')
             ->join('naszones','naszones.nasid','=','nas.id')->join('zones','zones.id','=','naszones.zoneid')->whereIn('naszones.zoneid',$myzones)->get();
@@ -38,7 +40,7 @@ class nasController extends Controller
         return view('nas.newnas',compact('zones'));
     }
     public function editNas(Request $request,$id){
-        $nas=DB::table('nas')->where('id',$id)->get();
+        $nas=DB::table('nas')->where('id','=',$id)->get();
         $zones=Zone::all();
         return view('nas.editnas',compact('nas','zones'));
     }
@@ -64,6 +66,7 @@ class nasController extends Controller
         if($request->get('restartserver')=='yes'){
             self::restartServer();
         }
+        toast('Nas saved successfully','success');
         return redirect()->back()->with("success","Nas saved successfully");
     }
     public function removeNas(Request $request,$id){
@@ -74,8 +77,12 @@ class nasController extends Controller
         }
 
         if($nas==true){
+            toast('Nas has been removed successfully','success');
+
             return redirect()->back()->with("success","Nas has been removed successfully");
         }else{
+        toast('There was an error removing the requested nas, try again later','error');
+
             return redirect()->back()->with("error","There was an error removing the requested nas, try again later");
         }
     }
@@ -98,8 +105,12 @@ class nasController extends Controller
             if($request->get('restartserver')=='yes'){
                 self::restartServer();
             }
+            toast('changes have been made successfully','success');
+
             return redirect()->route('nas.view')->with("success","changes have been made successfully");
         }else{
+            toast('There was an error saving the changes, try again later','error');
+
             return redirect()->back()->with("error","There was an error saving the changes, try again later");
         }
        

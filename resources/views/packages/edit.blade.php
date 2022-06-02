@@ -27,6 +27,10 @@ Edit Package
                     <option value="pppoe">PPPOE</option>
                     <option value="resellers">Resellers</option>
                 </select>
+                @if($package->users=='pppoe')
+                <label>Pool Name</label>
+                <input type="text" name="poolname" value="{{ $package->poolname }}" class="form-control">
+                @endif
                 <label>Package Zone</label>     
                 <select class="form-control" name="packagezone">
                     <option value="{{ $package->packagezone }}">{{ $package->packagezone }}</option>

@@ -61,8 +61,12 @@ class zonesController extends Controller
 
 
     	if ($z) {
+            toast('A new zone has been added, add the zone manager','success');
+
     		return redirect()->back()->with('success','A new zone has been added, add the zone manager');
     	}else{
+            toast('There was a problem adding a new zone, try again','error');
+
     		return redirect()->back()->with('error','There was a problem adding a new zone, try again');
     	}
     }
@@ -76,8 +80,12 @@ class zonesController extends Controller
     	$zm=DB::table('zonemanagers')->insert(['managerid'=>$request->get('managerid'),'zoneid'=>$request->get('zoneid')]);
 
     	if ($zm) {
+            toast('a new zone manager has been added','success');
+
     		return redirect()->back()->with('success','a new zone manager has been added');
     	}else{
+            toast('There was an error adding zone manager, try again','error');
+
     		return redirect()->back()->with('error','There was an error adding zone manager, try again');
     	}
     }
@@ -99,8 +107,12 @@ class zonesController extends Controller
         // where('zoneid','=',$request->get('id'))->update();
 
     	if ($zm) {
+            toast('Zone transfer success','success');
+
     		return redirect()->route('zone.all')->with('success','Zone transfer success');
     	}else{
+            toast('zone transfer failed, try again','error');
+
     		return redirect()->back()->with('error','zone transfer failed, try again');
     	}
     }
@@ -128,8 +140,12 @@ class zonesController extends Controller
                 $log=" edited zone to ".$z->zonename." ".$z->networktype;
                 $log_write=Log::createTxtLog(Auth::user()->email,$log);
             }
+            toast('The zone has been updated','success');
+
             return redirect()->back()->with('success','The zone has been updated');
         }else{
+            toast('There was a problem updating the zone, try again','error');
+
             return redirect()->back()->with('error','There was a problem updating the zone, try again');
         }
     }
@@ -138,6 +154,8 @@ class zonesController extends Controller
 
         $zone->delete();
         DB::table('zonemanagers')->where('zoneid','=',$id)->delete();
+            toast('Zone has been removed successfully','success');
+
         return redirect()->route('zone.all')->with("success","Zone has been removed successfully");
     }
 }

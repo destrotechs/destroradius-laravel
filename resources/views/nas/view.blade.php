@@ -5,7 +5,7 @@ All nas
 @section('buttons')
 @if(Auth::user()->role_id==1)
 <div class="col-lg-6 text-right">
-  <a href="{{ route('nas.new') }}" class="btn btn-sm btn-primary">New</a>
+  <a href="{{ route('nas.new') }}" class="btn btn-sm btn-white"><i class="fas fa-plus-circle"></i> New Nas</a>
 </div>
 @endif
 @endsection

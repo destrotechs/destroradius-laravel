@@ -16,4 +16,7 @@ class salesController extends Controller
 
         return view('finance.sales',compact('sales','totalCommDue'));
     }
+    public function newInvoice(Request $request){
+    	return view('finance.invoice');
+    }
 }

@@ -16,6 +16,7 @@ class CreatePackagesTable extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('packagename')->unique();
+            $table->string('poolname')->nullable();
             $table->integer('uploadspeed');
             $table->integer('downloadspeed');
             $table->integer('numberofdevices');

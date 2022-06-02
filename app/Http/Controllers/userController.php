@@ -147,8 +147,9 @@ class userController extends Controller
         $user = Auth::user()->email;
         $log=" Created New user ".$request->get('username');
         $logwrite=Log::createTxtLog($user,$log);
+        $packageusers = DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('users');
         //calculate validdays for this customer
-        if($request->get('package')!="none"){
+        if($request->get('package')!="none" && $packageusers=='hotspot'){
             $customerdays=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('validdays');
             $customermaxmbs=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('quota');
 
@@ -187,6 +188,17 @@ class userController extends Controller
 
             //return success
             return redirect()->back()->with("success","user added successfully");
+        }else if ($packageusers=='pppoe') {
+           
+            DB::table('radcheck')->insert([
+                ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
+            ]);
+            //add user to PPOE Profile
+             DB::table('radcheck')->insert([
+                ['username'=>$request->get('username'),'attribute'=>'User-Profile','op'=>':=','value'=>$request->get('package').'_Profile'],
+            ]);
+            return redirect()->back()->with("success","user added successfully");
+
         }else{
             DB::table('radcheck')->insert([
                 ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
@@ -308,8 +320,18 @@ class userController extends Controller
 
             $userdetails=DB::table('customers')->where('username','=',$username)->leftJoin('zones','zones.id','=','customers.zone')->get();
 
+            $user_pppoe = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->get();
 
-            $userpackage=DB::table('radusergroup')->where('username','=',$username)->pluck('groupname');
+            if (count($user_pppoe)>0){
+                $profile = '';
+                foreach($user_pppoe as $p){
+                    $profile=$p->value;
+                }
+                $userpackage=DB::table('radusergroup')->where('username','=',$profile)->pluck('groupname');
+            }else{
+
+                $userpackage=DB::table('radusergroup')->where('username','=',$username)->pluck('groupname');
+            }
 
 
             $replyattributes = array();
@@ -432,7 +454,11 @@ class userController extends Controller
         $logwrite=Log::createTxtLog($user,$log);
 
         $package_id = DB::table('packages')->where('packagename','=',$package)->pluck('id');
+
+        $packageusers = DB::table('packages')->where('packagename','=',$package)->pluck('users');
+
         $user_id = DB::table('customers')->where('username','=',$username)->pluck('id');
+
         if($username){
                 $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');
 
@@ -450,9 +476,9 @@ class userController extends Controller
 
             echo "user activated on non-regulated mode";
 
-        }else{
+        }else if($packageusers[0] == 'hotspot'){
 
-            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$user_id],['packageid','=',$package_id]])->count();
+            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$user_id[0]],['packageid','=',$package_id[0]]])->count();
 
             if ($user_on_package > 0) {
                 echo "user is already on the selected package";
@@ -471,9 +497,12 @@ class userController extends Controller
                 );
 
                 //remove from radusergroup
-                $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id)->delete();
+                $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id[0])->delete();
+
 
                 $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
+
+                $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
 
                 $new_radusergrouprecord = DB::table('radusergroup')->insert([
                     'username'=>$username,'groupname'=>$package,'priority'=>10,
@@ -491,6 +520,32 @@ class userController extends Controller
                 }
 
             }
+        }else if ($packageusers[0] =='pppoe'){
+            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$user_id[0]],['packageid','=',$package_id[0]]])->count();
+
+            if ($user_on_package > 0) {
+                echo "user is already on the selected package";
+
+            }
+            DB::table('radusergroup')->where('username','=',$request->get('username'))->delete();
+
+            // DB::table('radcheck')->updateOrInsert(
+            //     ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$request->get('password')]
+            // );
+            //add user to PPOE Profile
+             DB::table('radcheck')->updateOrInsert(
+                ['username'=>$request->get('username'),'attribute'=>'User-Profile'],['op'=>':=','value'=>$request->get('package').'_Profile']
+            );
+             //remove user from package
+              $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id[0])->delete();
+              //add user to the news package
+              $new_userpackage = DB::table('customerpackages')->insert([
+                    'customerid'=>$user_id[0],'packageid'=>$package_id[0],
+                ]);
+
+
+             return "PPOE Package applied successfully!";
+
         }
 
     }

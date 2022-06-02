@@ -435,6 +435,7 @@ class clientsController extends Controller
         if ($remaining<0){
             return 0;
         }else{
+            
             return $remaining;
         }
     }
