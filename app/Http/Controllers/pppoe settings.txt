@@ -1,0 +1,23 @@
+PPOE check
+groupname Framed-Protocol attribute value PPP op ==
+
+
+PPPoe reply
+
+Framed-Pool attribute value profile_pool op =
+
+Mikrotik-Rate-Limit attribute value speedup/speeddown burstup/burstdown 40/40 (form 512K/512K or 1M/1M)
+
+
+
+create user profiles in raduser group
+(profile_name, group_name,priority(10))
+
+
+assign user to profiles
+add user to radcheck with cleartext password 
+
+add user with attribute User-profile to radcheck
+
+
+
