@@ -93,7 +93,7 @@ class accountingController extends Controller
         }else{
             $totalsessiontime.=" Seconds";
         }
-        $output='<table class="table table-sm table-striped table-bordered table-sm"><thead><tr><th>ID</th><th>username</th><th>Ip Address</th><th>Start Time</th><th>End Time</th><th>Total Time</th><th>Uplaod</th><th>Download</th><th>Termination Cause</th><th>Nas IP address</th></tr></thead><tbody>';
+        $output='<table class="table table-responsive  table-sm table-striped table-bordered table-sm"><thead><tr><th>ID</th><th>username</th><th>Ip Address</th><th>Start Time</th><th>End Time</th><th>Total Time</th><th>Uplaod</th><th>Download</th><th>Termination Cause</th><th>Nas IP address</th></tr></thead><tbody>';
         if (count($useraccounting)>0) {
            foreach ($useraccounting as $key => $o) {
             $timespent=$o->acctsessiontime;
@@ -138,7 +138,7 @@ class accountingController extends Controller
         }else{
             $totalsessiontime.=" Seconds";
         }
-        $output='<table class="table table-sm table-striped table-bordered table-sm"><thead><tr><th>ID</th><th>username</th><th>Ip Address</th><th>Start Time</th><th>End Time</th><th>Total Time</th><th>Uplaod</th><th>Download</th><th>Termination Cause</th><th>Nas IP address</th></tr></thead><tbody>';
+        $output='<table class="table table-sm table-responsive  table-striped table-bordered table-sm"><thead><tr><th>ID</th><th>username</th><th>Ip Address</th><th>Start Time</th><th>End Time</th><th>Total Time</th><th>Uplaod</th><th>Download</th><th>Termination Cause</th><th>Nas IP address</th></tr></thead><tbody>';
         if (count($useraccounting)>0) {
            foreach ($useraccounting as $key => $o) {
             $timespent=$o->acctsessiontime;
