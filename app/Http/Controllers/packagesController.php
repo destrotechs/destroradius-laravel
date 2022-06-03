@@ -120,7 +120,7 @@ class packagesController extends Controller
             ]);
              //create pppoe profile
             DB::table('radusergroup')->insert([
-                'username'=>$packagename.'_Profile','groupname'=>$request->get('packagename'),'prio'=>'10']);
+                'username'=>$request->get('packagename').'_Profile','groupname'=>$request->get('packagename'),'priority'=>'10']);
         }
         
         
