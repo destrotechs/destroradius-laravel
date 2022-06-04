@@ -183,6 +183,7 @@ Route::get('/payments/option','paymentsController@selectPayOption')->name('pay.o
 Route::get('/accounting/user','accountingController@getUserAccounting')->name('user.accounting');
 Route::get('/accounting/nas','accountingController@getNasAccounting')->name('nas.accounting');
 Route::get('/accounting/ip','accountingController@getIpAccounting')->name('ip.accounting');
+Route::get('/invpoice/doc','salesController@invoicepdf')->name('invoice.doc');
 
 Route::post('/accounting/user/get','accountingController@returnUserAccounting')->name('getuseraccountingdetails');
 
