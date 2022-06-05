@@ -1,4 +1,5 @@
-@extends('layouts.customers')
+@extends('layouts.clientslayout')
+
 
 @section('content')
 <div class="row d-flex justify-content-center">

@@ -1,4 +1,5 @@
-@extends('layouts.customers')
+@extends('layouts.clientslayout')
+
 @section('content')
 <div class="procpar" style="display: none;">
 	<div class="card" id="proc">

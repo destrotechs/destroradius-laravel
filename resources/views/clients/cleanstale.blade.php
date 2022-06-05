@@ -1,4 +1,5 @@
-@extends('layouts.customers')
+@extends('layouts.clientslayout')
+
 @section('content')
 @if (session('error'))
     <div class="alert alert-danger">

@@ -1,5 +1,10 @@
 @extends('layouts.clientslayout')
-
+@section('page_info')
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal">Pricing</h1>
+      <p class="fs-5 text-muted">Quickly Purchase Internet packages for easy connection.</p>
+    </div>
+ @endsection
 @section('content')
 		@forelse($packages->chunk(3) as $package)
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
