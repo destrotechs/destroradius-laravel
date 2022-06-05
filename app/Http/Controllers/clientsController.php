@@ -8,6 +8,7 @@ use Auth;
 use App\Payment;
 use Morris\Mpesa\Mpesa;
 use App\Message;
+use Alert;
 class clientsController extends Controller
 {
     public function getLogin(Request $request){
@@ -72,7 +73,9 @@ class clientsController extends Controller
         if(isset(Auth::guard('customer')->user()->username)){
            return view('clients.changephone');
        }else{
-        return response()->json(["message"=>"You must be logged in to view this page"]);
+            toast('You must be logged in to view this page"','warning');
+            return redirect()->back();
+        // return response()->json(["message"=>"You must be logged in to view this page"]);
        }
 
     }
@@ -90,8 +93,10 @@ class clientsController extends Controller
         $user= DB::table('customers')->where('phone','=',$phone)->get();
         if (count($user)>0) {
             $userupdate=DB::table('customers')->where('username','=',$username)->update(['phone'=>$phoneupdate]);
+            toast('Phone number was updated successfully','success');
             return redirect()->back()->with("success_message","Phone number was updated successfully");
         }else{
+            toast('No user was found with the current phone number','error');
             return redirect()->back()->with('error','No user was found with the current phone number');
         }
     }
@@ -107,7 +112,9 @@ class clientsController extends Controller
         return view('clients.transactions',compact('transactions'));
         }
         else{
-            return response()->json(["message"=>"You must be logged in to view this page"]);
+            toast('You must be logged in to view this page"','warning');
+            return redirect()->back();
+            // return response()->json(["message"=>"You must be logged in to view this page"]);
         }
 
     }
