@@ -1,5 +1,12 @@
 @extends('layouts.clientslayout')
-
+@section('page_info')
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('client.bundles')}}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Transactions</li>
+  </ol>
+</nav>
+@endsection
 @section('content')
 <div class="card">
 	<div class="card-body">
@@ -25,7 +32,7 @@
 					<td>{{ $t->amount }}</td>
 					<td>{{ $t->transactionid }}</td>
 					<td>{{ $t->phonenumber }}</td>
-					<td>{{ date('Y/m/d', strtotime(substr($t->transactiondate,0,8)))}}</td>
+					<td>{{ date('d/m/Y', strtotime($t->transactiondate))}}</td>
 				</tr>
 				@empty
 				<tr>

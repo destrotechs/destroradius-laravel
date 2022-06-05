@@ -11,7 +11,14 @@
         {{ session('success') }}
     </div>
 @endif
-<h4>Clean my connections</h4><br>
+@section('page_info')
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('client.bundles')}}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Clean my connections</li>
+  </ol>
+</nav>
+@endsection
 <div class="card">
 <div class="card-body">
 	<div class="message"></div>

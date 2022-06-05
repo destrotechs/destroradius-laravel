@@ -98,6 +98,8 @@
             <i class="fas fa-bars"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li class="bg-info"><a class="dropdown-item disabled text-white" href="#"><i class="fas fa-user"></i> Welcome {{ Auth::guard('customer')->user()->name }}</a></li>
+            <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('client.bundles')}}"><i class="fas fa-home"></i> Home</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.balance')}}"><i class="fas fa-money-bill"></i> Balance</a></li>
@@ -123,7 +125,7 @@
       
     @yield('content')    
       @include('sweetalert::alert')
-    
+
     {{-- </div> --}}
   </main>
 
