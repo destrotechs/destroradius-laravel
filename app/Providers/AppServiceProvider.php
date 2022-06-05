@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use ConsoleTVs\Charts\Registrar as Charts;
-
+use Illuminate\Support\Facades\Validator;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,5 +29,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Charts\MonthlySales::class,
             \App\Charts\ItemsChart::class,
         ]);
+
+        Validator::extend('allowed_username', function ($attribute, $value, $parameters, $validator)
+        {
+          $bannedUsernames = ['HEWANET'];
+          return !in_array(strtoupper($value), $bannedUsernames);
+        });
     }
 }
