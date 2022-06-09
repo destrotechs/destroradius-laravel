@@ -29,14 +29,21 @@ Send Invoice
 						</tr>
 					</thead>
 					<tbody>
+						@forelse($invoices as $key=>$inv)
 						<tr>
-							<td colspan="9">
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3">
-							  Launch demo modal
-							</button>
-
-							</td>
+							<td>{{ $key+1 }}</td>
+							<td>{{ $inv->invoice_no }}</td>
+							<td>{{ $inv->customer_id }}</td>
+							<td>{{ $inv->rate }}</td>
+							<td>{{ $inv->invoice_date }}</td>
+							<td>{{ $inv->amount }}</td>
+							<td>{{ $inv->start_date }}</td>
+							<td>{{ $inv->end_date }}</td>
+							<td>{{ $inv->status }}</td>
 						</tr>
+						@empty
+						<tr><td colspan="9">There are no invoices to show</td></tr>
+						@endforelse
 					</tbody>
 				</table>
 			</div>
@@ -60,14 +67,15 @@ Send Invoice
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form class="row g-3">
+        <form class="row g-3" method="POST" action="{{ route('invoice.post') }}">
+        	@csrf
 		  <div class="col-md-6">
 		    <label for="inputPassword4" class="form-label">Invoice Number</label>
-		    <input type="text" name="invoice_number" class="form-control" id="inputPassword4">
+		    <input type="text" name="invoice_no" class="form-control" id="inputPassword4">
 		  </div>
 		  <div class="col-md-6">
 		    <label for="inputEmail4" class="form-label">Customer</label>
-		    <select class="form-control" name="customer_id">
+		    <select class="form-control" name="customer">
 		    	<option value="">Select Customer ...</option>
 		    	@forelse($customers as $c)
 		    	<option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -75,23 +83,44 @@ Send Invoice
 		    	<option value="">No customers available</option>
 		    	@endforelse
 		    </select>
+		  </div>		 
+		  <div class="col-12">
+		    <label for="inputAddress" class="form-label">Invoice Date</label>
+		    <input type="date" class="form-control" name="invoice_date" required id="inputAddress" placeholder="rate">
 		  </div>
 		  <div class="col-12">
-		    <label for="inputAddress" class="form-label">Rate</label>
-		    <input type="text" class="form-control" name="rate" id="inputAddress" placeholder="rate">
+		    <label for="inputAddress" class="form-label">Due Date</label>
+		    <input type="date" class="form-control" name="due_date" required id="inputAddress" placeholder="rate">
 		  </div>
 		  <div class="col-6">
 		    <label for="inputAddress2" class="form-label">From</label>
-		    <input type="date" name="from" class="form-control" id="inputAddress2">
+		    <input type="date" name="start_date" class="form-control" id="from">
 		  </div>
 		  <div class="col-md-6">
 		    <label for="inputCity" class="form-label">To</label>
-		    <input type="date" name="to" class="form-control" id="inputCity">
+		    <input type="date" name="end_date" class="form-control" id="to">
+		  </div>
+		  <div class="col-6">
+		    <label for="inputAddress" class="form-label">Rate</label>
+		    <input type="text" class="form-control" name="rate" id="rate" placeholder="rate">
+		  </div>
+		  <div class="col-6">
+		    <label for="inputAddress" class="form-label">Measure/Per</label>
+		    <select id="measure" class="form-control" name="measure">
+		    	<option value="">Choose Measure ...</option>
+		    	<option value="DAY">PER DAY</option>
+		    	<option value="MONTH">PER MONTH</option>
+		    	<option value="MB">PER MB</option>
+		    </select>
+		  </div>
+		  <div class="col-12">
+		    <label for="inputAddress" class="form-label">Amount</label>
+		    <input type="number" class="form-control" name="amount" id="amount" placeholder="rate">
 		  </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
+        <button type="submit" class="btn btn-primary">Save Invoice</button>
       </div>
   </form>
     </div>
@@ -146,7 +175,29 @@ Send Invoice
 @section('js')
 <script type="text/javascript">
 	$(document).ready(function(){
-		// alert();
+		$("#measure").change(function(){
+			var measure = $(this).val();
+			calculateAmount(measure);
+		})
+
+		function calculateAmount(measure=null){
+			var start = new Date ($("#from").val());
+			var end = new Date ($("#to").val());
+			var difference = end.getTime() - start.getTime();
+			var days = Math.ceil(difference / (1000 * 3600 * 24));
+			var rate = $("#rate").val();
+			var amount = 0;
+			if (!days){
+				alert("select from and to dates");
+			}else{
+				if (measure=='DAY' && rate!=0){
+					amount = days*rate;
+				}else if(measure=='MONTH'){
+					amount = (days/30) * rate;
+				}
+			}
+			$("#amount").val(amount);
+		}
 	})
 </script>
 @endsection

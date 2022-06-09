@@ -195,6 +195,7 @@ Route::get('/user/change/{username?}','userController@getUserChange')->name('get
 Route::post('/user/specificuser','userController@getUserToEdit')->name('getspecificuser');
 Route::post('/user/peruserlimit','userController@perUserLimit')->name('peruserlimit.post');
 Route::post('/user/editattribute','userController@editAttribute')->name('edit_attr.post');
+Route::post('/finance/invoice','salesController@postInvoice')->name('invoice.post');
 Route::get('/user/change/checkattr/del/{id}','userController@deleteAttrcheck')->name('checkdeleteattr');
 Route::get('/user/change/replyattr/del/{id}','userController@deleteAttrreply')->name('replydeleteattr');
 //post routes

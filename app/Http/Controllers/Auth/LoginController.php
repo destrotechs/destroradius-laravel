@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Alert;
 
 
 class LoginController extends Controller
@@ -54,7 +55,7 @@ class LoginController extends Controller
         ]);
         // $credentials = $request->only('', 'password');
         if (Auth::guard('customer')->attempt(['username' => $request->username, 'password' => $request->password])) {
-
+            toast('Login success','success');
             return redirect()->intended('/client/bundles');
         }else{
             return redirect()->back()->with("error","Wrong username or password");//->withInput($request->only('username', 'remember'));
