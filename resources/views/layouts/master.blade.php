@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Morris Mbae Destro">
-  <title>DestroRadius</title>
+  <title>{{ env('APP_NAME') }}</title>
   <!-- Favicon -->
   <link rel="icon" href="{{asset('images/u2.png')}}" type="image/png">
   <!-- Fonts -->
