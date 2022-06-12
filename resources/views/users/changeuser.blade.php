@@ -296,12 +296,8 @@ $(document).ready(function(){
 
             request.done(function(response){
                 if(response){
-                    $("#exampleModal").modal('hide');
-                    $(".toast-body").empty().html(response);
-                    showToast()
-                    setTimeout(function(){
-                        location.reload();
-                    },5000);
+                    alert(response);
+                    location.reload();                   
 
                 }
                 

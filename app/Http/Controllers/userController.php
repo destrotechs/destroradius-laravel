@@ -536,6 +536,13 @@ class userController extends Controller
              DB::table('radcheck')->updateOrInsert(
                 ['username'=>$request->get('username'),'attribute'=>'User-Profile'],['op'=>':=','value'=>$request->get('package').'_Profile']
             );
+                $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
+                $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
+                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0]);
+
+              $rad_reply = DB::table('radreply')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$dateToDisconnect]
+                );
              //remove user from package
               $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id[0])->delete();
               //add user to the news package
