@@ -67,6 +67,8 @@
                             <option value="">Choose user type ...</option>
                             <option value="prepaid">Prepaid</option>
                             <option value="postpaid">Postpaid</option>
+                            <option value="hotspot">Hotspot User</option>
+                            <option value="pppoe">PPPOE User</option>
                         </select>
                         <label>Address</label>
                         <input type="text" name="address" class="form-control" placeholder="e.g 123 street">
