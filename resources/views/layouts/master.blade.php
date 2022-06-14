@@ -103,13 +103,13 @@
                       <span class="sidenav-normal"> User Limits</span>
                     </a>
                   </li>
-                  {{-- <li class="nav-item">
-                    <a href="{{route('user.paid')}}" class="nav-link">
+                  <li class="nav-item">
+                    <a href="{{route('user.balance')}}" class="nav-link">
                       <span class="fas fa-circle text-success"></span>&nbsp;
-                      <span class="sidenav-normal"> Paid users </span>
+                      <span class="sidenav-normal"> Bundle Balance</span>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  {{-- <li class="nav-item">
                     <a href="{{route('user.unpaid')}}" class="nav-link">
                       <span class="fas fa-circle text-danger"></span>&nbsp;
                       <span class="sidenav-normal"> Unpaid users </span>

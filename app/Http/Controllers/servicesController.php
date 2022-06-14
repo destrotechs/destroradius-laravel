@@ -23,7 +23,8 @@ class servicesController extends Controller
     }
     public function postTestConn(Request $request){
         //radtest testing password localhost 0 testing123
-        $cmd="radtest ".escapeshellarg($request->get('username'))." ".escapeshellarg($request->get('password'))." ".escapeshellarg($request->get('server'))." ".escapeshellarg($request->get('nasport'))." ".escapeshellarg($request->get('nassecret'));
+        // $cmd="radtest ".escapeshellarg($request->get('username'))." ".escapeshellarg($request->get('password'))." ".escapeshellarg($request->get('server'))." ".escapeshellarg($request->get('nasport'))." ".escapeshellarg($request->get('nassecret'));
+        $cmd="radtest ".$request->get('username')." ".$request->get('password')." ".$request->get('server')." ".$request->get('nasport')." ".$request->get('nassecret')." 1";
         $res=system($cmd);
         if($res==" " || $res==NULL){
             echo "The command was not executed successfully";

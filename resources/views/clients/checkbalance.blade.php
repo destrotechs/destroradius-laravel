@@ -1,13 +1,7 @@
 @extends('layouts.clientslayout')
-@section('page_info')
-<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{route('client.bundles')}}">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Check Balance</li>
-  </ol>
-</nav>
-@endsection
 @section('content')
+
+<h4>Bundle Balance</h4><br>
 <div class="card">
 <div class="card-body">
 	<table class="table table-sm table-responsivetable-bordered table-striped table-responsive" style="display: none;">

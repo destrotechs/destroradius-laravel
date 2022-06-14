@@ -113,10 +113,10 @@ User Information
                         </div>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                           <div class="card-body">
-                            @if(count($packagedetails)>0)
-                            <div class="card">
-                                <div class="card-header"><h3>Package Details ({{ $userpackage[0] }})</h3></div>
+                            @if(count($packagedetails)>0)                        
                               <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-grey">Package Details ({{ $userpackage[0] }})                                   
+                                </li>
                                   @foreach($packagedetails as $d)
                                 <li class="list-group-item"><b>Down Speed :</b> {{ $d->downloadspeed/(1024*1024) }} mbps</li>
                                 <li class="list-group-item"><b>Up Speed:</b> {{ $d->uploadspeed/(1024*1024) }} mbps</li>
@@ -132,7 +132,6 @@ User Information
                                 <li class="list-group-item"><b>Used Bundles :</b> {{ $userquotaspent/(1024*1024) }}(MBs)</li>
                               @endforeach
                               </ul>
-                            </div>
                             @else
                             <div class="alert alert-warning">User has no package allocated</div>
                             @endif
@@ -150,7 +149,7 @@ User Information
 				<button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-link" aria-hidden="true"></i>Change package</button>
 				
                 <a href="#" class="btn btn-outline-warning btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-exclamation-triangle"></i> Per user limits</a>
-                <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass]) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>
+                <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass??'']) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>
                 <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
                 <a href="#" id="{{ $username }}" class="btn btn-outline-warning btn-md trashrec"><i class="fas fa-close"></i> Remove Accounting records</a>
 
