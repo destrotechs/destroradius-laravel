@@ -3,7 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use PEAR2\Net\RouterOS;
 
+require_once app_path().'/PEAR2_Net_RouterOS-1.0.0b6/src/PEAR2/Autoload.php';
 class Mikrotik extends Model
 {
 	/*
@@ -11,19 +13,27 @@ class Mikrotik extends Model
 
 	#viewing live online users, available customers,changing pppoe settings
 	*/
-	public $nasip;
-	public $username;
-	public $password;
 
 
-    public function __construct(){
-    	$this->middleware('auth');
-    }
+	public static function connectToNas(){
+		try {
+		    $client = new RouterOS\Client('ADDRESS', 'LOGIN', 'PASSWORD');
+		    $responses = $client->sendSync(new RouterOS\Request('/ip/hotspot/active/print'));
+		    $users = array();
+			foreach ($responses as $response) {
+			    if ($response->getType() === RouterOS\Response::TYPE_DATA) {
+			    	array_push($response->getProperty('user'),$users);
+			        // echo 'User: ', $response->getProperty('user'),
+			        // "\n";
+			    }
+			}
+		}
+		catch (Exception $e) {
+		    // die($e);
+		    return "failed";
+		}
 
-    public static function performFetchQuery($nasip,$user,$pass,$query){
-    	$cmd= "curl -k -u ".$user.": -X POST https://".$nasip."/rest/".$query;
-    	$output=shell_exec($cmd);
-    	return $output;
+	}
 
-    }
+
 }

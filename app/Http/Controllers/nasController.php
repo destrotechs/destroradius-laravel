@@ -8,6 +8,7 @@ use App\Zone;
 use Route;
 use App\Log;
 use Illuminate\Http\Request;
+use App\Mikrotik;
 
 class nasController extends Controller
 {
@@ -36,6 +37,9 @@ class nasController extends Controller
         return view('nas.view',compact('nas'));
     }
     public function newNas(Request $request){
+        // $m = new Mikrotik();
+        $message = Mikrotik::connectToNas();
+        dd($message);
         $zones=Zone::all();
         return view('nas.newnas',compact('zones'));
     }
