@@ -22,11 +22,14 @@ class Mikrotik extends Model
 		    $users = array();
 			foreach ($responses as $response) {
 			    if ($response->getType() === RouterOS\Response::TYPE_DATA) {
-			    	array_push($response->getProperty('user'),$users);
+			    	$user = $response->getProperty('user');
+			    	array_push($user,$users);
 			        // echo 'User: ', $response->getProperty('user'),
 			        // "\n";
+
 			    }
 			}
+			return $users;
 		}
 		catch (Exception $e) {
 		    // die($e);
