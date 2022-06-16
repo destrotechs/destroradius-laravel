@@ -294,6 +294,7 @@ class userController extends Controller
                     $output.="<td>".$num."</td><td>".$o->username."</td><td>".$o->acctstarttime."</td><td>".$o->framedipaddress."</td><td>".$o->nasipaddress."</td><td>".$totaldownload."</td><td>".$totalupload."</td>";
                     $output.="</tr>";
                 }
+                return $output;
 
             }else{
                 echo "none";
@@ -310,6 +311,7 @@ class userController extends Controller
                         $output.="</tr>";
                     }
                 }
+            return $output;
         }
     }
     public function getUserEdit(){
