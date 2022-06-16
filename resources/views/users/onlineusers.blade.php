@@ -16,8 +16,15 @@ Online users
 						<option value="nas">Nas</option>
 					</select>
 				</div>
-				<div class="col">
-					
+				<div class="col" style="display:none;">
+					<select name="nasid" class="form-control nasid">
+						<option value="">Choose ...</option>
+						@forelse($nas as $n)
+						<option value="{{ $n->id }}">{{ $n->nasname }}</option>
+						@empty
+						<option value="">No nas added</option>
+						@endforelse
+					</select>
 				</div>
 			</div>
 		</form>
@@ -54,11 +61,21 @@ Online users
 			$(".usertype").change(function(){
 				var usertype=$(this).val();
 				var _token=$("input[name='_token']").val();
+				var id = 0;
 				if(usertype!=""){
+					if (usertype=='nas'){
+						$(".nasid").change(function(){
+							id = $(this).val();
+							if(id!=0 && id!=''){
+
+							}
+						})
+					}
+
 					var req=$.ajax({
 						method:"POST",
 						url:"{{ route('getonlineusers') }}",
-						data:{usertype:usertype,_token:_token},
+						data:{usertype:usertype,_token:_token,nasid:id},
 					})
 
 					req.done(function(result){

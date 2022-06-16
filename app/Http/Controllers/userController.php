@@ -220,10 +220,8 @@ class userController extends Controller
         return view('users.changepackage');
     }
     public function onlineUsers(){
-        // $query="ip/hotspot/user/active";
-        // $users=Mikrotik::performFetchQuery('10.50.120.2','admin','123456',$query);
-        // $users=json_decode($users);
-        return view('users.onlineusers');
+        $nas = DB::table('nas')->get();
+        return view('users.onlineusers',compact('nas'));
     }
     public function offlineUsers(){
         return view('users.offlineusers');
@@ -300,7 +298,8 @@ class userController extends Controller
                 echo "none";
             }
         }else if($usertype=='nas'){
-           $users = Mikrotik::connectToNas(1);
+            $nasid = $request->get('nasid');
+           $users = Mikrotik::connectToNas($nasid);
                 
                 if(count($users)>0){
                     foreach ($users as $key => $o) {
@@ -308,7 +307,7 @@ class userController extends Controller
                         $totaldownload=$o[3];
                         $totalupload=$o[4];
                         $output.="<tr>";
-                        $output.="<td>".$num."</td><td>".$o[0]."</td><td></td><td>".$o[1]."</td><td>".$o[5]."</td><td>".round($totalupload/(1024*1024),2)."</td><td>".round($totaldownload/(1024*1024),2)."</td>";
+                        $output.="<td>".$num."</td><td>".$o[0]."</td><td></td><td>".$o[1]."</td><td>".$o[5]."</td><td>".round($totalupload/(1024*1024),2)." MBs</td><td>".round($totaldownload/(1024*1024),2)."MBs</td>";
                         $output.="</tr>";
                     }
                 }else{
