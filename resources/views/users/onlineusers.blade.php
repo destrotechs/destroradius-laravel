@@ -16,9 +16,9 @@ Online users
 						<option value="nas">Nas</option>
 					</select>
 				</div>
-				<div class="col" style="display:none;">
+				<div class="col nas" style="display:none;">
 					<select name="nasid" class="form-control nasid">
-						<option value="">Choose ...</option>
+						<option value="">Choose nas...</option>
 						@forelse($nas as $n)
 						<option value="{{ $n->id }}">{{ $n->nasname }}</option>
 						@empty
@@ -58,21 +58,31 @@ Online users
 @section('js')
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var id = 0;
+			var _token='';
+			var usertype = null;
 			$(".usertype").change(function(){
-				var usertype=$(this).val();
-				var _token=$("input[name='_token']").val();
-				var id = 0;
+				usertype=$(this).val();
+				_token=$("input[name='_token']").val();
+				
 				if(usertype!=""){
 					if (usertype=='nas'){
+						$(".nas").show();
 						$(".nasid").change(function(){
 							id = $(this).val();
 							if(id!=0 && id!=''){
-
+								fetchUsers();
 							}
 						})
+					}else{
+						
+					fetchUsers();
 					}
-
-					var req=$.ajax({
+					
+				}
+			})
+			function fetchUsers(){
+				var req=$.ajax({
 						method:"POST",
 						url:"{{ route('getonlineusers') }}",
 						data:{usertype:usertype,_token:_token,nasid:id},
@@ -88,8 +98,7 @@ Online users
 							$(".tbody").empty().html(result).removeClass("alert alert-danger");
 						}
 					})
-				}
-			})
+			}
 		})
 	</script>
 @endsection
