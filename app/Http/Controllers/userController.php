@@ -299,7 +299,7 @@ class userController extends Controller
                 echo "none";
             }
         }else if($usertype=='nas'){
-           $users = Mikrotik::connectToNas();
+           $users = Mikrotik::connectToNas(1);
                 
                 if(count($users)>0){
                     foreach ($users as $key => $o) {
