@@ -304,10 +304,11 @@ class userController extends Controller
                 
                 if(count($users)>0){
                     foreach ($users as $key => $o) {
+                        $num++;
                         $totaldownload=$o[3];
                         $totalupload=$o[4];
                         $output.="<tr>";
-                        $output.="<td>".$num."</td><td>".$o[0]."</td><td>".$o[1]."</td><td>".$totaldownload."</td><td>".$totalupload."</td>";
+                        $output.="<td>".$num."</td><td>".$o[0]."</td><td></td><td>".$o[1]."</td><td>".$o[5]."</td><td>".$totaldownload/(1024*1024)."</td><td>".$totalupload/(1024*1024)."</td>";
                         $output.="</tr>";
                     }
                 }else{

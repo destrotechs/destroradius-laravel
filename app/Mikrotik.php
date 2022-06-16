@@ -31,7 +31,7 @@ class Mikrotik extends Model
 			    	$download = $response->getProperty('bytes-in');
 			    	$upload = $response->getProperty('bytes-out');
 
-			    	$user_details = array($user,$ip,$uptime,$download,$upload);
+			    	$user_details = array($user,$ip,$uptime,$download,$upload,$nas->nasname);
 
 			    	array_push($users,$user_details);
 			        // echo 'User: ', $response->getProperty('user'),
