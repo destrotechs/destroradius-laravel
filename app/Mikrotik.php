@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use PEAR2\Net\RouterOS;
+use DB;
 
 require_once app_path().'/PEAR2_Net_RouterOS-1.0.0b6/src/PEAR2/Autoload.php';
 class Mikrotik extends Model
