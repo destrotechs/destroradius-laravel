@@ -299,7 +299,17 @@ class userController extends Controller
                 echo "none";
             }
         }else if($usertype=='nas'){
-            echo "not supported!";
+           $users = Mikrotik::connectToNas();
+                
+                if(count($users)>0){
+                    foreach ($users as $key => $o) {
+                        $totaldownload=$o[3];
+                        $totalupload=$o[4];
+                        $output.="<tr>";
+                        $output.="<td>".$num."</td><td>".$o[0]."</td><td>".$o[1]."</td><td>".$totaldownload."</td><td>".$totalupload."</td>";
+                        $output.="</tr>";
+                    }
+                }
         }
     }
     public function getUserEdit(){

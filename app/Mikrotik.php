@@ -15,15 +15,24 @@ class Mikrotik extends Model
 	*/
 
 
-	public static function connectToNas(){
+	public static function connectToNas($nasid){
 		try {
-		    $client = new RouterOS\Client('ADDRESS', 'LOGIN', 'PASSWORD');
+			$nas = DB::table('nas')->where('id','=',$nasid)->first();
+
+		    $client = new RouterOS\Client($nas->nasname, 'admin', $nas->secret);
 		    $responses = $client->sendSync(new RouterOS\Request('/ip/hotspot/active/print'));
 		    $users = array();
 			foreach ($responses as $response) {
 			    if ($response->getType() === RouterOS\Response::TYPE_DATA) {
-			    	$user = $response;
-			    	array_push($users,$user);
+			    	$user = $response->getProperty('user');
+			    	$ip = $response->getProperty('address');
+			    	$uptime=$response->getProperty('uptime');
+			    	$download = $response->getProperty('bytes-in');
+			    	$upload = $response->getProperty('bytes-out');
+
+			    	$user_details = array($user,$ip,$uptime,$download,$upload);
+
+			    	array_push($users,$user_details);
 			        // echo 'User: ', $response->getProperty('user'),
 			        // "\n";
 
@@ -33,7 +42,7 @@ class Mikrotik extends Model
 		}
 		catch (Exception $e) {
 		    // die($e);
-		    return "failed";
+		    return [];
 		}
 
 	}

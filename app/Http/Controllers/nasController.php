@@ -38,8 +38,7 @@ class nasController extends Controller
     }
     public function newNas(Request $request){
         // $m = new Mikrotik();
-        $message = Mikrotik::connectToNas();
-        dd($message);
+        
         $zones=Zone::all();
         return view('nas.newnas',compact('zones'));
     }
