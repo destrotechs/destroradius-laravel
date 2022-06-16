@@ -82,6 +82,7 @@ Online users
 				}
 			})
 			function fetchUsers(){
+				$(".tbody").empty().html("<tr><td colspan='7'>Loading...</td></tr>")
 				var req=$.ajax({
 						method:"POST",
 						url:"{{ route('getonlineusers') }}",
