@@ -94,6 +94,8 @@ Online users
 							$(".tbody").empty().html("<tr><td colspan='7'>No Customers online</td></tr>").addClass("alert alert-danger");
 						}else if(result=="not supported!"){
 							$(".tbody").empty().html("<tr><td colspan='7'>Not supported usertype</td></tr>").addClass("alert alert-danger");
+						}else if('message' in result){
+							$(".tbody").empty().html("<tr><td colspan='7'>"+result['message']+"</td></tr>").addClass("alert alert-danger");
 						}
 						else{
 							$(".tbody").empty().html(result).removeClass("alert alert-danger");

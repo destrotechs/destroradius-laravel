@@ -41,13 +41,19 @@ class packagesController extends Controller
         ]);
         $downloadspeed=0;
         $uploadspeed=0;
+        $burstup=0;
+        $burstdown=0;
         $bandwidth=$request->get('bandwidth');
         if($bandwidth=='M'){
             $uploadspeed=$request->get('uploadspeed')*1024*1024;
             $downloadspeed=$request->get('downloadspeed')*1024*1024;
+            $burstup=$request->get('burstup')*1024*1024;
+            $burstdown=$request->get('burstdown')*1024*1024;
         }else{
             $uploadspeed=$request->get('uploadspeed')*1024;
             $downloadspeed=$request->get('downloadspeed')*1024;
+            $burstup=$request->get('burstup')*1024;
+            $burstdown=$request->get('burstdown')*1024;
         }
         $quota=($request->get('quota'))*1024*1024;
         $package = new Package;
@@ -58,6 +64,9 @@ class packagesController extends Controller
         $package->users=$request->get('users');
         $package->packagezone=$request->get('packagezone');
         $package->quota=$quota;
+        $package->burstup=$burstup;
+        $package->burstdown=$burstdown;
+        $package->profile=$request->get('profile');
         $package->durationmeasure=$request->get('period');
         $package->numberofdevices=$request->get('numberofdevices');
         $package->description=$request->get('description');
@@ -115,12 +124,12 @@ class packagesController extends Controller
             ]);
 
             $ppoereply=DB::table('radgroupreply')->insert([
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Pool','op'=>'=','value'=>$request->get('poolname').'_Pool'],
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Mikrotik-Rate-Limit','op'=>'=','value'=>$request->get('uploadspeed').$request->get('bandwidth').'/'.$request->get('downloadspeed').$request->get('bandwidth').' '.($request->get('uploadspeed')+1).$request->get('bandwidth').'/'.($request->get('downloadspeed')+1).$request->get('bandwidth').' 40/40'],
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Pool','op'=>'=','value'=>($request->get('poolname'))??$request->get('packagename').'_pool'],
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Mikrotik-Rate-Limit','op'=>'=','value'=>$request->get('uploadspeed').$request->get('bandwidth').'/'.$request->get('downloadspeed').$request->get('bandwidth').' '.$request->get('burstup').$request->get('bandwidth').'/'.$request->get('burstdown').$request->get('bandwidth').' 40/40'],
             ]);
              //create pppoe profile
             DB::table('radusergroup')->insert([
-                'username'=>$request->get('packagename').'_Profile','groupname'=>$request->get('packagename'),'priority'=>'10']);
+                'username'=>$request->get('profile')?? $request->get('packagename').'_Profile','groupname'=>$request->get('packagename'),'priority'=>'10']);
         }
         
         
@@ -145,7 +154,7 @@ class packagesController extends Controller
         $validdays=$request->get('validdays');
         $id=$request->get('id');
 
-        $packageupdate=DB::table('packages')->where('id','=',$id)->update(['packagename'=>$packagename,'uploadspeed'=>$uploadspeed,'downloadspeed'=>$downloadspeed,'users'=>$users,'quota'=>$quota,'numberofdevices'=>$numberofdevices,'validdays'=>$validdays,'packagezone'=>$request->get('packagezone'),'durationmeasure'=>$request->get('period'),'poolname'=>$request->get('poolname')]);
+        $packageupdate=DB::table('packages')->where('id','=',$id)->update(['packagename'=>$packagename,'uploadspeed'=>$uploadspeed,'downloadspeed'=>$downloadspeed,'users'=>$users,'quota'=>$quota,'numberofdevices'=>$numberofdevices,'validdays'=>$validdays,'packagezone'=>$request->get('packagezone'),'durationmeasure'=>$request->get('period'),'poolname'=>$request->get('poolname'),'profile'=>$request->get('profile')]);
         //update attributes on radgroupcheck and radgroupreply
         DB::table('radgroupreply')->where('groupname','=',$packagename)->delete();
 
@@ -205,11 +214,11 @@ class packagesController extends Controller
 
             $ppoereply=DB::table('radgroupreply')->insert([
                 ['groupname'=>$request->get('packagename'),'attribute'=>'Framed-Pool','op'=>'=','value'=>$request->get('poolname').'_pool'],
-                ['groupname'=>$request->get('packagename'),'attribute'=>'Mikrotik-Rate-Limit','op'=>'=','value'=>$request->get('uploadspeed').$request->get('bandwidth').'/'.$request->get('downloadspeed').$request->get('bandwidth').' '.($request->get('uploadspeed')+1).$request->get('bandwidth').'/'.($request->get('downloadspeed')+1).$request->get('bandwidth').' 40/40'],
+                ['groupname'=>$request->get('packagename'),'attribute'=>'Mikrotik-Rate-Limit','op'=>'=','value'=>$request->get('uploadspeed').$request->get('bandwidth').'/'.$request->get('downloadspeed').$request->get('bandwidth').' '.($request->get('burstup')).$request->get('bandwidth').'/'.($request->get('burstdown')).$request->get('bandwidth').' 40/40'],
             ]);
             //create pppoe profile
             DB::table('radusergroup')->updateOrInsert(
-                ['username'=>$packagename.'_Profile','groupname'=>$packagename],['priority'=>10]
+                ['username'=>$request->get('profile')??$packagename.'_Profile','groupname'=>$packagename],['priority'=>10]
             );
         }
         // alert()->success('Success','Package details updated successfully');

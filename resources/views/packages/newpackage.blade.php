@@ -36,8 +36,14 @@ New Package
                     <option value="resellers">Resellers</option>
                 </select>
                 <div class="form-row pool" style="display: none;">
-                    <label>Pool name (Mikrotik PPPoE pool name)</label>
-                <input type="text" name="poolname" class="form-control">
+                    <div class="col">
+                        <label>Pool name (Mikrotik PPPoE pool name)</label>
+                        <input type="text" name="poolname" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label>Profile name (Mikrotik PPPoE profile name)</label>
+                        <input type="text" name="profile" class="form-control">
+                    </div>
                 </div>
                 <label>Package Zone</label>
                 <select class="form-control" name="packagezone">
@@ -57,12 +63,28 @@ New Package
                 </select>
 
                 <p class="p-1 text-danger mes"></p>
-                <label for="uploadspeed">Upload Speed</label>
-                <input type="digit" required name="uploadspeed" class="form-control up" placeholder="1 or 2 ...">
-                <label for="uploadspeed">Download Speed</label>
-                <input type="hidden" name="upbandwidth" id="upbnd">
-                <input type="hidden" name="downbandwidth" id="downbnd">
-                <input type="digit" required name="downloadspeed" class="form-control down" placeholder="1 or 2 ...">
+                <div class="form-row">
+                    <div class="col">
+                        <label for="uploadspeed">Upload Speed</label>
+                        <input type="digit" required name="uploadspeed" class="form-control up" placeholder="1 or 2 ...">
+                    </div>
+                    <div class="col">
+                        <label for="uploadspeed">Download Speed</label>
+                        <input type="hidden" name="upbandwidth" id="upbnd">
+                        <input type="hidden" name="downbandwidth" id="downbnd">
+                        <input type="digit" required name="downloadspeed" class="form-control down" placeholder="1 or 2 ...">
+                    </div>
+                </div>
+                <div class="form-row pool" style="display: none;">
+                    <div class="col">
+                        <label>Burst Upload</label>
+                        <input type="digit" name="burstup" class="form-control" placeholder="burst up">
+                    </div>
+                    <div class="col">
+                        <label>Burst Download</label>
+                        <input type="digit" name="burstdown" class="form-control" placeholder="burst down">
+                    </div>                    
+                </div>
                 <label>Max Number of Devices</label>
                 <input required type="digit" name="numberofdevices" class="form-control">
                 <div class="form-row">

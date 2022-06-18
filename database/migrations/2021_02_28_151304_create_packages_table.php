@@ -26,6 +26,9 @@ class CreatePackagesTable extends Migration
             $table->text('description');
             $table->integer('validdays')->nullable();
             $table->string('durationmeasure')->nullable();
+            $table->string('burstup')->nullable();
+            $table->string('burstdown')->nullable();
+            $table->string('profile')->nullable();
             $table->timestamps();
         });
     }

@@ -535,6 +535,7 @@ class userController extends Controller
 
             }
         }else if ($packageusers[0] =='pppoe'){
+            $mpackage = DB::table('packages')->where('packagename','=',$package)->first();
             $user_on_package = DB::table('customerpackages')->where([['customerid','=',$user_id[0]],['packageid','=',$package_id[0]]])->count();
 
             if ($user_on_package > 0) {
@@ -548,7 +549,7 @@ class userController extends Controller
             // );
             //add user to PPOE Profile
              DB::table('radcheck')->updateOrInsert(
-                ['username'=>$request->get('username'),'attribute'=>'User-Profile'],['op'=>':=','value'=>$request->get('package').'_Profile']
+                ['username'=>$request->get('username'),'attribute'=>'User-Profile'],['op'=>':=','value'=>$mpackage->profile??$package.'_Profile']
             );
                 $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
                 $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
