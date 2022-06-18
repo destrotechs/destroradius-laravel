@@ -24,19 +24,33 @@ User Information
 			<div class="col-md-4">
 				<div class="card card-sm">
 					<div class="card-header"><h3>Personal Details</h3></div>
+                    <form method="POST" action="{{ route('update.user.details') }}">
 				  <ul class="list-group list-group-flush">
 				  	@foreach($userdetails as $d)
 				  	<?php
 				  		$username = $d->username;
                         $usertype = $d->type;
 				  	?>
-				    <li class="list-group-item"><b>Name :</b> {{ $d->name }}</li>
-				    <li class="list-group-item"><b>Username:</b> {{ $d->username }}</li>
-				    <li class="list-group-item"><b>Email: </b>{{ $d->email }}</li>
-				    <li class="list-group-item"><b>Phone:</b> {{ $d->phone }}</li>
-				    <li class="list-group-item"><b>Zone:</b> {{ $d->zonename }}</li>
+				    <li class="list-group-item"><b>Name</b> <input type="text" name="name" class="form-control" value="{{ $d->name }}"></li>
+				    <li class="list-group-item"><b>Username:</b> <input type="text" name="username" class="form-control" readonly value="{{ $d->username }}"></li>
+                    <input type="hidden" name="id" value="{{ $d->id }}">
+				    <li class="list-group-item"><b>Email</b><input type="email" name="email" class="form-control" value="{{ $d->email }}"></li>
+				    <li class="list-group-item"><b>Phone</b> <input type="text" name="phone" class="form-control" value="{{ $d->phone }}"></li>
+				    <li class="list-group-item"><b>Zone</b> 
+                        <select name="zone" class="form-control">
+                            <option value="{{ $d->zonename}}">{{ $d->zonename }}</option>
+                            @forelse($zones as $z)
+                            <option value="{{ $z->id}}">{{ $z->zonename }}</option>
+                            @empty
+                            <option value="">No Zones available</option>
+                            @endforelse
+                        </select>
+                    </li>
 				  @endforeach
 				  </ul>
+                    <center><button class="btn btn-success btn-md" type="submit">Save Changes</button></center>
+                    @csrf
+                    </form>
 				</div>
 
 			</div>

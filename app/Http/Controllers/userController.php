@@ -332,9 +332,11 @@ class userController extends Controller
 
         if($username){
 
-            $userdetails=DB::table('customers')->where('username','=',$username)->leftJoin('zones','zones.id','=','customers.zone')->get();
+            $userdetails=DB::table('customers')->where('username','=',$username)->leftJoin('zones','zones.id','=','customers.zone')->select('customers.*','zones.zonename')->get();
 
             $user_pppoe = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->get();
+            $zones=DB::table('zones')->get();
+
 
             if (count($user_pppoe)>0){
                 $profile = '';
@@ -377,10 +379,23 @@ class userController extends Controller
             $userquotaspent=$userdownloadspent+$useruploadspent;
             $packages = DB::table('packages')->get();
             $customlimits = DB::table('custom_limits')->get();
-            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent'));
+            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent','zones'));
 
         }else{
-            return redirect()->route('geteditcustomer');
+            return redirect()->route('geteditcustomer',compact('zones'));
+        }
+    }
+    public function postUserPersonalDetails(Request $request){
+        $id = $request->get('id');
+         $userupdated = DB::table('customers')
+              ->where('id', $id)
+              ->update(['name'=>$request->get('name'),'username'=>$request->get('username'),'email'=>$request->get('email'),'phone'=>$request->get('phone'),'zone'=>$request->get('zone')]);
+        if($userupdated){
+            toast('User details updated successfully','success');
+            return redirect()->back();
+        }else{
+            toast('User details could not be updated','error');
+            return redirect()->back();
         }
     }
     public static function updateBundlesForExistingCustomer($username,$package){
@@ -445,6 +460,7 @@ class userController extends Controller
             }
         }
     }
+
     public static function calculateBundleRemaining($username,$package){
         $user_total_mbs = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->pluck('value');
 

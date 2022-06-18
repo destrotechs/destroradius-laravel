@@ -203,6 +203,7 @@ Route::get('/user/change/replyattr/del/{id}','userController@deleteAttrreply')->
 
 //user post routes
 Route::post('/user/new','userController@saveNewCustomer')->name('save.user');
+Route::post('/user/updatedetails','userController@postUserPersonalDetails')->name('update.user.details');
 
 //setting post routes
 Route::post('/settings/man/comm','settingsController@addManagerCommission')->name('add.manager.commission');
