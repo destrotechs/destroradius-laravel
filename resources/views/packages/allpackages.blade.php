@@ -45,8 +45,8 @@
                         <td><?php echo $num;?></td>
                         <td>{{ $p->packagename }}</td>
                         <td>{{ $p->packagezone }}</td>
-                        <td>{{ ($p->downloadspeed)/(1024*1024) }} mbps Burst:{{ $p->burstup??'Not Set' }}</td>
-                        <td>{{ ($p->uploadspeed)/(1024*1024) }} mbps {{ $p->burstdown??'Not set' }}</td>
+                        <td>{{ ($p->downloadspeed)/(1024*1024) }} mbps Burst:{{ round($p->burstup/(1024*1024),2)??'Not Set' }}</td>
+                        <td>{{ ($p->uploadspeed)/(1024*1024) }} mbps Burst: {{ round($p->burstdown/(1024*1024),2)??'Not set' }}</td>
                         @if ($p->quota !=0)
                         <td>{{ round(($p->quota)/(1024*1024),2) }}MBs</td>
                         @else
