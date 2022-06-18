@@ -32,6 +32,8 @@
                     <th>Upload Speed</th>
                     <th>Max Quota</th>
                     <th>Max Devices</th>
+                    <th>Pool Name</th>
+                    <th>Profile</th>
                     <th>Designated For</th>
                     <th>Edit</th>
                 </tr>
@@ -43,14 +45,16 @@
                         <td><?php echo $num;?></td>
                         <td>{{ $p->packagename }}</td>
                         <td>{{ $p->packagezone }}</td>
-                        <td>{{ ($p->downloadspeed)/(1024*1024) }} mbps</td>
-                        <td>{{ ($p->uploadspeed)/(1024*1024) }} mbps</td>
+                        <td>{{ ($p->downloadspeed)/(1024*1024) }} mbps Burst:{{ $p->burstup??'Not Set' }}</td>
+                        <td>{{ ($p->uploadspeed)/(1024*1024) }} mbps {{ $p->burstdown??'Not set' }}</td>
                         @if ($p->quota !=0)
                         <td>{{ round(($p->quota)/(1024*1024),2) }}MBs</td>
                         @else
                         <td>No limit</td>
                         @endif
                         <td>{{ $p->numberofdevices}}</td>
+                        <td>{{ $p->poolname}}</td>
+                        <td>{{ $p->profile}}</td>
                         <td>{{ $p->users }} users</td>
                         <td><a href="{{ route('packages.edit',['id'=>$p->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="#" class="btn btn-danger btn-sm trash" id="{{ $p->id }}"><i class="fas fa-trash"></i></a></td>
                     </tr>
