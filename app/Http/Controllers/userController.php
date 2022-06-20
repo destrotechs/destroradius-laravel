@@ -332,7 +332,7 @@ class userController extends Controller
 
         if($username){
 
-            $userdetails=DB::table('customers')->where('username','=',$username)->leftJoin('zones','zones.id','=','customers.zone')->select('customers.*','zones.zonename')->get();
+            $userdetails=DB::table('customers')->where('username','=',$username)->leftJoin('zones','zones.id','=','customers.zone')->select('customers.*','zones.id as zoneid')->get();
 
             $user_pppoe = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->get();
             $zones=DB::table('zones')->get();
@@ -379,7 +379,10 @@ class userController extends Controller
             $userquotaspent=$userdownloadspent+$useruploadspent;
             $packages = DB::table('packages')->get();
             $customlimits = DB::table('custom_limits')->get();
-            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent','zones'));
+
+            $useritems = DB::table('customers')->join('item_allocations','item_allocations.customer_id','=','customers.id')->join('items','items.id','=','item_allocations.item_id')->select('customers.id as cid,username','items.id as item_id','items.item_code','items.name','item_allocations.quantity','item_allocations.allocation_date','item_allocations.status','item_allocations.return_date')->where('customers.username','=',$username)->get();
+
+            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent','zones','useritems'));
 
         }else{
             return redirect()->route('geteditcustomer',compact('zones'));

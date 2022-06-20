@@ -15,47 +15,55 @@ User Information
 @endif
 
 <div class="card">
-	<div class="card-header">User Details</div>
 	<div class="card-body">
 		<?php
 			$username = "";
 		?>
 		<div class="row">
-			<div class="col-md-4">
-				<div class="card card-sm">
-					<div class="card-header"><h3>Personal Details</h3></div>
+			<div class="col-md-12">
+                <div class="accordion" id="accordionExample">
+                    <div class="card card-sm">
+                    <div class="card-header" id="headingTwo">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+                              User Details
+                            </button>
+                          </h2>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+
                     <form method="POST" action="{{ route('update.user.details') }}">
-				  <ul class="list-group list-group-flush">
-				  	@foreach($userdetails as $d)
-				  	<?php
-				  		$username = $d->username;
+                  <ul class="list-group list-group-flush">
+                    @foreach($userdetails as $d)
+                    <?php
+                        $username = $d->username;
                         $usertype = $d->type;
-				  	?>
-				    <li class="list-group-item"><b>Name</b> <input type="text" name="name" class="form-control" value="{{ $d->name }}"></li>
-				    <li class="list-group-item"><b>Username:</b> <input type="text" name="username" class="form-control" readonly value="{{ $d->username }}"></li>
+                    ?>
+                    <li class="list-group-item"><b>Name</b> <input type="text" name="name" class="form-control" value="{{ $d->name }}"></li>
+                    <li class="list-group-item"><b>Username:</b> <input type="text" name="username" class="form-control" readonly value="{{ $d->username }}"></li>
                     <input type="hidden" name="id" value="{{ $d->id }}">
-				    <li class="list-group-item"><b>Email</b><input type="email" name="email" class="form-control" value="{{ $d->email }}"></li>
-				    <li class="list-group-item"><b>Phone</b> <input type="text" name="phone" class="form-control" value="{{ $d->phone }}"></li>
-				    <li class="list-group-item"><b>Zone</b> 
+                    <li class="list-group-item"><b>Email</b><input type="email" name="email" class="form-control" value="{{ $d->email }}"></li>
+                    <li class="list-group-item"><b>Phone</b> <input type="text" name="phone" class="form-control" value="{{ $d->phone }}"></li>
+                    <li class="list-group-item"><b>Zone</b> 
                         <select name="zone" class="form-control">
-                            <option value="{{ $d->zonename}}">{{ $d->zonename }}</option>
+                            
                             @forelse($zones as $z)
-                            <option value="{{ $z->id}}">{{ $z->zonename }}</option>
+                            <option value="{{  $z->id}}" {{ $z->id==$d->zoneid? 'selected':'' }}>{{ $z->zonename }}</option>
                             @empty
                             <option value="">No Zones available</option>
                             @endforelse
                         </select>
                     </li>
-				  @endforeach
-				  </ul>
-                    <center><button class="btn btn-success btn-md" type="submit">Save Changes</button></center>
+                  @endforeach
+                  </ul>
+                    <button class="btn btn-success btn-md ml-3" type="submit"> <i class="fas fa-save"></i>&nbsp;Save Changes</button>
                     @csrf
                     </form>
-				</div>
+                </div>
 
-			</div>
-			<div class="col-md-8">
-                <div class="accordion" id="accordionExample">
+            </div>
+            </div>
                     <div class="card">
                       <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
@@ -65,7 +73,7 @@ User Information
                         </h2>
                       </div>
 
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <div class="card-body">
                             @if(count($preplyattributes)>0 || count($pcheckattributes)>0)
                             <table class="table table-sm table-responsivetable-sm table-bordered table-striped">
@@ -152,17 +160,69 @@ User Information
                           </div>
                         </div>
                       </div>
+                {{-- </div> --}}
+
+                <div class="card card-sm">
+                    <div class="card-header" id="headingTwo">
+                          <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseTwo">
+                              User Items
+                            </button>
+                          </h2>
+                    </div>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+
+                    <form>
+                       @if(count($useritems)>0)
+                       <table>
+                           <tr>
+                               <th>Item</th>
+                               <th>Quantity</th>
+                               <th>Allocation Date</th>
+                               <th>Status</th>
+                               <th>Return Date</th>
+                           </tr>
+                           <tbody>                               
+                                @foreach($useritems as $i)
+                                <tr>
+                                    <td>
+                                        <input class="form-control" type="text" name="item" id="{{ $i->item_id }}" value="{{ $i->item_code.'|'.$i->name }}">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" name="quantity" id="{{ $i->quantity }}" value="{{ $i->quantity }}">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="date" name="allocation_date" id="{{ $i->allocation_date }}" value="{{ $i->allocation_date }}">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" name="status" id="{{ $i->status }}" value="{{ $i->status }}">
+                                    </td>
+                                    <td>
+                                        <input type="date" name="return_date" id="{{ $i->return_date }}" value="{{ $i->return_date }}">
+                                    </td>
+                                </tr>
+                                @endforeach
+                           </tbody>
+                       </table>
+                       @else
+                       <div class="alert alert-warning">The user has not been allocated Equipments/Items</div>  
+                       @endif                 
+                    </form>
                 </div>
 
+            </div>
+            </div>
 
+        </div>
 			</div>
 
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-                @if($usertype!='pppoe')
+                {{-- @if($usertype?? && $usertypr!='pppoe') --}}
 				<button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-link" aria-hidden="true"></i>Change package</button>
-				@endif
+				{{-- @endif --}}
                 <a href="#" class="btn btn-outline-warning btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-exclamation-triangle"></i> Per user limits</a>
                 <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass??'']) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>
                 <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
