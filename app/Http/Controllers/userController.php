@@ -285,7 +285,7 @@ class userController extends Controller
             if (count($onlineusers)>0) {
                 $num++;
 
-                foreach ($onlneuser as $key => $o) {
+                foreach ($onlineusers as $key => $o) {
                     $totaldownload=DB::table('radacct')->where('username','=',$o->username)->sum('AcctInputOctets');
                     $totalupload=DB::table('radacct')->where('username','=',$o->username)->sum('AcctOutputOctets');
                     $output.="<tr>";

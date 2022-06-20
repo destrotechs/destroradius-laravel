@@ -75,14 +75,13 @@ Online users
 							}
 						})
 					}else{
-						
-					fetchUsers();
+						fetchUsers();
 					}
 					
 				}
 			})
 			function fetchUsers(){
-				$(".tbody").empty().html("<tr><td colspan='7'>Loading...</td></tr>")
+				$(".tbody").empty().html("<tr><td colspan='7'>Loading...</td></tr>").removeClass('alert-danger');
 				var req=$.ajax({
 						method:"POST",
 						url:"{{ route('getonlineusers') }}",
