@@ -235,6 +235,10 @@ class packagesController extends Controller
         $zones=Zone::all();
         return view('packages.edit',compact('package','zones'));
     }
+    public function getHotspotPackages(Request $request){
+        $packages = DB::table('packages')->join('package_prices','package_prices.packageid','=','packages.id')->select('packages.*','package_prices.amount')->get();
+        return response()->json($packages);
+    }
     public function deletePackage($id){
         //fetch package and store the name in a variable
 

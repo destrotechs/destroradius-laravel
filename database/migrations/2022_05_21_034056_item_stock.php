@@ -14,9 +14,11 @@ class ItemStock extends Migration
     {
          Schema::create('item_stock', function (Blueprint $table) {
             $table->id();
-            $table->string('item_code');
+            $table->bigInteger('item_id');
             $table->string('quantity_in')->nullable();
-            $table->string('added_by');
+            $table->string('narration')->nullable();
+            $table->string('added_by')->nullable();
+            $table->string('allocation_id')->nullable();
             $table->timestamps();
 
         });

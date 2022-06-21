@@ -380,9 +380,11 @@ class userController extends Controller
             $packages = DB::table('packages')->get();
             $customlimits = DB::table('custom_limits')->get();
 
-            $useritems = DB::table('customers')->join('item_allocations','item_allocations.customer_id','=','customers.id')->join('items','items.id','=','item_allocations.item_id')->select('customers.id as cid,username','items.id as item_id','items.item_code','items.name','item_allocations.quantity','item_allocations.allocation_date','item_allocations.status','item_allocations.return_date')->where('customers.username','=',$username)->get();
+            $useritems = DB::table('customers')->join('item_allocations','item_allocations.customer_id','=','customers.id')->join('items','items.id','=','item_allocations.item_id')->select('customers.id as cid,username','items.id as item_id','items.item_code','items.name','item_allocations.quantity','item_allocations.allocation_date','item_allocations.status','item_allocations.date_returned','item_allocations.id as alloc_id','item_allocations.quantity_returned')->where('customers.username','=',$username)->get();
 
-            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent','zones','useritems'));
+            $items = DB::table('items')->get();
+
+            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent','zones','useritems','items'));
 
         }else{
             return redirect()->route('geteditcustomer',compact('zones'));
@@ -735,5 +737,63 @@ class userController extends Controller
         $limits = DB::table('custom_limits')->where('id','=',$id)->delete();
 
         return redirect()->back()->with("success","limit has been deleted successfully");
+    }
+    public function allocateEquipmet(Request $request){
+        $added_by = Auth::user()->email;
+        $today_date = date("Y-m-d");
+        $allocation = DB::table('item_allocations')->insertGetId(
+            ['item_id'=>$request->get('item_id'),'customer_id'=>$request->get('userid'),'quantity'=>$request->get('quantity'),'status'=>$request->get('status'),'return_date'=>$request->get('return_date'),'added_by'=>$added_by,'allocation_date'=>$today_date]
+        );
+        DB::table('item_stock')->insert(
+            ['item_id'=>$request->get('item_id'),'allocation_id'=>$allocation,'narration'=>'CUSTOMER ALLOCATION','added_by'=>$added_by,'quantity_in'=>-($request->get('quantity'))]
+        );
+        if(is_int($allocation) && $request->ajax()){
+            return "success";
+        }else if(is_int($allocation) && !$request->ajax()){
+            toast("Item allocated successfully","success");
+            return redirect()->back();
+        }else{
+            toast("Item could not be allocated","error");
+            return redirect()->back();
+        }
+    }
+    public function deleteAllocation(Request $request,$id){
+        $del = DB::table('item_allocations')->where('id',$id)->delete();
+        if($del){
+            //remove stock negative record
+            DB::table('item_stock')->where('allocation_id',$id)->delete();
+
+            return "Allocation removed successfully";
+        }else{
+            return "Allocation could not be removed";
+
+        }
+    }
+    public function returnEquipment(Request $request){
+        $received_by = Auth::user()->email;
+        $today_date = date("Y-m-d");
+        $id = $request->get('allocation_id');
+        $qr = $request->get('quantity_returned');
+        $alloc = DB::table('item_allocations')->where('id',$id)->first();
+        if (intval($qr)>intval($alloc->quantity)){
+            alert()->error("Quantity returned cannot be more than what was allocated");
+            return redirect()->back();
+        }else{
+           $update_alloc = DB::table('item_allocations')->where('id',$id)->update(
+                ['quantity_returned'=>$qr,'date_returned'=>$today_date,'received_by'=>$received_by,'status'=>'RETURNED']
+            );
+            if ($update_alloc){
+                DB::table('item_stock')->insert(
+                    ['item_id'=>$alloc->item_id,'allocation_id'=>$id,
+                    'narration'=>'CUSTOMER RETURNED ITEMS','added_by'=>$received_by,'quantity_in'=>$qr]
+                );
+                toast("Allocation updated successfully","success");
+                return redirect()->back();
+            }else{
+                toast("Allocation could not be updated, try again ","error");
+                return redirect()->back();
+            } 
+        }        
+
     }
 }

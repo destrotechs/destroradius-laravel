@@ -14,10 +14,12 @@ User Information
     </div>
 @endif
 
-<div class="card">
-	<div class="card-body">
+<div class="">
+	<div class="">
 		<?php
 			$username = "";
+            $usertype ="";
+            $uid="";
 		?>
 		<div class="row">
 			<div class="col-md-12">
@@ -26,7 +28,8 @@ User Information
                     <div class="card-header" id="headingTwo">
                           <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
-                              User Details
+                              <i class="fa fa-info-circle" aria-hidden="true"></i>
+&nbsp;User Details
                             </button>
                           </h2>
                     </div>
@@ -39,6 +42,8 @@ User Information
                     <?php
                         $username = $d->username;
                         $usertype = $d->type;
+                        $uid = $d->id;
+
                     ?>
                     <li class="list-group-item"><b>Name</b> <input type="text" name="name" class="form-control" value="{{ $d->name }}"></li>
                     <li class="list-group-item"><b>Username:</b> <input type="text" name="username" class="form-control" readonly value="{{ $d->username }}"></li>
@@ -68,7 +73,7 @@ User Information
                       <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
                           <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Per user limits
+                           <i class="fa fa-hourglass" aria-hidden="true"></i>&nbsp; Per user limits
                           </button>
                         </h2>
                       </div>
@@ -129,7 +134,7 @@ User Information
                         <div class="card-header" id="headingTwo">
                           <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                              Package Details
+                              <i class="fa fa-info" aria-hidden="true"></i>&nbsp; Package Details
                             </button>
                           </h2>
                         </div>
@@ -166,7 +171,7 @@ User Information
                     <div class="card-header" id="headingTwo">
                           <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseTwo">
-                              User Items
+                              <i class="fa fa-list" aria-hidden="true"></i>&nbsp; User Items
                             </button>
                           </h2>
                     </div>
@@ -175,31 +180,45 @@ User Information
 
                     <form>
                        @if(count($useritems)>0)
-                       <table>
+                       <table class="table table-sm table-responsive table-striped">
+                           <thead>
                            <tr>
+                               <th>#</th>
                                <th>Item</th>
-                               <th>Quantity</th>
+                               <th>Quantity Allocated</th>
                                <th>Allocation Date</th>
                                <th>Status</th>
+                               <th>Quantity Returned</th>
                                <th>Return Date</th>
+                               <th>Action</th>
                            </tr>
+                            </thead>
                            <tbody>                               
-                                @foreach($useritems as $i)
+                                @foreach($useritems as $key=>$i)
                                 <tr>
+                                    <td>{{ $key+1 }}</td>
                                     <td>
-                                        <input class="form-control" type="text" name="item" id="{{ $i->item_id }}" value="{{ $i->item_code.'|'.$i->name }}">
+                                        {{ $i->name }}
+                                    </td>
+                                    <td>{{ $i->quantity }}
+                                    </td>
+                                    <td>{{ $i->allocation_date }}
+                                    </td>
+                                    <td class="{{ $i->status=='RETURNED'? 'text-success':'text-info' }}">{{ $i->status }}
                                     </td>
                                     <td>
-                                        <input class="form-control" type="text" name="quantity" id="{{ $i->quantity }}" value="{{ $i->quantity }}">
+                                        {{ $i->quantity_returned??'N/A' }}
                                     </td>
                                     <td>
-                                        <input class="form-control" type="date" name="allocation_date" id="{{ $i->allocation_date }}" value="{{ $i->allocation_date }}">
+                                        {{ $i->date_returned??'N/A' }}
                                     </td>
                                     <td>
-                                        <input class="form-control" type="text" name="status" id="{{ $i->status }}" value="{{ $i->status }}">
-                                    </td>
-                                    <td>
-                                        <input type="date" name="return_date" id="{{ $i->return_date }}" value="{{ $i->return_date }}">
+                                        @if($i->status=='LEASED' || $i->status=='LEASED')
+                                        <a href="#" id="{{ $i->alloc_id }}" class="btn btn-sm btn-danger mt-2 remove_allocation"><i class="fas fa-trash"></i></a>
+                                        @endif
+                                        @if($i->status=='LEASED')
+                                        <a href="#" id="{{ $i->alloc_id }}" class="btn btn-sm btn-success mt-2 return_item" data-toggle="modal" data-target="#exampleModal5"><i class="fas fa-edit"></i>&nbsp;return item</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -227,7 +246,7 @@ User Information
                 <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass??'']) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>
                 <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
                 <a href="#" id="{{ $username }}" class="btn btn-outline-warning btn-md trashrec"><i class="fas fa-close"></i> Remove Accounting records</a>
-
+                <a href="#" class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal4"><i class="fa fa-hashtag"></i>&nbsp;Allocate Equipment</a>
             </div>
 		</div>
 	</div>
@@ -339,19 +358,75 @@ User Information
 	  </div>
 	</div>
   </div>
+{{-- modal 4 --}}
+<div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Equipment Allocation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{{ route('post.new.equipment') }}">
+                <label>Item/Equipment</label>
+                <select class="form-control" name="item_id" id="item_id">
 
-<div class="position-relative top-0 end-0 p-3">
-  <div class="toast" id="liveToast" role="alert" aria-live="assertive" aria-atomic="true">
-  <div class="toast-header">
-    <strong class="me-auto">Bootstrap</strong>
-    <small>11 mins ago</small>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <option value="">Select ... </option>
+                    @forelse($items as $i)
+                    <option value="{{ $i->id }}">{{ $i->item_code.' | '.$i->name }}</option>
+                    @empty
+                    <option value="">No items available</option>
+                    @endforelse
+                </select>
+                    <input type="hidden" id="username" name="userid" value="<?php echo $uid;?>">
+                    <label>Lease Type</label>
+                    <select name="status" class="form-control" id="leasetype">
+                        <option value="">Select ...</option>
+                        <option value="PERMANENT">PERMANENT/BOUGHT</option>
+                        <option value="LEASED">LEASED</option>
+                    </select>
+                    <label>Quantity Allocated</label>
+                    <input type="digit" name="quantity" class="form-control" placeholder="e.g 1">
+                    <label class="return_date" style="display: none;">Expected Return Date</label>
+                    <input type="date" name="return_date" class="form-control return_date" style="display:none;">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Allocate</button>
+        </div>
+        @csrf
+    </form>
+      </div>
+    </div>
   </div>
-  <div class="toast-body">
-    Hello, world! This is a toast message.
+{{-- end of modal 4 --}}
+{{-- modal 5 --}}
+<div class="modal fade" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Equipment Allocation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{{ route('return.equipment') }}">
+                    <label>Quantity Returned</label>
+                    <input type="digit" name="quantity_returned" class="form-control" placeholder="e.g 1" required>
+                    <input type="hidden" name="allocation_id" id="alloc_id">
+                    
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Allocate</button>
+        </div>
+        @csrf
+    </form>
+      </div>
+    </div>
   </div>
-</div>
-</div>
+{{-- end of modal 5 --}}
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -436,6 +511,32 @@ $(document).ready(function(){
                 }
             })
         }
+    })
+    $("#leasetype").change(function(){
+        var leasetype = $(this).val();
+        if(leasetype!=='PERMANENT'){
+            $(".return_date").show();
+        }else{
+            $(".return_date").hide();
+        }
+    })
+    $(".remove_allocation").click(function(){
+        var id = $(this).attr('id');
+        if (confirm("Are you sure you want to delete this record?")){
+            $.ajax({
+                method:'GET',
+                url:'/del/'+id,
+                success:function(res){
+                    alert(res);
+                    window.location.reload();
+                }
+            })
+        }
+
+    })
+
+    $(".return_item").click(function(){
+        $("#alloc_id").val($(this).attr('id'));
     })
 })
 </script>

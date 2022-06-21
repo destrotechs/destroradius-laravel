@@ -211,6 +211,12 @@ Route::post('/settings/man/comm','settingsController@addManagerCommission')->nam
 ///special posts
 Route::post('/user/nas','userController@getNas')->name('getnas');
 
+//user equipments
+Route::post('user/equipment/new','userController@allocateEquipmet')->name('post.new.equipment');
+Route::post('user/equipment/return','userController@returnEquipment')->name('return.equipment');
+Route::get('/del/{id}','userController@deleteAllocation')->name('delete.equipment');
+Route::get('/hotspot/packages','packagesController@getHotspotPackages')->name('hotspot.packages');
+
 
 
 
