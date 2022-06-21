@@ -215,7 +215,6 @@ Route::post('/user/nas','userController@getNas')->name('getnas');
 Route::post('user/equipment/new','userController@allocateEquipmet')->name('post.new.equipment');
 Route::post('user/equipment/return','userController@returnEquipment')->name('return.equipment');
 Route::get('/del/{id}','userController@deleteAllocation')->name('delete.equipment');
-Route::get('/hotspot/packages','packagesController@getHotspotPackages')->name('hotspot.packages');
 
 
 
@@ -253,3 +252,4 @@ Route::get('/customer/register', 'Auth\RegisterController@showCustomerRegisterFo
 Route::post('/login/customer', 'Auth\LoginController@customerLogin')->name('post.customer.login');
 Route::post('/register/customer', 'Auth\RegisterController@createCustomer')->name('post.customer.register');
 Route::get('/customer/logout','clientsController@getLogout')->name('user.logout');
+Route::get('/hotspot/packages','apiController@getHotspotPackages')->name('hotspot.packages');
