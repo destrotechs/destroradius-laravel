@@ -76,6 +76,7 @@
       {{-- <a class="btn btn-outline-primary" href="#">Login</a>
       <a class="btn btn-outline-primary" href="#">Sign up</a> --}}
       @if(!isset(Auth::guard('customer')->user()->username ))
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Account
@@ -110,6 +111,12 @@
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.transactions')}}"><i class="fas fa-chart-line"></i> Transactions</a></li>
             <div class="dropdown-divider"></div>
+            @if(CustomerHelper::isSuspended())
+            <li><a class="dropdown-item btn btn-danger btn-sm p-2 activate" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-danger"></i> Activate Connection</a></li>
+            @else
+            <li><a class="dropdown-item btn btn-danger btn-sm p-2 suspend" href="#" id="{{ Auth::guard('customer')->user()->username }}"><i class="fas fa-wifi text-danger"></i> Suspend Connection</a></li>
+            @endif
+            <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             <div class="dropdown-divider"></div>
           </ul>
@@ -133,10 +140,57 @@
   
   </footer>
 </div>
+{{-- modal 5 --}}
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Equipment Allocation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{{ route('activate.account') }}">
+                    <label>Activation Code</label>
+                    <input type="digit" name="activation_code" class="form-control" placeholder="e.g 1" required>
+                    <input type="hidden" name="username" id="username">
+                    
 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Activate</button>
+        </div>
+        @csrf
+    </form>
+      </div>
+    </div>
+  </div>
+{{-- end of modal 5 --}}
 
     <script src="{{asset('js/app.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     @yield('js')
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".suspend").click(function(){
+          if(confirm("Are you sure you want to suspend your internet access?")){
+            var username = $(this).attr('id');
+            $.ajax({
+              method:'GET',
+              url:'account/suspend/'+username,
+              success:function(res){
+                alert(res);
+                window.location.reload();
+              }
+            })
+          }
+        })
+        $(".activate").click(function(){
+          var username = $(this).attr('id');
+
+          $("#username").val(username);
+        })
+      })
+    </script>
   </body>
 </html>

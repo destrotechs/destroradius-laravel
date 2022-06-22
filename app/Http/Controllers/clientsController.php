@@ -22,7 +22,22 @@ class clientsController extends Controller
 
 
     public function bundlebalance(Request $request){
-        return view('clients.checkbalance');
+        $user_info = '';
+        $user_type = '';
+        $username='';
+        if(Auth::guard('customer')->check()){
+
+            $username = Auth::guard('customer')->user()->username;
+            $user_type = Auth::guard('customer')->user()->type;
+
+            if(Auth::guard('customer')->user()->type=='pppoe' || Auth::guard('customer')->user()->type=='prepaid'){
+                $user_info = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
+                // array_push($user_info,$info);
+
+            }
+
+        }
+        return view('clients.checkbalance',compact('user_info','user_type','username'));
     }
     public function fetchBalance(Request $request){
         $username=$request->get('username');
@@ -53,7 +68,47 @@ class clientsController extends Controller
 
     public function buyBundlePlan(Request $request,$id){
         $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where('packages.id','=',$id)->get();
-        return view('clients.buybundle',compact('package'));
+        $balance = 0;
+        $usertype = '';
+        if(Auth::guard('customer')->check()){
+            $username = Auth::guard('customer')->user()->username;
+            $usertype = Auth::guard('customer')->user()->type;
+            $balance = self::getBBalance($username);
+        }
+
+        if($balance>0){
+            alert()->warning("You have an active package, you cannot purchase a new one");
+            return redirect()->route('client.bundles');
+        }else if($usertype=='pppoe' || $usertype=='prepaid'){
+            alert()->warning("PPOE PAGE NOT READY");
+            return redirect()->route('user.balance');
+        }
+
+        else{
+            return view('clients.buybundle',compact('package','balance'));
+        }
+
+    }
+    public static function getBBalance($username){
+        $user=DB::table('radcheck')->where('username','=',$username)->get();
+        $mbsused=0;
+        $totalbytesrecord=0;
+        $remainder=0;
+        if(count($user)>0){
+            $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
+            foreach ($userdata as $key => $data) {
+                $totalbytesrecord=$data->value;
+            }
+            $totaldownbs=DB::table('radacct')->where('username','=',$username)->sum('AcctInputOctets');
+            $totalupbs=DB::table('radacct')->where('username','=',$username)->sum('AcctOutputOctets');
+            $mbsused=($totaldownbs+$totalupbs);
+
+            $totalbytesrecord=($totalbytesrecord/(1024*1024));
+            $mbsused=0;
+            $remainder=$totalbytesrecord-$mbsused;
+
+            return $remainder;
+        } 
     }
     public function getCleanStale(){
         return view('clients.cleanstale');
@@ -490,6 +545,66 @@ class clientsController extends Controller
         return $dateToDisconnect;
 
     }
+    public function suspendAccount(Request $request,$username){
+        $userisactive = DB::table('radcheck')->where('username',$username)->get();
+        if(count($userisactive>0)){            
+            $expiration = DB::table('radcheck')->where([['username','=',$username],['attribute'=>'Expiration']])->first();
+            $cltpass = '';
+            $other_attrs = array();
+            foreach ($userisactive as $key => $a) {
+                $attrs=array($a->attribute,$a->op,$a->value);
+
+                array_push($other_attrs,$attrs);
+
+                if($a->attribute=='Cleartext-Password'){
+                    $cltpass = $a->value;
+                }
+            }
+
+
+            $activation_code = rand(1,10000);
+            $sus = DB::table('user_access_suspensions')->insert(
+                ['username'=>$username,'activation_code'=>$activation_code,'expiration'=>$epiration->value,'cleartextpassword'=>$cltpass,'otherattributes'=>$other_attrs]
+            );
+
+            if($sus){
+                //clear radcheck to disable connection
+                $userout = DB::table('radcheck')->where('username',$username)->delete();
+                if ($userout){
+                    return "Account suspended successfull, Please use code ".$activation_code." to reactivate again";
+                }
+            }else{
+                return "There was an error suspending your account, try again!";
+            }
+        }else{
+            return "You are not an active internet user!";
+        }
+    }
+
+    public function activateSuspendedAccount(Request $request){
+        $activation_code= $request->get('activation_code');
+        $username= $request->get('username');
+        $accountissuspended = DB::table('user_access_suspensions')->where([['username','=',$username],['activation_code','=',$activation_code],['activation_used','=',false]])->first();
+        if(count($accountissuspended)>0){
+            $attrs = $accountissuspended->otherattributes;
+
+            foreach($attrs as $at){
+                DB::table('radcheck')->insert(
+                    ['username'=>$username,'attribute'=>$at[0],'op'=>$at[1],'value'=>$at[2]]
+                );
+            }
+
+            return "Account has been reactivated successfully!";
+
+        }else{
+            return "Your activation code may be wrong!";
+        }
+    }
+
+
+
+
+
     public function getLogout(Request $request){
         Auth::guard('customer')->logout();
 

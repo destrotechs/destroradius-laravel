@@ -508,6 +508,8 @@ class userController extends Controller
 
             $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
             $remove_radusergroup = DB::table('radreply')->where('username','=',$username)->delete();
+            $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
+                $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
 
             echo "user activated on non-regulated mode";
 
@@ -538,6 +540,7 @@ class userController extends Controller
                 $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
 
                 $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
+                $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
 
                 $new_radusergrouprecord = DB::table('radusergroup')->insert([
                     'username'=>$username,'groupname'=>$package,'priority'=>10,
@@ -574,11 +577,16 @@ class userController extends Controller
             );
                 $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
                 $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
-                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0]);
+                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0],'pppoe');
+                $expiration = explode("H",$dateToDisconnect)[0];
+                $wispr = explode("H",$dateToDisconnect)[1];
 
               $rad_reply = DB::table('radreply')->updateOrInsert(
-                    ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$dateToDisconnect]
+                    ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$wispr]
                 );
+              DB::table('radcheck')->insert(
+                ['username'=>$username,'attribute'=>'Expiration','op'=>':=','value'=>$expiration]
+              );
              //remove user from package
               $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id[0])->delete();
               //add user to the news package
@@ -592,7 +600,18 @@ class userController extends Controller
         }
 
     }
-    public static function calculateTime($timemeasure,$num){
+
+    // public static function calculateDateToDisconnectPPPoE($packagecost=0,$paid_amount=0,$timemeasure=0,$num=0)
+    // {
+    //     $year=date("Y");
+    //     $month=date("n");
+    //     $day=date("j");
+    //     $hour=date("H");
+    //     $min=date("i");
+    //     $sec=date("s");
+
+    // }
+    public static function calculateTime($timemeasure,$num,$usertype='hotspot'){
         $year=date("Y");
         $month=date("n");
         $day=date("j");
@@ -622,18 +641,40 @@ class userController extends Controller
 
         }
 
-        $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
-        $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
+        if ($usertype=='hotspot'){
 
-        $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
+            $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
+            $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
 
-        $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
+            $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
 
-        $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
+            $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
 
-        $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
+            $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
 
-        return $dateToDisconnect;
+            $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
+
+            return $dateToDisconnect;
+        }else if ($usertype=='pppoe'){
+
+            $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
+            $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
+
+            
+            $mnth = date('M',$packageValidDate);
+            $d = date('j',$packageValidDate);
+            $y = date('Y',$packageValidDate);
+
+            return $d." ".$mnth." ".$y. " 12:00"."H".$dateToDisconnect;
+        }
 
     }
     

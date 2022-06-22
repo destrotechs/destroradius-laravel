@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('allowed_username', function ($attribute, $value, $parameters, $validator)
         {
-          $bannedUsernames = ['HEWANET'];
+          $bannedUsernames = ['HEWANET','PAMEWA'];
           return !in_array(strtoupper($value), $bannedUsernames);
         });
     }

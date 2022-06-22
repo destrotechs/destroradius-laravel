@@ -1,8 +1,9 @@
 @extends('layouts.clientslayout')
 @section('content')
 
-<h4>Bundle Balance</h4><br>
+<h4>{{ ($user_type=='hotspot' || $username=='')? 'Bundle Balance':'Internet Access Information' }}</h4><br>
 <div class="card">
+@if($user_type=='' or $user_type=='hotspot')
 <div class="card-body">
 	<table class="table table-sm table-responsivetable-bordered table-striped table-responsive" style="display: none;">
 		<thead>
@@ -30,6 +31,15 @@
 	<br>
 
 </div>
+@else
+<div class="card-body d-flex justify-content-center">
+	@if($user_info!=='')
+	<h3>Hi <b>{{ $username }}</b>, Your access is valid until <b>{{ $user_info->value }}</b></h3>
+	@else
+	<h3>You have no active internet access</h3>
+	@endif
+</div>
+@endif
 </div>
 
 @endsection

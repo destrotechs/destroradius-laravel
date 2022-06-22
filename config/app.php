@@ -237,6 +237,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'CustomerHelper' => App\Helpers\CustomerHelper::class,
 
 
     ],
