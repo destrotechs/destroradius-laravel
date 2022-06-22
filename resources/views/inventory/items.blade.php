@@ -24,7 +24,7 @@ Items
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example2" class="table table-sm table-responsive table-bordered table-hover">
+              <table id="example2" class="table table-sm table-responsive table-striped table-hover">
                 <thead>
                   <?php $num=0;?>
                   <tr>
@@ -35,12 +35,14 @@ Items
                     <th>Model</th>
                     <th>Type</th>
                     <th>Serial</th>
-                    <th>Quantity</th>
+                    <th>Stock In</th>
+                    <th>Allocated Items</th>
+                    <th>Available Stock</th>
                     <th>Edit</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @forelse($items as $i)
+                  @forelse($items as $key=>$i)
                   <?php $num++;?>
                     <tr>
                       <td><?php echo $num;?></td>
@@ -51,6 +53,8 @@ Items
                       <td>{{ $i->type }}</td>
                       <td>{{ $i->serial }}</td>
                       <td>{{ $i->quantity }}</td>
+                      <td>{{ str_replace('-','',(strval($leased_items[$key]+$stock_items[$key]))) }}</td>
+                      <td>{{ $i->quantity+($leased_items[$key]+$stock_items[$key]) }}</td>
                       <td><a href="{{ route('edit.item',['id'=>$i->id]) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i>&nbsp;</a>&nbsp;<a href="#" class="btn btn-danger btn-sm trash" id="{{ $i->id }}"><i class="fas fa-trash text-white"></i>&nbsp;</a></td>
                     </tr>
                   @empty

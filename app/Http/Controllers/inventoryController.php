@@ -22,7 +22,18 @@ class inventoryController extends Controller
     }
     public function render_items(){
     	$items=DB::table('items')->join('item_categories','item_categories.category_code','=','items.category_code')->join('item_sub_categories','item_sub_categories.sub_category_code','=','items.sub_category_code')->select('items.*','item_categories.description as cat_desc','item_sub_categories.description as sub_desc')->paginate(15);
-    	return view('inventory.items',compact('items'));
+        $leased_items = array();
+        $stock_items = array();
+        $sold_items = array();
+
+        foreach($items as $i){
+            $stock_total = DB::table('item_stock')->where([['item_id','=',$i->id],['narration','=','RETURNED']])->sum('quantity_in');
+            $stock_allocation = DB::table('item_stock')->where([['item_id','=',$i->id]])->sum('quantity_in');
+
+            array_push($stock_items,$stock_total);
+            array_push($leased_items,$stock_allocation);
+        }
+    	return view('inventory.items',compact('items','leased_items','stock_items'));
     }public function render_categories(){
         $items=DB::table('item_categories')->paginate(15);
         return view('inventory.category',compact('items'));
