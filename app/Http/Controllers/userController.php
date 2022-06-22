@@ -741,21 +741,34 @@ class userController extends Controller
     public function allocateEquipmet(Request $request){
         $added_by = Auth::user()->email;
         $today_date = date("Y-m-d");
-        $allocation = DB::table('item_allocations')->insertGetId(
-            ['item_id'=>$request->get('item_id'),'customer_id'=>$request->get('userid'),'quantity'=>$request->get('quantity'),'status'=>$request->get('status'),'return_date'=>$request->get('return_date'),'added_by'=>$added_by,'allocation_date'=>$today_date]
-        );
-        DB::table('item_stock')->insert(
-            ['item_id'=>$request->get('item_id'),'allocation_id'=>$allocation,'narration'=>'CUSTOMER ALLOCATION','added_by'=>$added_by,'quantity_in'=>-($request->get('quantity'))]
-        );
-        if(is_int($allocation) && $request->ajax()){
-            return "success";
-        }else if(is_int($allocation) && !$request->ajax()){
-            toast("Item allocated successfully","success");
-            return redirect()->back();
-        }else{
-            toast("Item could not be allocated","error");
-            return redirect()->back();
+        $item_in_stock=DB::table('items')->where('id',$request->get('item_id'))->first();
+        $item_stock = DB::table('item_stock')->where('item_id',$request->get('item_id'))->get();
+        $quantity_in_stock = intval($item_in_stock->quantity);
+        $stock_total = 0;
+        foreach($item_stock as $s){
+            $stock_total+=$s->quantity_in; 
         }
+        if(($quantity_in_stock+$stock_total)>0 && ($quantity_in_stock+$stock_total)>= $request->get('quantity')){
+                $allocation = DB::table('item_allocations')->insertGetId(
+                ['item_id'=>$request->get('item_id'),'customer_id'=>$request->get('userid'),'quantity'=>$request->get('quantity'),'status'=>$request->get('status'),'return_date'=>$request->get('return_date'),'added_by'=>$added_by,'allocation_date'=>$today_date]
+            );
+            DB::table('item_stock')->insert(
+                ['item_id'=>$request->get('item_id'),'allocation_id'=>$allocation,'narration'=>'CUSTOMER ALLOCATION','added_by'=>$added_by,'quantity_in'=>-($request->get('quantity'))]
+            );
+            if(is_int($allocation) && $request->ajax()){
+                return "success";
+            }else if(is_int($allocation) && !$request->ajax()){
+                toast("Item allocated successfully","success");
+                return redirect()->back();
+            }else{
+                toast("Item could not be allocated","error");
+                return redirect()->back();
+            }
+        }else{
+           alert()->error("Item could not be allocated, There is no enough stock to issue ".$request->get('quantity')." items. Your stock for this item stand at ".intval(intval($quantity_in_stock)+intval($stock_total)));
+            return redirect()->back(); 
+        }
+        
     }
     public function deleteAllocation(Request $request,$id){
         $del = DB::table('item_allocations')->where('id',$id)->delete();
