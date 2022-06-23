@@ -699,11 +699,15 @@ class clientsController extends Controller
     public static function checkIfUserIsExpired($username){
         $expiration = DB::table('radreply')->where([['username','=',$username],['attribute','=','WISPr-Session-Terminate-Time']])->first();
 
-        $date_to_expire = explode("T",$expiration->value)[0];
-        $date_string = strtotime($date_to_expire);
-        $date = date("Y/m/d",$date_string);
-        $today_date = date("Y/m/d");
-        return ($date>$today_date);
+        if($expiration){
+            $date_to_expire = explode("T",$expiration->value)[0];
+            $date_string = strtotime($date_to_expire);
+            $date = date("Y/m/d",$date_string);
+            $today_date = date("Y/m/d");
+            return ($date>$today_date);
+        }else{
+            return false;
+        }
     }
     public static function checkDaysToActivate($amount,$packageprice){
         $packageM = DB::table('packages')->where('packagename',$package)->first();
