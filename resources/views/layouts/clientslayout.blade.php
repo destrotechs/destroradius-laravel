@@ -145,7 +145,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New Equipment Allocation</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Enter Your Activation Code</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
