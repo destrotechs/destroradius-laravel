@@ -710,7 +710,7 @@ class clientsController extends Controller
         }
     }
     public static function checkDaysToActivate($amount,$packageprice){
-        $packageM = DB::table('packages')->where('packagename',$package)->first();
+        $packageM = DB::table('packages')->where('id',$packageprice->packageid)->first();
         if ($amount==$packageprice->amount){
             $newdatetodisconnect = self::calculateTime($packageM->durationmeasure,$packageM->validdays,'pppoe');
             return $newdatetodisconnect;
