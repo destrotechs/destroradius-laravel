@@ -11,6 +11,7 @@ use App\Zone;
 use DB;
 use Auth;
 use Hash;
+use App\Helpers\CustomerHelper;
 class userController extends Controller
 {
     public function __construct(){
