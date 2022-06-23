@@ -256,5 +256,6 @@ Route::get('/hotspot/packages','apiController@getHotspotPackages')->name('hotspo
 Route::get('/client/account/suspend/{username}','clientsController@suspendAccount')->name('suspend.account');
 Route::post('/account/activate','clientsController@activateSuspendedAccount')->name('activate.account');
 Route::post('/account/pppoe/ractivate','userController@reactivatePPPoeAccount')->name('reactivate_pppoeuser');
+Route::post('/riskfee','settingsController@postRiskFee')->name('post-risk-fee');
 // Route::post('/account/check','clientsController@testingPPoe')->name('pppoe.test');
 // Route::get('/account/check','clientsController@gettestingPPoe')->name('pppoe.test.get');

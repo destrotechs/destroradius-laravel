@@ -30,8 +30,10 @@ class settingsController extends Controller
         $logging=DB::table('settings')->pluck('logs_enabled')[0];
         }
     	$managers=User::all();
+        $packages = DB::table('packages')->get();
     	$managerrates=DB::table('users')->join('managercommissionrates','managercommissionrates.managerid','=','users.id')->get();
-    	return view('settings.systemsettings',compact('logging','managerrates','managers'));
+        $package_risk_fees = DB::table('package_risk_fees')->join('packages','packages.id','=','package_risk_fees.packageid')->get();
+    	return view('settings.systemsettings',compact('logging','managerrates','managers','package_risk_fees','packages'));
     }
     public function Logging($en){
         $log = DB::table('settings')->count();
@@ -72,5 +74,17 @@ class settingsController extends Controller
     	}else{
     		return redirect()->back()->with('error','There was an error updating the manager commission rate, please try again');
     	}
+    }
+    public function postRiskFee(Request $request){
+        $feeposted = DB::table('package_risk_fees')->updateOrInsert(
+            ['packageid'=>$request->packageid],['amount'=>$request->get('amount')]
+        );
+        if($feeposted){
+            alert()->success("Risk fee posted successfully");
+            return redirect()->back();
+        }else{
+            alert()->success("Risk fee could not be posted");
+            return redirect()->back();
+        }
     }
 }
