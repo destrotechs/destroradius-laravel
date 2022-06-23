@@ -110,7 +110,6 @@
             <li><a class="dropdown-item" href="{{route('user.changephone')}}"><i class="fas fa-phone"></i> Change Phone</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.transactions')}}"><i class="fas fa-chart-line"></i> Transactions</a></li>
-            <li><a class="dropdown-item" href="{{route('pppoe.test.get')}}"><i class="fas fa-chart-line"></i> Test PPOe</a></li>
             <div class="dropdown-divider"></div>
             @if(CustomerHelper::isSuspended())
             <li><a class="dropdown-item btn btn-danger btn-sm p-2 activate" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-danger"></i> Activate Connection</a></li>
