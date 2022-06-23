@@ -253,5 +253,8 @@ Route::post('/login/customer', 'Auth\LoginController@customerLogin')->name('post
 Route::post('/register/customer', 'Auth\RegisterController@createCustomer')->name('post.customer.register');
 Route::get('/customer/logout','clientsController@getLogout')->name('user.logout');
 Route::get('/hotspot/packages','apiController@getHotspotPackages')->name('hotspot.packages');
-Route::get('/account/suspend/{username}','clientsController@suspendAccount')->name('suspend.account');
+Route::get('/client/account/suspend/{username}','clientsController@suspendAccount')->name('suspend.account');
 Route::post('/account/activate','clientsController@activateSuspendedAccount')->name('activate.account');
+Route::post('/account/pppoe/ractivate','userController@reactivatePPPoeAccount')->name('reactivate_pppoeuser');
+// Route::post('/account/check','clientsController@testingPPoe')->name('pppoe.test');
+// Route::get('/account/check','clientsController@gettestingPPoe')->name('pppoe.test.get');

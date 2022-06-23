@@ -2,6 +2,27 @@
 @section('content_header')
 User Information
 @endsection
+@section('styles')
+<style type="text/css">
+
+.float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    top:60px;
+    right:40px;
+    background-color:skyblue;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+}
+
+.my-float{
+    margin-top:22px;
+}
+</style>
+@endsection
 @section('content')
 @if (session('error'))
     <div class="alert alert-danger">
@@ -29,7 +50,7 @@ User Information
                           <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
                               <i class="fa fa-info-circle" aria-hidden="true"></i>
-&nbsp;User Details
+&nbsp;User Details 
                             </button>
                           </h2>
                     </div>
@@ -166,7 +187,13 @@ User Information
                         </div>
                       </div>
                 {{-- </div> --}}
-
+<a href="#" class="float" data-bs-toggle="tooltip" data-bs-placement="left" title="Customer available funds">
+<b class="my-float">
+    <?php
+echo "KSH ".CustomerHelper::availableFunds($username);
+?>
+</b>
+</a>
                 <div class="card card-sm">
                     <div class="card-header" id="headingTwo">
                           <h2 class="mb-0">
@@ -239,9 +266,16 @@ User Information
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-                {{-- @if($usertype?? && $usertypr!='pppoe') --}}
+                @if(CustomerHelper::userAllocatedPackage($username))
+                @if($usertype!='pppoe' && $usertype!='prepaid')
 				<button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-link" aria-hidden="true"></i>Change package</button>
-				{{-- @endif --}}
+				@endif
+                @if($usertype=='pppoe' || $usertype=='prepaid')
+                <button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal6"><i class="fa fa-link" aria-hidden="true"></i>Reactivate Customer</button>
+                @endif
+                @else
+                <button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-link" aria-hidden="true"></i>Change package</button>
+                @endif
                 <a href="#" class="btn btn-outline-warning btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-exclamation-triangle"></i> Per user limits</a>
                 <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass??'']) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>
                 <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
@@ -285,6 +319,37 @@ User Information
 	  </div>
 	</div>
   </div>
+  <!-- Modal 6-->
+  <div class="modal fade" id="exampleModal6" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Reactivate User Package</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{{ route('reactivate_pppoeuser') }}">
+                    <p class="card-text">This action reactivates the customer on his/package for period equal to package valid days.</p>
+                    <div class="form-check">
+                      <input class="form-check-input" name="deduct" value="yes" type="checkbox" value="" id="flexCheckChecked" checked>
+                      <label class="form-check-label" for="flexCheckChecked">
+                        Deduct Customer Available Funds
+                      </label>
+                    </div>
+                    <input type="hidden" id="username" name="username" value="<?php echo $username;?>">
+                    @csrf
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+        @csrf
+    </form>
+      </div>
+    </div>
+  </div>
+  <!--end of modal 6-->
   <!-- Modal2 -->
   <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">

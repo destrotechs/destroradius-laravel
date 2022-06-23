@@ -823,6 +823,65 @@ class userController extends Controller
 
         }
     }
+    public function reactivatePPPoeAccount(Request $request){
+        $user = DB::table('customers')->where([['username','=',$request->get('username')]])->first();
+        $package = DB::table('customerpackages')->where([['customerid','=',$user->id]])->first();
+        if($package){
+            $userpackage = DB::table('packages')->where('id',$package->packageid)->first();
+            if($userpackage){
+                if(!self::checkIfUserIsExpired($request->get('username'))){
+                    if($request->deduct){
+                        $packageprice = DB::table('package_prices')->where('packageid',$package->packageid)->first();
+                        $userbalance = CustomerHelper::availableFunds($request->username);
+                        if($userbalance<$packageprice->amount){
+                            alert()->error("User available funds is less than the package price");
+                        }else{
+                            $used_funds = CustomerHelper::usedFunds($request->username)+$packageprice->amount;
+                            $available_funds = $userbalance-$packageprice->amount;
+                            DB::table('customer_funds')->updateOrInsert(
+                                ['username'=>$request->get('username')],
+                                ['available_funds'=>$available_funds,'used_funds'=>$used_funds]
+                            );
+                        }
+                    }
+                    $dateToDisconnectWSP = self::calculateTime($userpackage->durationmeasure,$userpackage->validdays,'hotspot');
+                    $dateToDisconnectPPPOE = self::calculateTime($userpackage->durationmeasure,$userpackage->validdays,'pppoe');
+                    $update_radcheck = DB::table('radcheck')->updateOrInsert(
+                        ['username'=>$request->get('username'),'attribute'=>'Expiration'],
+                        ['value'=>$dateToDisconnectPPPOE],
+                    );
+                    $update_radreply = DB::table('radreply')->updateOrInsert(
+                        ['username'=>$request->get('username'),'attribute'=>'WISPr-Session-Terminate-Time'],
+                        ['value'=>$dateToDisconnectWSP],
+                    );
+                    alert()->success('User reactivated for '.$userpackage->validdays.' '.$userpackage->durationmeasure.' (s)');
+                    return redirect()->back();
+                }else{
+                    alert()->warning('user is already active, no action could be taken');
+                    return redirect()->back();
+                }
+                
+            }else{
+                alert()->error("User is not allocated to a package");
+                return redirect()->back();
+            }
+
+        }else{
+             alert()->error("User is not allocated to a package");
+            return redirect()->back();
+        }
+        
+
+    }
+    public static function checkIfUserIsExpired($username){
+        $expiration = DB::table('radreply')->where([['username','=',$username],['attribute','=','WISPr-Session-Terminate-Time']])->first();
+
+        $date_to_expire = explode("T",$expiration->value)[0];
+        $date_string = strtotime($date_to_expire);
+        $date = date("Y/m/d",$date_string);
+        $today_date = date("Y/m/d");
+        return ($date>$today_date);
+    }
     public function returnEquipment(Request $request){
         $received_by = Auth::user()->email;
         $today_date = date("Y-m-d");

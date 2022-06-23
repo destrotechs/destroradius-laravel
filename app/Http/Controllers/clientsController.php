@@ -80,11 +80,20 @@ class clientsController extends Controller
             alert()->warning("You have an active package, you cannot purchase a new one");
             return redirect()->route('client.bundles');
         }else if($usertype=='pppoe' || $usertype=='prepaid'){
-            alert()->warning("PPOE PAGE NOT READY");
-            return redirect()->route('user.balance');
-        }
+            $userid = Auth::guard('customer')->user()->id;
+            $pid = DB::table('customerpackages')->where('customerid',$userid)->first();
+            if($pid){
+                $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->leftJoin('customerpackages','customerpackages.packageid','packages.id')->where([['packages.id','=',$pid->packageid],['customerid','=',$userid]])->get();  
 
-        else{
+                alert()->warning("You have been redirected to the package subscribed to, if you wish to change your subscription, contact admin");
+                return view('clients.buybundle',compact('package','balance'));
+
+            }else{
+                alert()->error("Contact administrator for initial subscription");
+                return redirect()->back();
+            }
+            
+        }else{
             return view('clients.buybundle',compact('package','balance'));
         }
 
@@ -221,12 +230,54 @@ class clientsController extends Controller
 
                 $cust_trans->save();
                 
+                $userexist = DB::table('customers')->where('username',$username)->first();
+                if ($userexist){
+                    $package_info = DB::table('packages')->where('packagename',$package)->first();
+                    if($package_info->users=='pppoe'){
+                        $userinpackage = DB::table('customerpackages')->where([['packageid','=',$package_info->id],['customerid','=',$userexist->id]])->count();
+                        if($userinpackage>0){
+                            $packageprice = DB::table('package_prices')->where('packageid',$package_info->id)->first();
+
+                            //check if user connection is expired
+                            $date_to_disconnect = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
+                            if($date_to_disconnect){                                
+                                if(!self::checkIfUserIsExpired($username)){
+                                    $newdatetodisconnect=self::checkDaysToActivate($amount,$packageprice);
+                                    if($newdatetodisconnect!=false){
+                                          $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
+                                            return "success";
+                                    }else{
+                                        return "error";
+                                    }
+                                  
+                                }else{
+                                    //hold funds
+                        $available_funds = DB::table('customer_funds')->where([['username','=',$username]])->first();
+
+                                    $held_funds = DB::table('customer_funds')->updateOrInsert([
+                                        'username'=>$username],['available_funds'=>(floatval($amount)+floatval($available_funds->available_funds??0)),'added_on'=>date("Y/m/d")
+                                    ]);
+                                    alert()->success("You have an active account, the funds have been added to your wallet");
+                                    return "success";
+
+                                }
+                            }else{
+                                $newdatetodisconnect = self::calculateTime($packageinfo->durationmeasure,$packageinfo->validdays,'pppoe');
+                                $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
+                                    return "success";
+
+                            }
+                            
+                            
+                        }
+                    }
+                }
+
                 $status = self::purchasePackage($username,$password,$package,$amount,$phone);
                 //send message on success
                 if($status == 'success'){
-                    $message = "You have succesfully bought HEWANET ".$package.". Username : ".$username." Password : ".$password;
-                    $mess = new Message();
-                    $sent = $mess->sendSMS($phone,$message);
+                    //send message here...
+                    $sent=true;
 
                     if ($sent){
                         return "success";
@@ -461,6 +512,11 @@ class clientsController extends Controller
             }
         }
     }
+
+
+
+
+
     public static function calculateBundleRemaining($username,$package){
         $user_total_mbs = 0;
         $usermbs=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
@@ -501,7 +557,7 @@ class clientsController extends Controller
             return $remaining;
         }
     }
-    public static function calculateTime($timemeasure,$num){
+    public static function calculateTime($timemeasure,$num,$usertype='hotspot'){
         $year=date("Y");
         $month=date("n");
         $day=date("j");
@@ -523,7 +579,7 @@ class clientsController extends Controller
 
             break;
             case 'week':
-                $packageValidDate = mktime($hour,$min,$sec,$month,($day+$num),$year);
+                $packageValidDate = mktime($hour,$min,$sec,$month,($day+(7*$num)),$year);
 
             break;
             default:
@@ -531,30 +587,53 @@ class clientsController extends Controller
 
         }
 
-        $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
-        $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
+        if ($usertype=='hotspot'){
 
-        $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
+            $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
+            $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
 
-        $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
+            $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
 
-        $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
+            $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
 
-        $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
+            $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
 
-        return $dateToDisconnect;
+            $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
+
+            return $dateToDisconnect;
+        }else if ($usertype=='pppoe'){
+
+            $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
+            $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('UTC', 'T', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
+
+            $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
+
+            
+            $mnth = date('M',$packageValidDate);
+            $d = date('j',$packageValidDate);
+            $y = date('Y',$packageValidDate);
+
+            return $d." ".$mnth." ".$y. " 12:00"."H".$dateToDisconnect;
+        }
 
     }
     public function suspendAccount(Request $request,$username){
         $userisactive = DB::table('radcheck')->where('username',$username)->get();
-        if(count($userisactive>0)){            
-            $expiration = DB::table('radcheck')->where([['username','=',$username],['attribute'=>'Expiration']])->first();
+        if(count($userisactive)>0){            
+            $expiration = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
             $cltpass = '';
             $other_attrs = array();
             foreach ($userisactive as $key => $a) {
                 $attrs=array($a->attribute,$a->op,$a->value);
 
-                array_push($other_attrs,$attrs);
+                $atrs = implode("|",$attrs);
+                array_push($other_attrs,$atrs);
 
                 if($a->attribute=='Cleartext-Password'){
                     $cltpass = $a->value;
@@ -563,21 +642,23 @@ class clientsController extends Controller
 
 
             $activation_code = rand(1,10000);
+            $expval = $expiration->value;
+            $ot = implode("N", $other_attrs);
             $sus = DB::table('user_access_suspensions')->insert(
-                ['username'=>$username,'activation_code'=>$activation_code,'expiration'=>$epiration->value,'cleartextpassword'=>$cltpass,'otherattributes'=>$other_attrs]
+                ['username'=>$username,'activation_code'=>$activation_code,'expiration'=>$expval,'cleartextpassword'=>$cltpass,'otherattributes'=>$ot,'suspended_on'=>date("Y/m/d")]
             );
 
             if($sus){
                 //clear radcheck to disable connection
                 $userout = DB::table('radcheck')->where('username',$username)->delete();
                 if ($userout){
-                    return "Account suspended successfull, Please use code ".$activation_code." to reactivate again";
+                    echo "Account suspended successfull, Please use code ".$activation_code." to reactivate again";
                 }
             }else{
-                return "There was an error suspending your account, try again!";
+                echo "There was an error suspending your account, try again!";
             }
         }else{
-            return "You are not an active internet user!";
+            echo "You are not an active internet user!";
         }
     }
 
@@ -585,23 +666,63 @@ class clientsController extends Controller
         $activation_code= $request->get('activation_code');
         $username= $request->get('username');
         $accountissuspended = DB::table('user_access_suspensions')->where([['username','=',$username],['activation_code','=',$activation_code],['activation_used','=',false]])->first();
-        if(count($accountissuspended)>0){
+        if($accountissuspended){
+            $records = explode("N", $accountissuspended->otherattributes);
             $attrs = $accountissuspended->otherattributes;
 
-            foreach($attrs as $at){
+            // dd($attrs);
+            foreach($records as $r){
+                $at=explode("|",$r);
+
                 DB::table('radcheck')->insert(
                     ['username'=>$username,'attribute'=>$at[0],'op'=>$at[1],'value'=>$at[2]]
                 );
             }
-
-            return "Account has been reactivated successfully!";
+            $accountissuspended = DB::table('user_access_suspensions')->where([['username','=',$username],['activation_code','=',$activation_code],['activation_used','=',false]])->update(['activation_used'=>true]);
+            
+            alert()->success("Account has been reactivated successfully!");
+            return redirect()->back();
 
         }else{
-            return "Your activation code may be wrong!";
+            alert()->error("Your activation code may be wrong!");
+            return redirect()->back();
         }
     }
+    public function gettestingPPoe(Request $request){
+        return view('clients.test');
+    }
+
+    public function testingPPoe(Request $request){
+        self::checkIfUserIsExpired('test1');
+    }
+
+    public static function checkIfUserIsExpired($username){
+        $expiration = DB::table('radreply')->where([['username','=',$username],['attribute','=','WISPr-Session-Terminate-Time']])->first();
+
+        $date_to_expire = explode("T",$expiration->value)[0];
+        $date_string = strtotime($date_to_expire);
+        $date = date("Y/m/d",$date_string);
+        $today_date = date("Y/m/d");
+        return ($date>$today_date);
+    }
+    public static function checkDaysToActivate($amount,$packageprice){
+        $packageM = DB::table('packages')->where('packagename',$package)->first();
+        if ($amount==$packageprice->amount){
+            $newdatetodisconnect = self::calculateTime($packageM->durationmeasure,$packageM->validdays,'pppoe');
+            return $newdatetodisconnect;
+        }else if($packageprice->amount>$amount){
+            $risk_fee = DB::table('package_risk_fees')->where('packageid',$packageM->id)->first();
+            $base_daily_fee = $packageprice->amount/30;
+            $upfee = $base_daily_fee+$risk_fee->amount;
+            $customer_days = ceil($amount/$upfee);
+            $newdatetodisconnect = self::calculateTime('day',$customer_days,'pppoe');
+            return $newdatetodisconnect;
+        }else{
+            return false;
+        }
 
 
+    }
 
 
 

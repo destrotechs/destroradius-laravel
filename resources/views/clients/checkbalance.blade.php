@@ -33,8 +33,8 @@
 </div>
 @else
 <div class="card-body d-flex justify-content-center">
-	@if($user_info!=='')
-	<h3>Hi <b>{{ $username }}</b>, Your access is valid until <b>{{ $user_info->value }}</b></h3>
+	@if($user_info!='')
+	<h3>Hi <b>{{ $username }}</b>, Your access is valid until <b>{{ $user_info->value??'' }}</b></h3>
 	@else
 	<h3>You have no active internet access</h3>
 	@endif
