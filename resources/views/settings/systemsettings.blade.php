@@ -73,7 +73,7 @@ system settings
 							<option value="">No Packages available</option>
 							@endforelse
 						</select>
-						<label>Fee Amount</label>
+						<label>Daily Fee Amount</label>
 						<input type="digit" name="amount" required class="form-control" placeholder="e.g 10">
 					</div>
 					<div class="col">

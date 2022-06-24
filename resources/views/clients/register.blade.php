@@ -8,28 +8,28 @@
     <div class="card-body">
         <form method="POST" action="{{ route('post.customer.register') }}">
             <div class="form-row">
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                         <label for="exampleInputEmail1">Name</label>
                         <input type="text" class="form-control" name="name" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                         <label for="exampleInputPassword1">Phone</label>
                         <input type="digit" name="phone" class="form-control" id="exampleInputPassword1">
                 </div>
             </div>
             <div class="form-row">
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                     <label for="exampleInputEmail1">username</label>
                     <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                         <label for="exampleInputEmail1">Email</label>
                         <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
 
             </div>
             <div class="form-row">
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                     <label for="exampleInputPassword1">Zone</label>
                     <select name="zone" class="form-control">
                         <option value="">Select zone</option>
@@ -40,7 +40,7 @@
                         @endforelse
                     </select>
                 </div>
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                     <label for="exampleInputPassword1">Gender</label>
                     <select name="gender" class="form-control">
                         <option value="">Select gender</option>
@@ -51,12 +51,12 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                     <label for="exampleInputPassword1">Password</label>
                     <input type="password" name="password" class="form-control" id="exampleInputPassword1">
 
                 </div>
-                <div class="col">
+                <div class="col-md-6 col-sm-12">
                     <label for="exampleInputPassword1">Confirm Password</label>
                     <input type="password" name="password_confirm" class="form-control" id="exampleInputPassword1">
 
