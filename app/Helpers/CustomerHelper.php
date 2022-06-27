@@ -32,5 +32,9 @@ class CustomerHelper
             return false;
         }
     }
+    public static function getUserAccounts($username,$account_id=null){
+        $accounts = DB::table('customer_accounts')->where([['owner','=',$username]])->get();
+        return $accounts;
+    }
 }
 ?>
