@@ -168,6 +168,7 @@ Route::get('/manager/profile','profileController@getProfile')->name('manager.pro
 
 //tickets routes
 Route::get('/tickets/open','ticketsController@render_tickets_open')->name('tickets.open');
+Route::get('/user/accounts','userController@getUserAccounts')->name('customer.accounts');
 
 //settings routes
 

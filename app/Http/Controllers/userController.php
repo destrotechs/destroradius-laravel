@@ -49,6 +49,7 @@ class userController extends Controller
         $myzones=DB::table('zonemanagers')->where('managerid',$role_id)->pluck('zoneid');
         if ($role_id==1) {
             $customers=DB::table('customers')
+                // ->leftJoin('customer_accounts','customer_accounts.owner','=','customer')
                 ->leftJoin('customerpackages','customerpackages.customerid','=','customers.id')
                 ->leftJoin('packages','packages.id','=','customerpackages.packageid')
                 ->leftJoin("zones",'zones.id','=','customers.zone')
@@ -913,5 +914,25 @@ class userController extends Controller
             } 
         }        
 
+    }
+    public function getUserAccounts(Request $request){
+        $customers = DB::table('customers')->get();
+        $customer_accounts = array();
+
+
+        if($customers){
+            foreach($customers as $c){
+                $accounts = DB::table('customer_accounts')->where('owner',$c->username)->get();
+                array_push($customer_accounts, $accounts);
+            }
+        }
+
+        
+        return view('user_accounts.user_accounts', compact('customers','customer_accounts'));
+    }
+    public function postUserAccount(Request $request){
+        $account = DB::table('customer_accounts')->insert(
+            ['owner'=>$request->get('owner'),'account_name'=>$request->get('account_name'),'account_no'=>$request->get('account_no')]
+        );
     }
 }

@@ -93,9 +93,9 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{route('geteditcustomer')}}" class="nav-link">
+                    <a href="{{route('customer.accounts')}}" class="nav-link">
                       <span class="fas fa-edit text-success"></span>&nbsp;
-                      <span class="sidenav-normal"> Edit user </span>
+                      <span class="sidenav-normal"> User Accounts </span>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -362,6 +362,30 @@
                 </ul>
 
               </div>
+            </li>
+
+          </ul>
+          <!-- Divider -->
+          <hr class="my-3">
+          <!-- Heading -->
+          <h6 class="navbar-heading p-0 text-muted">
+            <span class="fa fas fa-cogs">&nbsp;SETTINGS</span>
+          </h6>
+          <!-- Navigation -->
+          <ul class="navbar-nav mb-md-3">
+
+            <li class="nav-item">
+              <a href="{{route('settings.index')}}" class="nav-link">
+                <i class="fas fa-cog text-orange"></i>
+                <span class="nav-link-text">&nbsp;General settings</span>
+              </a>
+              
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span class="nav-link-text">Account types</span>
+              </a>
             </li>
 
           </ul>
