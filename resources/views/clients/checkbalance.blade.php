@@ -33,10 +33,35 @@
 </div>
 @else
 <div class="card-body d-flex justify-content-center">
-	@if($user_info!='')
+	{{-- @if($user_info!='')
 	<h3>Hi <b>{{ $username }}</b>, Your access is valid until <b>{{ $user_info->value??'' }}</b></h3>
 	@else
 	<h3>You have no active internet access</h3>
+	@endif --}}
+	@if(count($accounts)>0)
+	<table class="table table-sm table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Account No/Access Code</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach($accounts as $k=>$ac)
+			<tr>
+				<td>{{ $k+1 }}</td>
+				<td>{{ $ac->account_no }}</td>
+				<td>{{ $ac->status }}</td>
+				<td>{{ '' }}</td>
+			</tr>
+			@endforeach
+		</tbody>
+	</table>
+		
+	@else
+
 	@endif
 </div>
 @endif

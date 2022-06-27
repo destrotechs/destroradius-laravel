@@ -225,7 +225,8 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-                <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>                
+                <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>   
+                <a href="#" class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal4"><i class="fa fa-hashtag"></i>&nbsp;Allocate Equipment</a>             
             </div>
 		</div>
 	</div>

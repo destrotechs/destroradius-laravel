@@ -31,13 +31,14 @@ class clientsController extends Controller
             $user_type = Auth::guard('customer')->user()->type;
 
             if(Auth::guard('customer')->user()->type=='pppoe' || Auth::guard('customer')->user()->type=='prepaid'){
+                $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
                 $user_info = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
                 // array_push($user_info,$info);
 
             }
 
         }
-        return view('clients.checkbalance',compact('user_info','user_type','username'));
+        return view('clients.checkbalance',compact('user_info','user_type','username','accounts'));
     }
     public function fetchBalance(Request $request){
         $username=$request->get('username');
