@@ -17,11 +17,15 @@ User accounts
 					<th>#</th>
 					<th>Name</th>
 					<th>Account(s)</th>
-					<th>Actions</th>
+					<th></th>
 				</tr>
 			</thead>
+			<?php $username='';?>
 			<tbody>
 				@forelse($customers as $key=>$ac)
+				<?php
+					$username = $ac->username;
+				?>
 				<tr>
 					<td>{{ $key+1 }}</td>
 					<td>{{ $ac->name }}</td>
@@ -32,25 +36,29 @@ User accounts
 							<tr>
 								<td>Accesscode</td>
 								<td>Status</td>
+								<td>Action</td>
 							</tr>
-							<?php
-							for($i=0;$i<count($customer_accounts);$i++){
-								echo '<tr><td>'.$customer_accounts[$key][$i]->account_no.'</td><td>'.$customer_accounts[$key][$i]->status.'</td></tr>';
-							}
-						?>
-						</table>
-								
+							@foreach($customer_accounts[$key] as $k=>$c)
+							<tr>
+								<td>{{ $c->account_no }}</td>
+								<td>{{ $c->status }}</td>
+								<td>
+									@if($c->status=='active')
+									<a href="#" id="{{ $c->id }}" class="btn btn-sm btn-danger diactivate">Diactivate</a>
+									@else
+									<a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal2">Activate</a>
+									@endif
+								</td>
+							</tr>
+							@endforeach
+							
+						</table>							
 
 
 						@else
-						<table class="table table-xs">
-							<tr>
-								<td colspan="2">
-									
-									<div class="text-danger text-sm">User has no associated accounts</div>
-								</td>
-							</tr>
-						</table>
+					
+						<div class="text-danger text-sm">User has no associated accounts</div>
+								
 						@endif
 					</td>
 				</tr>
@@ -72,7 +80,7 @@ User accounts
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form method="POST" action="{{ route('customer.accounts.post') }}">
         	<label>User </label>
         	<select class="form-control" name="owner">
         		<option value="">Choose ...</option>
@@ -88,6 +96,15 @@ User accounts
         		<option value="pppoe"> PPPoE</option>
         		<option value="hotspot">HOTSPOT</option>
         	</select>
+        	<label>Select Package</label>
+        	<select name="package" required class="form-control">
+        		<option value="">select ...</option>
+        		@forelse($packages as $p)
+        		<option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
+        		@empty
+        		<option value="">No Packages available</option>
+        		@endforelse
+        	</select>
         	<label>Account No</label>
         	<input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
         	<hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
@@ -101,6 +118,31 @@ User accounts
     </div>
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Activate Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      	<form method="POST" action="{{ route('customer.changepackage.post') }}">
+        <input type="hidden" name="username" id="username">
+        <input type="hidden" name="account_no" id="account_no">
+        <input type="hidden" name="package" id="package">
+        <h3>Are you sure you want to Activate this account?</h3>    	
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">NOPE</button>
+        <button type="submit" class="btn btn-success">YES!</button>
+      </div>
+      @csrf
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -108,6 +150,20 @@ User accounts
 		$(".gen").click(function(){
 			var account = generateNumber();
 			$(".num").val(account);
+		})
+
+		$(".activate").click(function(){
+			var account_id = $(this).attr('id');
+			$.ajax({
+				method:'GET',
+				url:'/user/accounts/'+account_id,
+				success:function(data){
+					$("#username").val(data[0]['owner']);
+					$("#account_no").val(data[0]['account_no']);
+					$("#package").val(data[0]['package_name']);
+					console.log(data[0]['package_name'])
+				}
+			})
 		})
 
 		function generateNumber(){

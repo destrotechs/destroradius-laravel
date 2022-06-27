@@ -19,6 +19,7 @@ class CustomerAccounts extends Migration
             $table->string('account_name')->nullable();
             $table->string('account_no')->nullable();
             $table->string('access_code')->nullable();
+            $table->string('package_name')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });
