@@ -257,6 +257,7 @@ Route::post('/register/customer', 'Auth\RegisterController@createCustomer')->nam
 Route::get('/customer/logout','clientsController@getLogout')->name('user.logout');
 Route::get('/hotspot/packages','apiController@getHotspotPackages')->name('hotspot.packages');
 Route::get('/client/account/suspend/{username}','clientsController@suspendAccount')->name('suspend.account');
+Route::post('/client/account/suspend','clientsController@suspendAccount')->name('suspend.account');
 Route::post('/account/activate','clientsController@activateSuspendedAccount')->name('activate.account');
 Route::post('/account/pppoe/ractivate','userController@reactivatePPPoeAccount')->name('reactivate_pppoeuser');
 Route::post('/riskfee','settingsController@postRiskFee')->name('post-risk-fee');

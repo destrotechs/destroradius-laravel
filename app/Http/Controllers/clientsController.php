@@ -623,7 +623,10 @@ class clientsController extends Controller
         }
 
     }
-    public function suspendAccount(Request $request,$username){
+    public function suspendAccount(Request $request,$username=null){
+        if($request->get('username')){
+            $username = $request->get('username');
+        }
         $userisactive = DB::table('radcheck')->where('username',$username)->get();
         if(count($userisactive)>0){            
             $expiration = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
@@ -652,7 +655,9 @@ class clientsController extends Controller
                 //clear radcheck to disable connection
                 $userout = DB::table('radcheck')->where('username',$username)->delete();
                 if ($userout){
-                    echo "Account suspended successfull, Please use code ".$activation_code." to reactivate again";
+
+                $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                    echo "Account suspended successfully, Please use code ".$activation_code." to reactivate again";
                 }
             }else{
                 echo "There was an error suspending your account, try again!";

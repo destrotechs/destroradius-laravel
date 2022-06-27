@@ -950,7 +950,7 @@ class userController extends Controller
     }
     public function postUserAccount(Request $request){
         $account_exist = DB::table('customer_accounts')->where([['owner','=',$request->get('owner')],['package_name','=',$request->get('package')]])->get();
-        if($account_exist){
+        if(count($account_exist)>0){
          alert()->error("User has an account linked to this package!");
          return redirect()->back();   
         }else{

@@ -106,19 +106,27 @@ User Information
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                           <div class="card-body">
                             @if(count($customer_accounts)>0)
-                        <table class="table table-xs table-bordered">
+                        <table class="table table-sm table-striped">
                             <tr>
-                                <td>Accesscode</td>
-                                <td>Status</td>
-                                <td>Action</td>
+                                <th>#</th>
+                                <th>Access code</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                             @foreach($customer_accounts as $k=>$c)
                             <tr>
+                                <td>{{ $k+1 }}</td>
                                 <td>{{ $c->account_no }}</td>
-                                <td>{{ $c->status }}</td>
                                 <td>
                                     @if($c->status=='active')
-                                    <a href="#" id="{{ $c->id }}" class="btn btn-sm btn-danger diactivate">Diactivate</a>
+                                    <span class="badge badge-success">Active</span>
+                                    @else
+                                    <span class="badge badge-danger">Inactive</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($c->status=='active')
+                                    <a href="#" id="{{ $c->account_no }}" class="btn btn-sm btn-danger diact">Suspend</a>
                                     @else
                                     <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal8">Activate</a>
                                     @endif
@@ -642,6 +650,22 @@ $(document).ready(function(){
                     console.log(data[0]['package_name'])
                 }
             })
+        });
+
+        $(".diact").click(function(){
+            var account = $(this).attr('id');
+            if(account){
+                if(confirm("Are you sure you want to deactivate this account?")){
+                    $.ajax({
+                        method:'GET',
+                        url:'/client/account/suspend/'+account,
+                        success:function(data){
+                            alert(data);
+                        }
+                    })
+                }
+                
+            }
         })
 
         function generateNumber(){

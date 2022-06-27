@@ -114,7 +114,7 @@
             @if(CustomerHelper::isSuspended())
             <li><a class="dropdown-item btn btn-danger btn-sm p-2 activate" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-danger"></i> Activate Connection</a></li>
             @else
-            <li><a class="dropdown-item btn btn-danger btn-sm p-2 suspend" href="#" id="{{ Auth::guard('customer')->user()->username }}"><i class="fas fa-wifi text-danger"></i> Suspend Connection</a></li>
+            <li><a class="dropdown-item btn btn-danger btn-sm p-2" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal6"><i class="fas fa-wifi text-danger"></i> Suspend Connection</a></li>
             @endif
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
@@ -150,6 +150,15 @@
         </div>
         <div class="modal-body">
             <form method="POST" action="{{ route('activate.account') }}">
+              <label>Account to Activate</label>
+              <select name="package" required class="form-control">
+                <option value="">select ...</option>
+                @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
+                <option value="{{ $p->account_no }}">{{ $p->account_no }}</option>
+                @empty
+                <option value="">No Accounts available</option>
+                @endforelse
+            </select>
                     <label>Activation Code</label>
                     <input type="digit" name="activation_code" class="form-control" placeholder="e.g 1" required>
                     <input type="hidden" name="username" id="username">
@@ -166,6 +175,42 @@
     </div>
   </div>
 {{-- end of modal 5 --}}
+
+{{-- modal 6 --}}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal6" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Customer User Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ route('suspend.account') }}">
+           
+            <input type="hidden" name="owner" value="{{ Auth::guard('customer')->user()->username??'' }}">
+            
+            <label>Select Account</label>
+            <select name="package" required class="form-control">
+                <option value="">select ...</option>
+                @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
+                <option value="{{ $p->account_no }}">{{ $p->account_no }}</option>
+                @empty
+                <option value="">No Accounts available</option>
+                @endforelse
+            </select>
+            
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Suspend Account</button>
+      </div>
+      @csrf
+      </form>
+    </div>
+  </div>
+</div>
+{{-- end modal 6 --}}
 
     <script src="{{asset('js/app.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
