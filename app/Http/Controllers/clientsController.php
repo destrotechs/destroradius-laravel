@@ -47,14 +47,17 @@ class clientsController extends Controller
         $username=$request->get('username');
 
         $user=DB::table('radcheck')->where('username','=',$username)->get();
+        $userpackage=DB::table('radusergroup')->where('username','=',$username)->first();
         $mbsused=0;
         $totalbytesrecord=0;
         $remainder=0;
         if(count($user)>0){
-            $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
-            foreach ($userdata as $key => $data) {
-                $totalbytesrecord=$data->value;
-            }
+            // $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
+            $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->packagename??'']])->first();
+
+            
+            $totalbytesrecord=$userdata->value;
+            
             $totaldownbs=DB::table('radacct')->where('username','=',$username)->sum('AcctInputOctets');
             $totalupbs=DB::table('radacct')->where('username','=',$username)->sum('AcctOutputOctets');
             $mbsused=($totaldownbs+$totalupbs);
