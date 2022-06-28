@@ -53,7 +53,7 @@ class clientsController extends Controller
         $remainder=0;
         if(count($user)>0){
             // $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
-            $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->packagename??'']])->first();
+            $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->groupname??'']])->first();
 
             
             $totalbytesrecord=$userdata->value;
