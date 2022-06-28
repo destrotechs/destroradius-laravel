@@ -143,6 +143,7 @@ class userController extends Controller
         $c->gender=$request->get('gender');
         $c->created_by=Auth::user()->email;
 
+        $c_username=$request->get('username');
 
         $c->save();
         $customerid=$c->id;
@@ -155,11 +156,12 @@ class userController extends Controller
         if($request->get('type')!='hotspot'){
             alert()->success("User created successfully");
             return redirect()->back()->with("success","user added successfully");
-        }else($request->get('type')=='hotspot'){
-            $newuseraccount = DB::table('customer_accounts')->updateOrInsert(
-                        ['owner'=>$c_username,'account_no'=>$username],
-                        ['package_name'=>$package,'status'=>'active']
-                    );
+        }else if($request->get('type')=='hotspot' && $request->get('package')!=null){
+            $useraccount = DB::table('customer_accounts')->updateOrInsert(
+                ['owner'=>$c_username,'account_no'=>$c_username],
+                ['package_name'=>$package,'status'=>'active']
+            );
+
             alert()->success("User created successfully");
             return redirect()->back()->with("success","user added successfully");
 
