@@ -170,7 +170,7 @@ Route::get('/manager/profile','profileController@getProfile')->name('manager.pro
 Route::get('/tickets/open','ticketsController@render_tickets_open')->name('tickets.open');
 Route::get('/user/accounts','userController@getUserAccounts')->name('customer.accounts');
 Route::get('/user/accounts/{id}','userController@getAccount')->name('customer.accounts.one');
-Route::get('/user/accounts/all/{username?}','clientsController@getAllUserAccounts')->name('customer.accounts.all');
+Route::get('/user/accounts/all/{username?}/{packageid?}','clientsController@getAllUserAccounts')->name('customer.accounts.all');
 Route::post('/user/accounts','userController@postUserAccount')->name('customer.accounts.post');
 
 //settings routes
@@ -240,7 +240,8 @@ Route::get('/client/bundles','clientsController@getBundles')->name('client.bundl
 
 Route::get('/connections/manage','clientsController@getCleanStale')->name('user.get.cleanstale');
 Route::post('/connection/staleconn','clientsController@cleanStaleConn')->name('user.post.cleanstale');
-Route::get('/buybundle/{id}','clientsController@buyBundlePlan')->name('user.buybundleplan');
+Route::get('/buybundle/{id}/{account?}','clientsController@buyBundlePlan')->name('user.buybundleplan');
+Route::post('/accounts/payfor','clientsController@AccountsPayFor')->name('account.payfor');
 Route::get('/changephone','clientsController@getChangePhone')->name('user.changephone');
 Route::post('/changephone','clientsController@postChangePhone')->name('user.post.changephone');
 

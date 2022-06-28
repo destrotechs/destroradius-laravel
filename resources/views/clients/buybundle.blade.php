@@ -35,6 +35,7 @@
   <div class="alert alert-info">you will receive a text message contaning your username and password after a successful payment.</div>
   <input type="hidden" name="package" value="{{ $p->packagename }}">
   <input type="hidden" name="amount" value="{{ $p->amount }}">
+  <input type="hidden" name="account" value="{{ $account??'' }}">
   <hr class="my-4">
   @if(isset(Auth::guard('customer')->user()->phone))
   <input type="text" name="phone" class="form-control p-4" value="{{ Auth::guard('customer')->user()->phone }}">
@@ -79,6 +80,7 @@
 		$(".sub").click(function(e){
 			var package=$("input[name='package']").val();
 			var amount=$("input[name='amount']").val();
+			var account=$("input[name='account']").val();
 			var phone=$("input[name='phone']").val();
 			var _token=$("input[name='_token']").val();
 			if(phone!=''){
@@ -93,7 +95,7 @@
 					var req=$.ajax({
 						method:'POST',
 						url:" {{ route('buybundle.post') }} ",
-						data:{phone:phone,package:package,amount:amount,_token:_token},
+						data:{phone:phone,package:package,amount:amount,_token:_token,account:account},
 					});
 					// req.done(function(data){
 					// 	alert(data);

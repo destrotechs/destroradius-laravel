@@ -150,61 +150,17 @@ class userController extends Controller
         $log=" Created New user ".$request->get('username');
         $logwrite=Log::createTxtLog($user,$log);
         $packageusers = DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('users');
+
         //calculate validdays for this customer
-        if($request->get('package')!="none" && $packageusers=='hotspot'){
-            $customerdays=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('validdays');
-            $customermaxmbs=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('quota');
-
-            $expireafter=$customerdays[0]*24*60*60;
-            $maximumbytes=$customermaxmbs[0];
-            //adduser to radcheck
-            if($maximumbytes>0){
-                DB::table('radcheck')->insert([
-                    ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-                    ['username'=>$request->get('username'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$maximumbytes],
-                ]);
-                //create user attributes to radreply
-                DB::table('radreply')->insert([
-                    ['username'=>$request->get('username'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$maximumbytes],
-                ]);
-            }else{
-                DB::table('radcheck')->insert([
-                    ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-                ]);
-            }
-
-
-
-
-            //apply package to the user
-            DB::table('radusergroup')->insert(['username'=>$request->get('username'),'groupname'=>$request->get('package'),'priority'=>'10']);
-            //add customer to customerpackages
-            $packageid=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('id');
-            $pid=$packageid[0];
-
-            DB::table('customerpackages')->insert([
-                ['packageid'=>$pid,'customerid'=>$customerid],
-            ]);
-
-            //add user to nas disabled mode
-
-            //return success
+        if($request->get('type')!='hotspot'){
+            alert()->success("User created successfully");
             return redirect()->back()->with("success","user added successfully");
-        }else if ($packageusers=='pppoe') {
-           
-            DB::table('radcheck')->insert([
-                ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-            ]);
-            //add user to PPOE Profile
-             DB::table('radcheck')->insert([
-                ['username'=>$request->get('username'),'attribute'=>'User-Profile','op'=>':=','value'=>$request->get('package').'_Profile'],
-            ]);
-            return redirect()->back()->with("success","user added successfully");
-
-        }else{
-            DB::table('radcheck')->insert([
-                ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-            ]);
+        }else($request->get('type')=='hotspot'){
+            $newuseraccount = DB::table('customer_accounts')->updateOrInsert(
+                        ['owner'=>$c_username,'account_no'=>$username],
+                        ['package_name'=>$package,'status'=>'active']
+                    );
+            alert()->success("User created successfully");
             return redirect()->back()->with("success","user added successfully");
 
         }
@@ -974,5 +930,5 @@ class userController extends Controller
         $account = DB::table('customer_accounts')->where('id',$id)->get();
         return $account;
     }
-    
+
 }

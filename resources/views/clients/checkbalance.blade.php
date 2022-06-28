@@ -67,7 +67,7 @@
 	</table>
 		
 	@else
-
+	<div class="alert alert-danger">Dear customer, You have not internet subscriptions</div>
 	@endif
 </div>
 @endif

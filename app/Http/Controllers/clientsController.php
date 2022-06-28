@@ -88,7 +88,7 @@ class clientsController extends Controller
             $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
             if($customer_has_accounts>0){
 
-                return redirect()->route('customer.accounts.all',['username'=>$username]);
+                return redirect()->route('customer.accounts.all',['username'=>$username,'packageid'=>$id]);
                 // $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->leftJoin('customerpackages','customerpackages.packageid','packages.id')->where([['packages.id','=',$pid->packageid],['customerid','=',$userid]])->get();  
 
                 // alert()->warning("You have been redirected to the package subscribed to, if you wish to change your subscription, contact admin");
@@ -214,16 +214,21 @@ class clientsController extends Controller
 
                 
 
-                $permitted_chars_username = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                $permitted_chars_username = '123456789';
     	        $permitted_chars_password = '23456789abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
                 if(isset(Auth::guard('customer')->user()->username)){
-                    $username = Auth::guard('customer')->user()->username;
-                    $password = Auth::guard('customer')->user()->cleartextpassword;
+                    if(Auth::guard('customer')->user()->type!='hotspot'){
+                        $username = $request->get('account');
+                        $password = $request->get('account');
+                    }else{                        
+                        $username = Auth::guard('customer')->user()->username;
+                        $password = Auth::guard('customer')->user()->cleartextpassword;
+                    }
                 }else{
-                    $username=substr(str_shuffle($permitted_chars_username), 0, 6);
-		    		$password= substr(str_shuffle($permitted_chars_password), 0, 5);
+                    $username=rand(1000,100000);
+		    		$password= $username;
                 }
-
+                $c_username = Auth::guard('customer')->user()->username??false;
                 $cust_trans = new Payment();
 
                 $cust_trans->phonenumber = $phone;
@@ -236,11 +241,15 @@ class clientsController extends Controller
 
                 $cust_trans->save();
                 
-                $userexist = DB::table('customers')->where('username',$username)->first();
+                $userexist = DB::table('customers')->where('username',$c_username)->first();
                 if ($userexist){
+                    $newuseraccount = DB::table('customer_accounts')->updateOrInsert(
+                        ['owner'=>$c_username,'account_no'=>$username],
+                        ['package_name'=>$package,'status'=>'active']
+                    );
                     $package_info = DB::table('packages')->where('packagename',$package)->first();
                     if($package_info->users=='pppoe'){
-                        $userinpackage = DB::table('customerpackages')->where([['packageid','=',$package_info->id],['customerid','=',$userexist->id]])->count();
+                        $userinpackage = DB::table('customerpackages')->where([['packageid','=',$package_info->id],['customerid','=',$username]])->count();
                         if($userinpackage>0){
                             $packageprice = DB::table('package_prices')->where('packageid',$package_info->id)->first();
 
@@ -263,6 +272,7 @@ class clientsController extends Controller
                                     $held_funds = DB::table('customer_funds')->updateOrInsert([
                                         'username'=>$username],['available_funds'=>(floatval($amount)+floatval($available_funds->available_funds??0)),'added_on'=>date("Y/m/d")
                                     ]);
+                                    $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                                     alert()->success("You have an active account, the funds have been added to your wallet");
                                     return "success";
 
@@ -270,6 +280,7 @@ class clientsController extends Controller
                             }else{
                                 $newdatetodisconnect = self::calculateTime($packageinfo->durationmeasure,$packageinfo->validdays,'pppoe');
                                 $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
+                                $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                                     return "success";
 
                             }
@@ -747,10 +758,21 @@ class clientsController extends Controller
 
 
     }
-    public function getAllUserAccounts(Request $request,$username){
+    public function getAllUserAccounts(Request $request,$username,$packageid=null){
         if($username){
             $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
+            toast("You have been redirected to your subscribed accounts","warning");
             return view('clients.client_accounts',compact('accounts'));
+        }
+    }
+    public function AccountsPayFor(Request $request){
+        $account= $request->get('account');
+        if($account){
+            $package = DB::table('packages')->where('packagename',$request->get('package'))->join('package_prices','package_prices.packageid','=','packages.id')->get();
+            return view('clients.buybundle',compact('package','account'));
+        }else{
+            alert()->error("Please select an account");
+            return redirect()->back();
         }
     }
 
