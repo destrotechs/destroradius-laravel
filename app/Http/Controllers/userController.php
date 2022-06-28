@@ -125,7 +125,7 @@ class userController extends Controller
             'zoneid'=>'required',
             'phone'=>'required|numeric',
             // 'package'=>'required',
-            'nasid'=>'required',
+            // 'nasid'=>'required',
         ]);
         
 
