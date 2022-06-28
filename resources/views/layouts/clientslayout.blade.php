@@ -111,11 +111,7 @@
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.transactions')}}"><i class="fas fa-chart-line"></i> Transactions</a></li>
             <div class="dropdown-divider"></div>
-            @if(CustomerHelper::isSuspended())
-            <li><a class="dropdown-item btn btn-danger btn-sm p-2 activate" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-danger"></i> Activate Connection</a></li>
-            @else
-            <li><a class="dropdown-item btn btn-danger btn-sm p-2" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal6"><i class="fas fa-wifi text-danger"></i> Suspend Connection</a></li>
-            @endif
+            
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             <div class="dropdown-divider"></div>
@@ -191,7 +187,7 @@
             <input type="hidden" name="owner" value="{{ Auth::guard('customer')->user()->username??'' }}">
             
             <label>Select Account</label>
-            <select name="package" required class="form-control">
+            <select name="username" required class="form-control">
                 <option value="">select ...</option>
                 @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
                 <option value="{{ $p->account_no }}">{{ $p->account_no }}</option>

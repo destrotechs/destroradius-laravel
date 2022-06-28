@@ -21,9 +21,9 @@
 	<form id="checkbalance">
 		<div id="err"></div>
 
-		<label>Username</label>
+		<label>Account Code</label>
 		<input type="text" class="form-control" name="username" placeholder="username" id="username">
-		<small>Enter the username here and click check</small>
+		<small>Enter the account code here and click check</small>
 		<br>
 		<button class="btn btn-success btn-md" type="submit">Check</button>
 		{{ csrf_field() }}
@@ -43,7 +43,7 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th>Account No/Access Code</th>
+				<th>Access Code</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
@@ -54,7 +54,13 @@
 				<td>{{ $k+1 }}</td>
 				<td>{{ $ac->account_no }}</td>
 				<td>{{ $ac->status }}</td>
-				<td>{{ '' }}</td>
+				<td>
+					@if(CustomerHelper::isSuspended($ac->account_no) || $ac->status=='inactive')
+		            <a class="btn btn-primary btn-sm p-2 activate" href="#" id="{{ $ac->account_no }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-danger"></i> Activate Connection</a>
+		            @else
+		            <a class="btn btn-danger btn-sm p-2" href="#" id="{{ $ac->account_no }}" data-toggle="modal" data-target="#exampleModal6"><i class="fas fa-wifi text-danger"></i> Suspend Connection</a>
+		            @endif
+				</td>
 			</tr>
 			@endforeach
 		</tbody>
@@ -99,6 +105,11 @@
 			}
 			e.preventDefault();
 		})
+		$(".activate").click(function(){
+          var username = $(this).attr('id');
+
+          $("#username").val(username);
+        })
 	})
 </script>
 @endsection

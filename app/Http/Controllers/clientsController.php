@@ -9,6 +9,8 @@ use App\Payment;
 use Morris\Mpesa\Mpesa;
 use App\Message;
 use Alert;
+use App\Helpers\CustomerHelper;
+
 class clientsController extends Controller
 {
     public function getLogin(Request $request){
@@ -82,12 +84,15 @@ class clientsController extends Controller
             return redirect()->route('client.bundles');
         }else if($usertype=='pppoe' || $usertype=='prepaid'){
             $userid = Auth::guard('customer')->user()->id;
-            $pid = DB::table('customerpackages')->where('customerid',$userid)->first();
-            if($pid){
-                $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->leftJoin('customerpackages','customerpackages.packageid','packages.id')->where([['packages.id','=',$pid->packageid],['customerid','=',$userid]])->get();  
+            // $pid = DB::table('customerpackages')->where('customerid',$userid)->first();
+            $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
+            if($customer_has_accounts>0){
 
-                alert()->warning("You have been redirected to the package subscribed to, if you wish to change your subscription, contact admin");
-                return view('clients.buybundle',compact('package','balance'));
+                return redirect()->route('customer.accounts.all',['username'=>$username]);
+                // $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->leftJoin('customerpackages','customerpackages.packageid','packages.id')->where([['packages.id','=',$pid->packageid],['customerid','=',$userid]])->get();  
+
+                // alert()->warning("You have been redirected to the package subscribed to, if you wish to change your subscription, contact admin");
+                // return view('clients.buybundle',compact('package','balance'));
 
             }else{
                 alert()->error("Contact administrator for initial subscription");
@@ -625,9 +630,11 @@ class clientsController extends Controller
 
     }
     public function suspendAccount(Request $request,$username=null){
+
         if($request->get('username')){
             $username = $request->get('username');
         }
+        // dd($username);
         $userisactive = DB::table('radcheck')->where('username',$username)->get();
         if(count($userisactive)>0){            
             $expiration = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
@@ -646,7 +653,12 @@ class clientsController extends Controller
 
 
             $activation_code = rand(1,10000);
+            if($expiration){                
             $expval = $expiration->value;
+            }else{
+                $expiration = DB::table('radreply')->where([['username','=',$username],['attribute','=','WISPr-Session-Terminate-Time']])->first();
+                $expval = $expiration->value;
+            }
             $ot = implode("N", $other_attrs);
             $sus = DB::table('user_access_suspensions')->insert(
                 ['username'=>$username,'activation_code'=>$activation_code,'expiration'=>$expval,'cleartextpassword'=>$cltpass,'otherattributes'=>$ot,'suspended_on'=>date("Y/m/d")]
@@ -657,7 +669,7 @@ class clientsController extends Controller
                 $userout = DB::table('radcheck')->where('username',$username)->delete();
                 if ($userout){
 
-                $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'inactive']);
                     echo "Account suspended successfully, Please use code ".$activation_code." to reactivate again";
                 }
             }else{
@@ -686,6 +698,8 @@ class clientsController extends Controller
             }
             $accountissuspended = DB::table('user_access_suspensions')->where([['username','=',$username],['activation_code','=',$activation_code],['activation_used','=',false]])->update(['activation_used'=>true]);
             
+            $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+
             alert()->success("Account has been reactivated successfully!");
             return redirect()->back();
 
@@ -733,7 +747,12 @@ class clientsController extends Controller
 
 
     }
-
+    public function getAllUserAccounts(Request $request,$username){
+        if($username){
+            $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
+            return view('clients.client_accounts',compact('accounts'));
+        }
+    }
 
 
     public function getLogout(Request $request){

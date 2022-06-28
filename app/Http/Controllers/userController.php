@@ -498,6 +498,8 @@ class userController extends Controller
 
         $user_id = DB::table('customers')->where('username','=',$c_username)->pluck('id');
 
+
+
         if($username){
                 $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');
 
@@ -514,7 +516,7 @@ class userController extends Controller
             $remove_radusergroup = DB::table('radreply')->where('username','=',$username)->delete();
             $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
                 $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
-
+            $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
             echo "user activated on non-regulated mode";
 
         }else if($packageusers[0] == 'hotspot'){
@@ -555,7 +557,8 @@ class userController extends Controller
                 ]);
 
                 if ($new_radusergrouprecord){
-                    $activated = DB::table('customer_accounts')->update(['status'=>'active'])->where('account_no',$username);
+                     $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
+                    $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                     if($request->ajax()){
                         echo "user package has been changed successfully";
 
@@ -613,7 +616,7 @@ class userController extends Controller
                 ]);
 
                 $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
-
+                 $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
                 if($request->ajax()){
                     return "PPOE Package applied successfully!";
 
@@ -971,4 +974,5 @@ class userController extends Controller
         $account = DB::table('customer_accounts')->where('id',$id)->get();
         return $account;
     }
+    
 }

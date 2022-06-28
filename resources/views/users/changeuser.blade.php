@@ -127,9 +127,11 @@ User Information
                                 <td>
                                     @if($c->status=='active')
                                     <a href="#" id="{{ $c->account_no }}" class="btn btn-sm btn-danger diact">Suspend</a>
+                                    <a href="{{ route('services.testconnectivity',['user'=>$c->account_no]) }}" class="btn btn-info btn-sm">Test Connectivity</a>
                                     @else
                                     <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal8">Activate</a>
                                     @endif
+
                                 </td>
                             </tr>
                             @endforeach

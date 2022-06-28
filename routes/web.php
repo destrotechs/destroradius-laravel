@@ -170,6 +170,7 @@ Route::get('/manager/profile','profileController@getProfile')->name('manager.pro
 Route::get('/tickets/open','ticketsController@render_tickets_open')->name('tickets.open');
 Route::get('/user/accounts','userController@getUserAccounts')->name('customer.accounts');
 Route::get('/user/accounts/{id}','userController@getAccount')->name('customer.accounts.one');
+Route::get('/user/accounts/all/{username?}','clientsController@getAllUserAccounts')->name('customer.accounts.all');
 Route::post('/user/accounts','userController@postUserAccount')->name('customer.accounts.post');
 
 //settings routes
