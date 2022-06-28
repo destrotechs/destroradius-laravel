@@ -458,15 +458,15 @@ echo "KSH ".CustomerHelper::availableFunds($username);
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Customer User Account</h5>
+        <h5 class="modal-title" id="exampleModalLabel">New Customer Account</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form method="POST" action="{{ route('customer.accounts.post') }}">
             <label>User </label>
-            <input type="hidden" name="owner" value="{{ $username }}">
+            <input type="hidden" name="owner" id="ownerf" value="{{ $username }}">
             <label>Account Type</label>
-            <select name="account_name" class="form-control">
+            <select name="account_name" class="form-control account_type">
                 <option value="">select ...</option>
                 <option value="pppoe"> PPPoE</option>
                 <option value="hotspot">HOTSPOT</option>
@@ -668,6 +668,16 @@ $(document).ready(function(){
                     })
                 }
                 
+            }
+        })
+
+        $(".account_type").change(function(){
+            var type = $(this).val();
+            if(type=='hotspot'){
+                var account = $("#ownerf").val();
+                $(".num").val(account).addAttr('disabled');
+            }else{
+                $(".num").val("")
             }
         })
 
