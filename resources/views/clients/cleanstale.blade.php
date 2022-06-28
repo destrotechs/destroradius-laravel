@@ -25,9 +25,9 @@
 	<form id="cleanconnections">
 		<div id="err"></div>
 
-		<label>Username</label>
+		<label>Access Code</label>
 		<input type="text" class="form-control" name="username" value="@if(isset(Auth::user()->username )){{ Auth::user()->username }}@else {{ '' }}@endif" id="username">
-		<small>Enter the username here and click clean connection</small>
+		<small>Enter the Access code here and click clean connection</small>
 		<br>
 		<button class="btn btn-success btn-md" type="submit">Clean Connections</button>
 		{{ csrf_field() }}
