@@ -27,6 +27,7 @@ class clientsController extends Controller
         $user_info = '';
         $user_type = '';
         $username='';
+        $accounts = null;
         if(Auth::guard('customer')->check()){
 
             $username = Auth::guard('customer')->user()->username;
