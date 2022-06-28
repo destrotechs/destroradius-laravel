@@ -22,7 +22,7 @@
 		<div id="err"></div>
 
 		<label>Account Code</label>
-		<input type="text" class="form-control" name="username" placeholder="username" id="username">
+		<input type="text" class="form-control" name="username" placeholder="Access Code" id="username">
 		<small>Enter the account code here and click check</small>
 		<br>
 		<button class="btn btn-success btn-md" type="submit">Check</button>
