@@ -109,7 +109,8 @@ User Information
                         <table class="table table-sm">
                             <tr>
                                 <th>#</th>
-                                <th>Access code</th>
+                                <th>Account Code</th>
+                                <th>Package</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -117,6 +118,7 @@ User Information
                             <tr>
                                 <td>{{ $k+1 }}</td>
                                 <td>{{ $c->account_no }}</td>
+                                <td>{{ $c->package_name }}</td>
                                 <td>
                                     @if($c->status=='active')
                                     <span class="badge badge-success">Active</span>
