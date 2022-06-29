@@ -122,7 +122,7 @@ class userController extends Controller
         $request->validate([
             'username'=>'required|unique:customers|unique:radcheck|allowed_username',
             'password'=>'required|min:6',
-            'zoneid'=>'required',
+            // 'zoneid'=>'required',
             'phone'=>'required|numeric',
             // 'package'=>'required',
             // 'nasid'=>'required',
