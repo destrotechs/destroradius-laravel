@@ -445,6 +445,10 @@ class userController extends Controller
     public function changeCustomerPackage(Request $request){
         $package = $request->get('package');
         $username = $request->get('account_no'); //username becomes the account no to be activated
+        if(!$package){
+            alert()->error("Assign the account to a package first");
+            return redirect()->back();
+        }
         $c_username = $request->get('username');
         $user = Auth::user()->email;
         $log="Changed ".$username." Package to ".$package;
