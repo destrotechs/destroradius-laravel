@@ -52,11 +52,13 @@ class clientsController extends Controller
         $totalbytesrecord=0;
         $remainder=0;
         if(count($user)>0){
-            // $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
             $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->groupname??'']])->first();
+            if(!$userdata){
+            $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
 
+            }
             
-            $totalbytesrecord=$userdata->value;
+            $totalbytesrecord=$userdata->value??0;
             
             $totaldownbs=DB::table('radacct')->where('username','=',$username)->sum('AcctInputOctets');
             $totalupbs=DB::table('radacct')->where('username','=',$username)->sum('AcctOutputOctets');
