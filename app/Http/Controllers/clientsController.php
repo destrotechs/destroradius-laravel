@@ -86,7 +86,7 @@ class clientsController extends Controller
         if($balance>0){
             alert()->warning("You have an active package, you cannot purchase a new one");
             return redirect()->route('client.bundles');
-        }else if($usertype=='pppoe' || $usertype=='prepaid'){
+        }else{
             $userid = Auth::guard('customer')->user()->id;
             // $pid = DB::table('customerpackages')->where('customerid',$userid)->first();
             $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
@@ -102,10 +102,11 @@ class clientsController extends Controller
                 alert()->error("Contact administrator for initial subscription");
                 return redirect()->back();
             }
-            
-        }else{
-            return view('clients.buybundle',compact('package','balance'));
         }
+            
+        // }else{
+        //     return view('clients.buybundle',compact('package','balance'));
+        // }
 
     }
     public static function getBBalance($username){
