@@ -74,7 +74,14 @@ Edit Package
                         <input name="validdays" type="digit" class="form-control" value="{{ $package->validdays }}">
                     </div>
                 </div>
-                
+                <label>Priority</label>
+                <select name="priority" class="form-control">
+                    <option>Select Priority</option>
+                    <option value="10">HIGH</option>
+                    <option value="5">MEDIUM</option>
+                </select>
+                <label>Valid Until (optional)</label>
+                <input type="date" name="validuntil" class="form-control">
                 <label for="validdays">Maximum Usage Quota (MBS)</label>
                 <input name="quota" value="{{ $package->quota/(1024*1024)}}" type="text" class="form-control quota">
                 <hr>

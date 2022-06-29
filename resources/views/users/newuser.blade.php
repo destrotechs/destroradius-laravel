@@ -71,8 +71,6 @@
                         <label>Type</label>
                         <select name="type" class="form-control">
                             <option value="">Choose user type ...</option>
-                            <option value="prepaid">Prepaid</option>
-                            <option value="postpaid">Postpaid</option>
                             <option value="hotspot">Hotspot User</option>
                             <option value="pppoe">PPPOE User</option>
                         </select>

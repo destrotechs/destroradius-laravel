@@ -25,10 +25,12 @@ class CreatePackagesTable extends Migration
             $table->string('packagezone');
             $table->text('description');
             $table->integer('validdays')->nullable();
+            $table->integer('priority')->nullable();
             $table->string('durationmeasure')->nullable();
             $table->string('burstup')->nullable();
             $table->string('burstdown')->nullable();
             $table->string('profile')->nullable();
+            $table->date('validuntil')->nullable();
             $table->timestamps();
         });
     }

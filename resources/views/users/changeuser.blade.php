@@ -106,7 +106,7 @@ User Information
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                           <div class="card-body">
                             @if(count($customer_accounts)>0)
-                        <table class="table table-sm table-striped">
+                        <table class="table table-sm">
                             <tr>
                                 <th>#</th>
                                 <th>Access code</th>
@@ -131,6 +131,8 @@ User Information
                                     @else
                                     <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal8">Activate</a>
                                     @endif
+                                    <a href="#" class="btn btn-sm btn-success"><i class="fas fa-download"></i>&nbsp;Business Form</a>
+                                    <a href="{{ route('edit.customer.account',['acc'=>$c->account_no]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                                 </td>
                             </tr>
@@ -173,6 +175,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                            <tr>
                                <th>#</th>
                                <th>Item</th>
+                               <th>Account</th>
                                <th>Quantity Allocated</th>
                                <th>Allocation Date</th>
                                <th>Status</th>
@@ -188,8 +191,8 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                                     <td>
                                         {{ $i->name }}
                                     </td>
-                                    <td>{{ $i->quantity }}
-                                    </td>
+                                    <td>{{ $i->account_no??'' }}</td>
+                                    <td>{{ $i->quantity }}</td>
                                     <td>{{ $i->allocation_date }}
                                     </td>
                                     <td class="{{ $i->status=='RETURNED'? 'text-success':'text-info' }}">{{ $i->status }}
@@ -227,8 +230,10 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-                <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>   
-                <a href="#" class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal4"><i class="fa fa-hashtag"></i>&nbsp;Allocate Equipment</a>             
+                <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a> 
+                @if($usertype!='hotspot')  
+                <a href="#" class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal4"><i class="fa fa-hashtag"></i>&nbsp;Allocate Equipment</a>
+                @endif             
             </div>
 		</div>
 	</div>
@@ -391,6 +396,15 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         </div>
         <div class="modal-body">
             <form method="POST" action="{{ route('post.new.equipment') }}">
+                <label>Account</label>
+                <select name="account_no" class="form-control account_type">
+                    <option value="">select ...</option>
+                    @forelse($customer_accounts as $ac)
+                    <option value="{{ $ac->account_no }}">{{ $ac->account_no }}</option>
+                    @empty
+                    <option value="">No accounts available</option>
+                    @endforelse
+                </select>
                 <label>Item/Equipment</label>
                 <select class="form-control" name="item_id" id="item_id">
 
@@ -429,7 +443,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New Equipment Allocation</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Return Equipment</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -442,7 +456,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Allocate</button>
+          <button type="submit" class="btn btn-primary">Return</button>
         </div>
         @csrf
     </form>
@@ -465,6 +479,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         <form method="POST" action="{{ route('customer.accounts.post') }}">
             <label>User </label>
             <input type="hidden" name="owner" id="ownerf" value="{{ $username }}">
+
             <label>Account Type</label>
             <select name="account_name" class="form-control account_type">
                 <option value="">select ...</option>

@@ -107,6 +107,15 @@ New Package
 
                 <label for="validdays">Maximum Usage Quota (MBS)</label>
                 <input required placeholder="use 0 for no limit" name="quota" type="text" class="form-control quota">
+
+                <label for="validdays">Priority</label>
+                <select name="priority" class="form-control">
+                    <option>Select Priority</option>
+                    <option value="10">HIGH</option>
+                    <option value="5">MEDIUM</option>
+                </select>
+                <label>Valid Until (optional)</label>
+                <input type="date" name="validuntil" class="form-control">
                 <label>Description</label>
                 <textarea class="form-control" name="description"></textarea>
                 <hr>

@@ -68,6 +68,8 @@ class packagesController extends Controller
         $package->burstdown=$burstdown;
         $package->profile=$request->get('profile');
         $package->durationmeasure=$request->get('period');
+        $package->priority=$request->get('priority');
+        $package->validuntil=$request->get('validuntil');
         $package->numberofdevices=$request->get('numberofdevices');
         $package->description=$request->get('description');
         $package->validdays=$request->get('validdays');
