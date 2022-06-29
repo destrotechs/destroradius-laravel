@@ -27,6 +27,7 @@ Pay Via Mpesa
             </center>
         </div>
     </div>
+    
 </div>
         <div class="card mn">
             <div class="dropdown-divider mt-2"></div>

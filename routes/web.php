@@ -99,7 +99,7 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::post('/inventory/categories','inventoryController@post_category')->name('category.new');
 	Route::post('/inventory/subcategories','inventoryController@post_sub_category')->name('sub_category.new');
 	//tickets pos
-	Route::post('/tickets/getcost','ticketsController@getPackageCost')->name('get.package.cost');
+	
 	Route::post('/tickets/new/auto','ticketsController@saveAutoGenTickets')->name('save.auto.tickets');
 	//zone post routes
 	Route::post('/zones/add','zonesController@addZone')->name('zones.add.new');
@@ -216,7 +216,7 @@ Route::post('/settings/man/comm','settingsController@addManagerCommission')->nam
 
 ///special posts
 Route::post('/user/nas','userController@getNas')->name('getnas');
-
+Route::post('/tickets/getcost','apiController@getPackageCost')->name('get.package.cost');
 //user equipments
 Route::post('user/equipment/new','userController@allocateEquipmet')->name('post.new.equipment');
 Route::post('user/equipment/return','userController@returnEquipment')->name('return.equipment');

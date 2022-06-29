@@ -1,161 +1,179 @@
 @extends('layouts.clientslayout')
 
+@section('content_header')
+Pay Via Mpesa
+@endsection
 @section('content')
-<div class="procpar" style="display: none;">
-	<div class="card" id="proc">
-		<div class="card-body">
-			<center>
-				<h4>Processing...</h4>
-				<hr>
-				<div class="loader" id="ld">
-					<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-				  	<span class="visually-hidden"></span>
-					</div>
-				<div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-				  <span class="visually-hidden"></span>
-				</div>
-				</div>
-				<div class="err"></div>
-				<p id="timer"></p>
-				<hr>
-				<h5>You will be redirected to login page once the transaction completes, please wait...</h5>
-				<button class="btn btn-primary" id="retry" style="display: none;">retry</button>
-			</center>
-		</div>
-	</div>
-</div>
-<div class="myfrm">
-@foreach($package as $p)
-<h3 class="bg-light p-3">Pay For {{ $p->packagename}}</h3>
-<form>
-	<div class="err"></div>
-<div class="jumbotron">
-  <h1 class="display-5">{{ $p->packagename }} /Kes {{ $p->amount }}</h1>
-  <p class="text-danger">{{ $p->description }}</p>
-  <div class="alert alert-info">you will receive a text message contaning your username and password after a successful payment.</div>
-  <input type="hidden" name="package" value="{{ $p->packagename }}">
-  <input type="hidden" name="amount" value="{{ $p->amount }}">
-  <input type="hidden" name="account" value="{{ $account??'' }}">
-  <hr class="my-4">
-  @if(isset(Auth::guard('customer')->user()->phone))
-  <input type="text" name="phone" class="form-control p-4" value="{{ Auth::guard('customer')->user()->phone }}">
-  <small>Mpesa registered number to be charged</small>
-  @else
-  <input type="text" name="phone" class="form-control p-4" value="" placeholder="Enter Your phone Number to continue">
-  <small>Mpesa registered number to be charged</small>
-  @endif
-  <hr class="my-4">
-  {{-- <button class="btn btn-success btn-lg" type="submit">Process Payment</button> --}}
-  <input type="button" name="btn" value="Process Payment" class="btn btn-success btn-lg sub">
-  <div id="timer"></div>
-</div>
-{{ csrf_field() }}
-</form>
-@endforeach
-<div class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title font-weight-bold">User Freedom</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Create your own username and password by signing up</p>
-        <center><a href="#" class="btn btn-lg btn-primary rounded-pill"><i class="fa fa-rocket"></i>&nbsp;click here to signup</a></center>
-      </div>
-      <div class="modal-footer">
-      	<button type="button" class="btn btn-danger p-3 close" data-dismiss="modal">Dismiss</button>
-      </div>
+<div class="row d-flex justify-content-center">
+    <div class="col-md-12">
+        <div class="procpar" style="display: none;">
+    <div class="card" id="proc">
+        <div class="card-body">
+            <center>
+                <h4>Processing...</h4>
+                <hr>
+                <div class="loader" id="ld">
+                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                    <!-- <span class="visually-hidden">Loading...</span> -->
+                    </div>
+                <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                </div>
+                <div class="err"></div>
+                <p id="timer"></p>
+                <hr>
+                <h5>You will be redirected to login page once the transaction completes, please wait...</h5>
+                <button class="btn btn-primary" id="retry" style="display: none;">retry</button>
+            </center>
+        </div>
     </div>
-  </div>
+    
 </div>
+        <div class="card mn">
+            <div class="dropdown-divider mt-2"></div>
+            <div class="card-body row">
+                <div class="col-md-4 mt-5">
+                <img height="250" width="250" src="{{ asset('images/mp.png') }}" class="rounded-circle">
+                <center><h3 class="text-bold amount"></h3></center>
+                </div>
+                <div class="col-md-8 border p-3 br-2">
+                <form>
+                    <label>Package</label>
+                    <select class="form-control" required name="package" id="package">
+                        <option value="">Choose Package to purchase...</option>
+                        @forelse($packages as $p)
+                            <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
+
+                        @empty
+
+                        <option value="">No package is available</option>
+                        @endforelse
+                        </select>
+                        <br>
+                        {{-- <input type="hidden" name="username" value="{{ $account??'' }}"> --}}
+                        <input type="hidden" id="account" name="account" value="{{ $account??'' }}">
+                    <label>Phone Number</label>
+                    <input type="text" required name="phone" class="form-control">
+                    <br>
+                    <label>Amount</label>
+                    <input name="amount" required class="form-control amnt" type="text">
+                    <br>
+                    <button type="button" class="btn btn-primary btn-md sub" name="submit">Process Payment</button>
+                    {{ csrf_field() }}
+                </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
-
 @section('js')
 <script type="text/javascript">
-	$(document).ready(function(){
-		$(".sub").click(function(e){
-			var package=$("input[name='package']").val();
-			var amount=$("input[name='amount']").val();
-			var account=$("input[name='account']").val();
-			var phone=$("input[name='phone']").val();
-			var _token=$("input[name='_token']").val();
-			if(phone!=''){
-				if (confirm("Are you sure you want to purchase "+package+ " at "+amount)) {
-					if(confirm("A prompt will be sent to your phone,input your M-Pesa pin to proceed")){
-					$(".btn-success").empty().html('processing, please wait...').addClass('btn-danger');
-					$("#timer").html( 0 + ":" + 45);
-					startTimer();
-					$("#timer").addClass("d-block");
-					$(".myfrm").hide();
-					$(".procpar").show();
-					var req=$.ajax({
-						method:'POST',
-						url:" {{ route('buybundle.post') }} ",
-						data:{phone:phone,package:package,amount:amount,_token:_token,account:account},
-					});
-					// req.done(function(data){
-					// 	alert(data);
-					// })
-                    // setTimeout(function(){
-                    //         location.reload();
-                    //     },40000);
-					req.done(function(data){
-						if(data=='error'){
+    $(document).ready(function(){
+        $(".sub").click(function(e){
+            var package=$("#package").val();
+            var amount=$("input[name='amount']").val();
+            var account=$("input[name='account']").val();
+            var phone=$("input[name='phone']").val();
+            var _token=$("input[name='_token']").val();
+            if(phone!=''){
+                if (confirm("Are you sure you want to purchase "+package+ " at "+amount)) {
+                    if(confirm("A prompt will be sent to your phone,input your M-Pesa pin to proceed")){
+                    $(".btn-success").empty().html('processing, please wait...').addClass('btn-danger');
+                    $("#timer").html( 0 + ":" + 45);
+                    startTimer();
+                    $("#timer").addClass("d-block");
+                    $(".myfrm").hide();
+                    $(".procpar").show();
+                    $(".mn").hide();
+                    var req=$.ajax({
+                        method:'POST',
+                        url:" {{ route('buybundle.post') }} ",
+                        data:{phone:phone,package:package,amount:amount,_token:_token,account:account},
+                    });
+                
+                    req.done(function(data){
+                        if(data=='error'){
+                            $("#timer").empty().removeClass('d-block').fadeOut();
+                            $(".btn-danger").empty().html('Failed!');
+                            $(".mn").hide();
+                            $("h4").empty().html("<i class='fa fa-times fa-4x'></i>").addClass('text-danger');
+                            $("h5").hide();
+                            $("#retry").show();
+                            $("#ld").hide();
+                            $(".err").html("Your transaction could not be completed, check your phone number and try again").addClass("alert alert-danger p-3");
 
-							$("#timer").empty().removeClass('d-block').fadeOut();
-						$(".btn-danger").empty().html('Failed!');
-						$("#ld").hide();
-						$("h4").empty().html("<i class='fa fa-times fa-4x'></i>").addClass('text-danger');
-						$("h5").hide();
-						$("#retry").show();
-						$(".err").html("Your transaction could not be completed, check your phone number and try again").addClass("alert alert-danger p-3");
+                        }else{
+                            $("#timer").empty().removeClass('d-block').fadeOut();;
+                            $(".btn-danger").empty().html('completed').removeClass('btn-danger').addClass("btn-success");
+                            $(".mn").hide();
+                            $(".loader").hide();
+                            $("h4").empty().html(data).addClass('text-success');
+                            $(".err").html("<i class='fa fa-check-circle fa-4x'></i>").addClass("text-success p-3");
+                        }
 
-						}else{
-							$("#timer").empty().removeClass('d-block').fadeOut();;
-							$(".btn-danger").empty().html('completed').removeClass('btn-danger').addClass("btn-success");
-							$("#ld").hide();
-							$("h4").empty().html(data).addClass('text-success');
-							$(".err").html("<i class='fa fa-check-circle fa-4x'></i>").addClass("text-success p-3");
-							// setTimeout(function(){
-							// window.location.replace('http://hewanet.wifi/login');
-							// },5000);
-						}
+                    })
+                }
+                }
 
-					})
-				}
-				}
+            }else{
+                $(".err").html("Enter a valid phone number and select a bundle plan").addClass("alert alert-danger");
+            }
+            e.preventDefault();
+        })
+        $("#package").change(function(){
+            var package = $(this).val();
+            var _token=$("input[name='_token']").val();
 
-			}else{
-				$(".err").html("Enter a valid phone number and select a bundle plan").addClass("alert alert-danger");
-			}
-			e.preventDefault();
-		})
-		function startTimer() {
-		  var presentTime = document.getElementById('timer').innerHTML;
-		  var timeArray = presentTime.split(/[:]+/);
-		  var m = timeArray[0];
-		  var s = checkSecond((timeArray[1] - 1));
-		  if(s==59){m=m-1}
-		  //if(m<0){alert('timer completed')}
+            if(package){
+                $.ajax({
+                    method:'POST',
+                    url:"{{ route('get.package.cost') }}",
+                    data:{package:package,_token:_token},
+                    success:function(data){
+                        $(".amnt").val(data[0]);
+                        $(".amount").html('KES. '+data[0]);
+                        if(data[1]=='hotspot'){
+                           $(".amnt").attr('readonly','readonly'); 
+                        }else{
+                           $(".amnt").removeAttr('readonly'); 
 
-		  document.getElementById('timer').innerHTML =
-		    m + ":" + s;
-		  console.log(m)
-		  setTimeout(startTimer, 1000);
-		}
+                        }
+                    }
+                })
+            }else{
+                $(".amnt").val('');
+            }
+        })
+        function startTimer() {
+          var presentTime = document.getElementById('timer').innerHTML;
+          var timeArray = presentTime.split(/[:]+/);
+          var m = timeArray[0];
+          var s = checkSecond((timeArray[1] - 1));
+          if(s==59){m=m-1}
+          //if(m<0){alert('timer completed')}
 
-		function checkSecond(sec) {
-		  if (sec < 10 && sec >= 0) {sec = "0" + sec}; // add zero in front of numbers < 10
-		  if (sec < 0) {sec = "59"};
-		  return sec;
-		}
-		$("#retry").click(function(){
-			location.reload();
-		})
-	})
+          document.getElementById('timer').innerHTML =
+            m + ":" + s;
+          console.log(m)
+          setTimeout(startTimer, 1000);
+        }
+
+        function checkSecond(sec) {
+          if (sec < 10 && sec >= 0) {sec = "0" + sec}; // add zero in front of numbers < 10
+          if (sec < 0) {sec = "59"};
+          return sec;
+        }
+        $("#retry").click(function(){
+            location.reload();
+        })
+        $(".amnt").on("keyup",function(){
+            var amount = $(this).val();
+            $(".amount").html("KES. "+amount);
+        })
+    })
 </script>
 @endsection
+

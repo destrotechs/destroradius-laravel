@@ -113,6 +113,7 @@ class clientsController extends Controller
         $mbsused=0;
         $totalbytesrecord=0;
         $remainder=0;
+
         if(count($user)>0){
             $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
             foreach ($userdata as $key => $data) {
@@ -220,18 +221,14 @@ class clientsController extends Controller
 
                 $permitted_chars_username = '123456789';
     	        $permitted_chars_password = '23456789abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
-                if(isset(Auth::guard('customer')->user()->username)){
-                    if(Auth::guard('customer')->user()->type!='hotspot'){
-                        $username = $request->get('account');
-                        $password = $request->get('account');
-                    }else{                        
-                        $username = Auth::guard('customer')->user()->username;
-                        $password = Auth::guard('customer')->user()->cleartextpassword;
-                    }
+                if(Auth::guard('customer')->check()){                     
+                    $username = $request->get('account');
+                    $password = $request->get('account');
                 }else{
                     $username=rand(1000,100000);
 		    		$password= $username;
                 }
+
                 $c_username = Auth::guard('customer')->user()->username??false;
                 $cust_trans = new Payment();
 
@@ -259,6 +256,7 @@ class clientsController extends Controller
 
                             //check if user connection is expired
                             $date_to_disconnect = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
+                            $remove_maxallmb = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->delete();
                             if($date_to_disconnect){                                
                                 if(!self::checkIfUserIsExpired($username)){
                                     $newdatetodisconnect=self::checkDaysToActivate($amount,$packageprice);
@@ -282,7 +280,9 @@ class clientsController extends Controller
 
                                 }
                             }else{
-                                $newdatetodisconnect = self::calculateTime($packageinfo->durationmeasure,$packageinfo->validdays,'pppoe');
+
+                                // $newdatetodisconnect = self::calculateTime($package_info->durationmeasure,$package_info->validdays,'pppoe');
+                                $newdatetodisconnect=self::checkDaysToActivate($amount,$packageprice);
                                 $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
                                 $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                                     return "success";
@@ -291,6 +291,8 @@ class clientsController extends Controller
                             
                             
                         }
+                    }else{
+
                     }
                 }
 
@@ -326,6 +328,8 @@ class clientsController extends Controller
           $user_exist = DB::table('radcheck')->where('username','=',$username)->count();
 
             if($user_exist>0){
+                $remove_pppoe_details = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
+                $remove_pppoe_details = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
                 //check if user is registered to use bundle mbs
                 $bundle_user = DB::table('radgroupreply')->where([['groupname','=',$package],['attribute','=','Max-All-MB']])->count();
 
@@ -772,8 +776,9 @@ class clientsController extends Controller
     public function AccountsPayFor(Request $request){
         $account= $request->get('account');
         if($account){
-            $package = DB::table('packages')->where('packagename',$request->get('package'))->join('package_prices','package_prices.packageid','=','packages.id')->get();
-            return view('clients.buybundle',compact('package','account'));
+            $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->get();  
+
+            return view('clients.buybundle',compact('packages','account'));
         }else{
             alert()->error("Please select an account");
             return redirect()->back();
