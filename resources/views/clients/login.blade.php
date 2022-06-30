@@ -26,9 +26,7 @@
                     <div class="col-md-6 col-sm-12">                        
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
-                    @if(isset($usertype) && $usertype=='pppoe')
-
-                    @else
+                    @if(isset($usertype) && $usertype=='hotspot')
                     <div class="col-md-6 col-sm-12">
                         <a href="{{ route('get.customer.register') }}" class="nav-link">New User? Register an account.</a>
                     </div>

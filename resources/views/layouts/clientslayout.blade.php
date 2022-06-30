@@ -85,9 +85,7 @@
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('get.customer.login')}}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
             <div class="dropdown-divider"></div>
-             @if(isset($usertype) && $usertype=='pppoe')
-
-            @else
+             @if(isset($usertype) && $usertype=='hotspot')
             <li><a class="dropdown-item" href="{{route('get.customer.register')}}"><i class="fas fa-sign-out-alt"></i> Sign up</a></li>
             <div class="dropdown-divider"></div>
             @endif
@@ -109,6 +107,11 @@
             <li><a class="dropdown-item" href="{{route('user.get.cleanstale')}}"><i class="fas fa-cross"></i> Can't Access Internet</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.changephone')}}"><i class="fas fa-phone"></i> Change Phone</a></li>
+            @if(isset(Auth::guard('customer')->user()->username))
+            <li><a class="dropdown-item btn btn-danger btn-sm p-2 activate" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-success"></i> Activate Connection</a></li>
+            
+            <li><a class="dropdown-item btn btn-danger btn-sm p-2" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal6"><i class="fas fa-wifi text-danger"></i> Suspend Connection</a></li>
+            @endif
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.transactions')}}"><i class="fas fa-chart-line"></i> Transactions</a></li>
             <div class="dropdown-divider"></div>
@@ -148,7 +151,7 @@
         <div class="modal-body">
             <form method="POST" action="{{ route('activate.account') }}">
               <label>Account to Activate</label>
-              <select name="package" required class="form-control">
+              <select name="username" required class="form-control">
                 <option value="">select ...</option>
                 @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
                 <option value="{{ $p->account_no }}">{{ $p->account_no }}</option>
@@ -158,7 +161,7 @@
             </select>
                     <label>Activation Code</label>
                     <input type="digit" name="activation_code" class="form-control" placeholder="e.g 1" required>
-                    <input type="hidden" name="username" id="username">
+                    {{-- <input type="hidden" name="username" id="username"> --}}
                     
 
         </div>
@@ -179,7 +182,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Customer User Account</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Select Account</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
