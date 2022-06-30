@@ -248,6 +248,7 @@ Route::get('/changephone','clientsController@getChangePhone')->name('user.change
 Route::post('/changephone','clientsController@postChangePhone')->name('user.post.changephone');
 
 Route::get('/bundlebalance','clientsController@bundlebalance')->name('user.balance');
+Route::get('/packages/free/{id}/{acc?}','clientsController@getFreeAccess')->name('clients.freepackage');
 Route::post('/bundlebalance','clientsController@fetchBalance')->name('user.check.balance');
 Route::post('/buybundle','clientsController@payToGetCredentials')->name('pay.forcredentials');
 Route::get('/transactions','clientsController@getTransactions')->name('user.transactions');
