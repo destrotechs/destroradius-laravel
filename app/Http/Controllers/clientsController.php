@@ -818,7 +818,6 @@ class clientsController extends Controller
     }
     public function getFreeAccess(Request $request,$id,$acc=null){
         $account = $acc;
-        dd($id);
         $thispackage = DB::table('packages')->where('id',$id)->first();
         return view('clients.getfreepackage',compact('thispackage','account'));
     }
