@@ -17,6 +17,10 @@
 					<small>GET FREE ACCESS FOR {{$thispackage->validdays }} {{$thispackage->durationmeasure}} (s)</small>
 				</center>
 			<br>
+
+			<center>
+				<label>Enter Phone to receive Access Code</label>
+				<input type="text" name="phone" class="form-control" placeholder="07....." value="{{Auth::guard('customer')->user()->phone??''}}"></center>
 			<input type="hidden" name="account" value="{{$account??null}}">
 			<input type="hidden" name="package" value="{{$thispackage->packagename}}">
 			<center><button class="btn btn-success btn-md" type="submit">ACTIVATE</button></center>
