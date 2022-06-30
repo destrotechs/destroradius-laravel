@@ -84,7 +84,6 @@ class clientsController extends Controller
             $usertype = Auth::guard('customer')->user()->type;
             $balance = self::getBBalance($username);
         }
-
         if($balance>0){
             alert()->warning("You have an active package, you cannot purchase a new one");
             return redirect()->route('client.bundles');
@@ -106,7 +105,8 @@ class clientsController extends Controller
                 if ($thispackage->amount==0){
                     return view('clients.getfreepackage',compact('thispackage'));
                 }else{
-                    return view('clients.buybundle');
+                    $packages=DB::table('packages')->get();
+                    return view('clients.buybundle',compact('packages'));
                 }
 
             }
