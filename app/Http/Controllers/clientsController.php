@@ -57,7 +57,7 @@ class clientsController extends Controller
             $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
 
             }
-            
+            if($userdata){
             $totalbytesrecord=$userdata->value??0;
             
             $totaldownbs=DB::table('radacct')->where('username','=',$username)->sum('AcctInputOctets');
@@ -69,6 +69,9 @@ class clientsController extends Controller
             $remainder=$totalbytesrecord-$mbsused;
 
              echo '<tr><td>'.round($totalbytesrecord,2).' MBs</td><td>'.round($mbsused,2).' MBs</td><td>'.round($remainder,2).' MBs</td></tr>';
+         }else{
+            return "error";
+         }
         }else{
             echo "error";
         }
@@ -297,7 +300,12 @@ class clientsController extends Controller
                                     ]);
                                     $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                                     alert()->success("You have an active account, the funds have been added to your wallet");
-                                    return "success";
+                                    if($request->ajax()){
+                                        return "success";
+                                    }else{
+                                        alert()->success("success");
+                                        return redirect()->route('client.bundles');
+                                    }
 
                                 }
                             }else{
@@ -306,7 +314,12 @@ class clientsController extends Controller
                                 $newdatetodisconnect=self::checkDaysToActivate($amount,$packageprice);
                                 $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
                                 $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                                if($request->ajax()){
                                     return "success";
+                                }else{
+                                    alert()->success("success");
+                                    return redirect()->route('client.bundles');
+                                }
 
                             }
                             
@@ -324,21 +337,46 @@ class clientsController extends Controller
                     $sent=true;
 
                     if ($sent){
-                        return "success";
+                        if($request->ajax()){
+                            return "success";
+                        }else{
+                            alert()->success("success");
+                            return redirect()->route('client.bundles');
+                        }
                     }else{
-                        return 'error';
+                        if($request->ajax()){
+                            return "error";
+                        }else{
+                            alert()->error("Error");
+                            return redirect()->back();
+                        }
                     }
 
                 }else{
-                    return "error";
+                    if($request->ajax()){
+                        return "error";
+                    }else{
+                        alert()->error("Error");
+                        return redirect()->back();
+                    }
                 }
 
             }else{
-                return "error";
+                if($request->ajax()){
+                    return "error";
+                }else{
+                    alert()->error("Error");
+                    return redirect()->back();
+                }
             }
         }
         else{
-            return "error";
+            if($request->ajax()){
+                return "error";
+            }else{
+                alert()->error("Error");
+                return redirect()->back();
+            }
         }
 
 
