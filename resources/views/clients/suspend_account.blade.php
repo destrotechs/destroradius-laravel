@@ -44,53 +44,6 @@ User accounts
 	</div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Customer User Account</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="{{ route('customer.accounts.post') }}">
-        	<label>User </label>
-        	<select class="form-control" name="owner">
-        		<option value="">Choose ...</option>
-        		@forelse($customers as $c)
-        		<option value="{{ $c->username }}">{{ $c->name }}</option>
-        		@empty
-        		<option value="">No users available</option>
-        		@endforelse
-        	</select>
-        	<label>Account Type</label>
-        	<select name="account_name" class="form-control">
-        		<option value="">select ...</option>
-        		<option value="pppoe"> PPPoE</option>
-        		<option value="hotspot">HOTSPOT</option>
-        	</select>
-        	<label>Select Package</label>
-        	<select name="package" required class="form-control">
-        		<option value="">select ...</option>
-        		@forelse($packages as $p)
-        		<option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
-        		@empty
-        		<option value="">No Packages available</option>
-        		@endforelse
-        	</select>
-        	<label>Account No</label>
-        	<input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
-        	<hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Add New Account</button>
-      </div>
-      @csrf
-      </form>
-    </div>
-  </div>
-</div>
-<!-- Modal -->
 <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
