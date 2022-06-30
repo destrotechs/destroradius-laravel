@@ -97,7 +97,7 @@ class clientsController extends Controller
                 // }else{
                     // alert()->error("Contact administrator for initial subscription");
                     // return redirect()->back();
-                }
+                // }
             }else{
                 $cost =0;
                 $thispackage = $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where('packages.id','=',$id)->first();
