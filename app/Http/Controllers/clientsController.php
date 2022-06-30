@@ -801,7 +801,7 @@ class clientsController extends Controller
         if($packageid){
             $thispackage=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.id','=',$packageid]])->select('packages.*','package_prices.amount')->first();
 
-            if($package->amount==0){
+            if($thispackage->amount==0){
                 return redirect()->route('clients.freepackage',['id'=>$thispackage->id,'acc'=>$account]);
                 // return view('clients.getfreepackage',compact('thispackage','account'));
             }
