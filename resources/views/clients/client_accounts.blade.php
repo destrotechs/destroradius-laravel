@@ -17,7 +17,7 @@
 
          @endforelse
          <input type="hidden" name="packageid" value="<?php
-         $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+         $url = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 			// Append Host Name and requested resource location
 			$url .= $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
           $parts = explode("/", $url);
