@@ -800,7 +800,7 @@ class clientsController extends Controller
         $packageid = $request->get('packageid');
         if($packageid){
             $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.id','=',$packageid]])->first();
-            dd($account);
+            
             if($package->amount==0){
                 $thispackage=$package;
                 return view('clients.getfreepackage',compact('thispackage','account'));
