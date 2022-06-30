@@ -16,7 +16,8 @@
          <br>
 
          @endforelse
-         <input type="hidden" name="packageid" value="{{pid??null}}">
+         <input type="hidden" name="packageid" value="<?php $parts = explode("/", $url);
+echo end($parts);?>">
 			<button type="submit" class="btn btn-success btn-large">NEXT</button>
 			@csrf
 		</form>
