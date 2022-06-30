@@ -26,4 +26,8 @@ class apiController extends Controller
         }
         return array($cost,$users);
     }
+    public function getAccount(Request $request,$id){
+        $account = DB::table('customer_accounts')->where('id',$id)->get();
+        return $account;
+    }
 }

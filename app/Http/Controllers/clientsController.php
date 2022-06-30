@@ -9,6 +9,7 @@ use App\Payment;
 use Morris\Mpesa\Mpesa;
 use App\Message;
 use Alert;
+use Redirect;
 use App\Helpers\CustomerHelper;
 
 class clientsController extends Controller

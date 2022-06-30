@@ -1073,10 +1073,7 @@ class userController extends Controller
         }
         
     }
-    public function getAccount(Request $request,$id){
-        $account = DB::table('customer_accounts')->where('id',$id)->get();
-        return $account;
-    }
+    
     public function getAccountEdit(Request $request,$acc){
         $account = DB::table('customer_accounts')->where('account_no',$acc)->first();
         $usertype = DB::table('customers')->where('username',$account->owner)->first();

@@ -109,7 +109,6 @@
             <li><a class="dropdown-item" href="{{route('user.get.cleanstale')}}"><i class="fas fa-cross"></i> Can't Access Internet</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.changephone')}}"><i class="fas fa-phone"></i> Change Phone</a></li>
-            <li><a class="dropdown-item" href="{{route('user.accounts.suspend')}}"><i class="fas fa-phone"></i> Suspend Connection</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.transactions')}}"><i class="fas fa-chart-line"></i> Transactions</a></li>
             <div class="dropdown-divider"></div>
