@@ -96,6 +96,10 @@ class RegisterController extends Controller
             'password' => Hash::make($request['password']),
             'type' => $request['type'],
         ]);
+        $useraccount = DB::table('customer_accounts')->updateOrInsert(
+                ['owner'=>$request['username'],'account_no'=>$request['username']],
+                ['status'=>'inactive']
+            );
         alert()->success("Account created successfully, Please login");
         return redirect()->intended('customer/login');
 
