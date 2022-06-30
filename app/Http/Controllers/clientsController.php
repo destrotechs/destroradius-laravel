@@ -791,11 +791,20 @@ class clientsController extends Controller
         if($username){
             $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
             toast("You have been redirected to your subscribed accounts","warning");
-            return view('clients.client_accounts',compact('accounts'));
+            return view('clients.client_accounts',compact('accounts','packageid'));
         }
     }
     public function AccountsPayFor(Request $request){
         $account= $request->get('account');
+        $packageid = $request->get('packageid');
+        if($packageid){
+            $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.id','=',$packageid]])->first();
+            if($package->amount==0){
+                $thispackage=$package;
+                return view('clients.getfreepackage',compact('thispackage','account'));
+            }
+
+        }
         if($account){
             $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->get();  
 
