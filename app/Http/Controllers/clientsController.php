@@ -17,7 +17,7 @@ class clientsController extends Controller
     	return view('auth.clientsauth.login');
     }
     public function getBundles(Request $request){
-        $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->->orderBy('priority', 'desc')->get();
+        $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->orderBy('priority', 'desc')->get();
     	return view('clients.bundles',compact('packages'));
     }
 
