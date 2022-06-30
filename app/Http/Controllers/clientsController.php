@@ -789,6 +789,7 @@ class clientsController extends Controller
     }
     public function getAllUserAccounts(Request $request,$username,$packageid=null){
         if($username){
+            $packageid=$packageid;
             $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
             toast("You have been redirected to your subscribed accounts","warning");
             return view('clients.client_accounts',compact('accounts','packageid'));
