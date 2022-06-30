@@ -7,50 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     public static function sendSMS($phone,$message){
-        
-        $p=$phone;
+        //write sms sending logic here
 
-        $smsgatewaUrl='https://sms.movesms.co.ke/api/compose?';
-
-        $curl=curl_init();
-
-        curl_setopt($curl, CURLOPT_URL, $smsgatewaUrl);
-
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-
-        $data_string = array(
-
-            'username'=>'HewaNet',
-
-            'api_key'=>'c04EhaD3ipcTGztn5albuExDHTdLCRPzP0BYUNYYF32UxShhDc',
-
-            'sender'=>'SMARTLINK',
-
-            'to'=>$p,
-
-            'message'=>$message,
-
-            'msgtype'=>'5',
-
-            'dlr'=>'1',
-
-        );
-
-        $data=json_encode($data_string);
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        curl_setopt($curl, CURLOPT_POST, true);
-
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-
-        curl_setopt($curl, CURLOPT_HEADER, false);
-
-        $curl_response=curl_exec($curl);
-
-        $resultcode=$curl_response;
-
-        if($resultcode=='Message Sent:1701'){
+        if($resultcode=='Message Sent:1701'){ // find if message was sent
             return true;
         }
         return false;
