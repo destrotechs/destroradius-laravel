@@ -824,7 +824,7 @@ class clientsController extends Controller
         $userexist = DB::table('radusergroup')->where([['username','=',$account],['groupname','=',$thispackage->packagename]])->count();
         if($userexist>0){
             alert()->error("You are already subscribed to this free package");
-            return redirect()->back();
+            return redirect()->route('client.bundles');
         }
         return view('clients.getfreepackage',compact('thispackage','account'));
     }
