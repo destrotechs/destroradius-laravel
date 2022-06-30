@@ -16,12 +16,7 @@
          <br>
 
          @endforelse
-         <input type="hidden" name="packageid" value="<?php
-         $url = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-			// Append Host Name and requested resource location
-			$url .= $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-          $parts = explode("/", $url);
-			echo end($parts);?>">
+         <input type="hidden" name="packageid" value="{{$packageid??nu}}">
 			<button type="submit" class="btn btn-success btn-large">NEXT</button>
 			@csrf
 		</form>
