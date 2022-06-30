@@ -334,7 +334,7 @@ class clientsController extends Controller
                 //send message on success
                 if($status == 'success'){
                     //send message here...
-                    $Message=str_replace("<br />","",nl2br("Dear ".ucwords(strtolower($username))). " You have successfully purchased".$package.". Your Access Code is ".$username.".");
+                    $message=str_replace("<br />","",nl2br("Dear ".ucwords(strtolower($username))). " You have successfully purchased".$package.". Your Access Code is ".$username.".");
 
                     $sms = new Message();
  
