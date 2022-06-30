@@ -317,8 +317,10 @@ class clientsController extends Controller
                                     if($request->ajax()){
                                         return "success";
                                     }else{
-                                        alert()->success("success");
-                                        return redirect()->route('client.bundles');
+                                        // alert()->success("success");
+                                        // return redirect()->route('client.bundles');
+
+                                        return Redirect::to('http://familywifi.net/login');
                                     }
 
                                 }
@@ -331,8 +333,9 @@ class clientsController extends Controller
                                 if($request->ajax()){
                                     return "success";
                                 }else{
-                                    alert()->success("success");
-                                    return redirect()->route('client.bundles');
+                                    // alert()->success("success");
+                                    // return redirect()->route('client.bundles');
+                                    return Redirect::to('http://familywifi.net/login');
                                 }
 
                             }
@@ -361,8 +364,9 @@ class clientsController extends Controller
                         if($request->ajax()){
                             return "success";
                         }else{
-                            alert()->success("Activation successfull");
-                            return redirect()->route('client.bundles');
+                            // alert()->success("Activation successfull");
+                            // return redirect()->route('client.bundles');
+                            return Redirect::to('http://familywifi.net/login');
                         }
                     }else{
                         if($request->ajax()){
@@ -867,6 +871,7 @@ class clientsController extends Controller
 
         }
         if($account){
+            $today = date("Y-m-d");
             $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();  
 
             return view('clients.buybundle',compact('packages','account'));
@@ -886,6 +891,12 @@ class clientsController extends Controller
             return redirect()->route('client.bundles');
         }
         return view('clients.getfreepackage',compact('thispackage','account'));
+    }
+
+    public function getSuspendAccount(){
+        $user = Auth::guard('customer')->user()->username;
+        $accounts = DB::table('customer_accounts')->where('owner',$user)->get();
+        return view('clients.suspend_account',compact('accounts'));
     }
 
     public function getLogout(Request $request){

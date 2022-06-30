@@ -85,8 +85,12 @@
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('get.customer.login')}}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
             <div class="dropdown-divider"></div>
+             @if(isset($usertype) && $usertype=='pppoe')
+
+            @else
             <li><a class="dropdown-item" href="{{route('get.customer.register')}}"><i class="fas fa-sign-out-alt"></i> Sign up</a></li>
             <div class="dropdown-divider"></div>
+            @endif
           </ul>
         </li>
         @endif
@@ -105,6 +109,7 @@
             <li><a class="dropdown-item" href="{{route('user.get.cleanstale')}}"><i class="fas fa-cross"></i> Can't Access Internet</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.changephone')}}"><i class="fas fa-phone"></i> Change Phone</a></li>
+            <li><a class="dropdown-item" href="{{route('user.accounts.suspend')}}"><i class="fas fa-phone"></i> Suspend Connection</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.transactions')}}"><i class="fas fa-chart-line"></i> Transactions</a></li>
             <div class="dropdown-divider"></div>

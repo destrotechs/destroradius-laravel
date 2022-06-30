@@ -112,6 +112,10 @@ Pay Via Mpesa
                             $(".loader").hide();
                             $("h4").empty().html(data).addClass('text-success');
                             $(".err").html("<i class='fa fa-check-circle fa-4x'></i>").addClass("text-success p-3");
+                           setTimeout(function(){
+                                window.location.replace('http://familywifi.net/login');
+
+                            },5000);
                         }
 
                     })

@@ -245,6 +245,7 @@ Route::post('/connection/staleconn','clientsController@cleanStaleConn')->name('u
 Route::get('/buybundle/{id}/{account?}','clientsController@buyBundlePlan')->name('user.buybundleplan');
 Route::post('/accounts/payfor','clientsController@AccountsPayFor')->name('account.payfor');
 Route::get('/changephone','clientsController@getChangePhone')->name('user.changephone');
+Route::get('/clients/accounts/suspend','clientsController@getSuspendAccount')->name('user.accounts.suspend');
 Route::post('/changephone','clientsController@postChangePhone')->name('user.post.changephone');
 
 Route::get('/bundlebalance','clientsController@bundlebalance')->name('user.balance');
@@ -255,7 +256,7 @@ Route::get('/transactions','clientsController@getTransactions')->name('user.tran
 // Route::post('/purchase','clientsController@purchasePackage')->name('buybundle.post');
 Route::post('/purchase','clientsController@payToGetCredentials')->name('buybundle.post');
 
-Route::get('/customer/login', 'Auth\LoginController@showCustomerLoginForm')->name('get.customer.login');
+Route::get('/customer/login/{usertype?}', 'Auth\LoginController@showCustomerLoginForm')->name('get.customer.login');
 Route::get('/customer/register', 'Auth\RegisterController@showCustomerRegisterForm')->name('get.customer.register');
 Route::post('/login/customer', 'Auth\LoginController@customerLogin')->name('post.customer.login');
 Route::post('/register/customer', 'Auth\RegisterController@createCustomer')->name('post.customer.register');
