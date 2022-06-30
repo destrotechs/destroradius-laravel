@@ -799,11 +799,10 @@ class clientsController extends Controller
         $account= $request->get('account');
         $packageid = $request->get('packageid');
         if($packageid){
-            $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.id','=',$packageid]])->select('packages.*','package_prices.amount')->first();
+            $thispackage=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.id','=',$packageid]])->select('packages.*','package_prices.amount')->first();
 
             if($package->amount==0){
-                $thispackage=$package;
-                return redirect()->route('clients.freepackage',['id'=>$package->id,'acc'=>$account]);
+                return redirect()->route('clients.freepackage',['id'=>$thispackage->id,'acc'=>$account]);
                 // return view('clients.getfreepackage',compact('thispackage','account'));
             }
 
@@ -817,10 +816,10 @@ class clientsController extends Controller
             return redirect()->back();
         }
     }
-    public function getFreeAccess($acc=null,$id){
+    public function getFreeAccess(Request $request,$id,$acc=null){
         $account = $acc;
+        dd($id);
         $thispackage = DB::table('packages')->where('id',$id)->first();
-        dd($thispackage);
         return view('clients.getfreepackage',compact('thispackage','account'));
     }
 
