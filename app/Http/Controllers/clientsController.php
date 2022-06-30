@@ -17,7 +17,7 @@ class clientsController extends Controller
     	return view('auth.clientsauth.login');
     }
     public function getBundles(Request $request){
-        $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->get();
+        $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->->orderBy('priority', 'desc')->get();
     	return view('clients.bundles',compact('packages'));
     }
 
@@ -89,21 +89,28 @@ class clientsController extends Controller
             alert()->warning("You have an active package, you cannot purchase a new one");
             return redirect()->route('client.bundles');
         }else{
-            $userid = Auth::guard('customer')->user()->id;
-            // $pid = DB::table('customerpackages')->where('customerid',$userid)->first();
-            $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
-            if($customer_has_accounts>0){
+            if(Auth::guard('customer')->check()){
+                $userid = Auth::guard('customer')->user()->id;
+                $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
+                if($customer_has_accounts>0){
+                    return redirect()->route('customer.accounts.all',['username'=>$username,'packageid'=>$id]);                    
 
-                return redirect()->route('customer.accounts.all',['username'=>$username,'packageid'=>$id]);
-                // $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->leftJoin('customerpackages','customerpackages.packageid','packages.id')->where([['packages.id','=',$pid->packageid],['customerid','=',$userid]])->get();  
-
-                // alert()->warning("You have been redirected to the package subscribed to, if you wish to change your subscription, contact admin");
-                // return view('clients.buybundle',compact('package','balance'));
-
+                }else{
+                    alert()->error("Contact administrator for initial subscription");
+                    return redirect()->back();
+                }
             }else{
-                alert()->error("Contact administrator for initial subscription");
-                return redirect()->back();
+                $cost =0;
+                $thispackage = $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where('packages.id','=',$id)->first();
+
+                if ($thispackage->amount==0){
+                    return view('clients.getfreepackage',compact('thispackage'));
+                }else{
+                    return view('clients.buybundle');
+                }
+
             }
+            
         }
             
         // }else{
@@ -200,21 +207,29 @@ class clientsController extends Controller
         $package = $request->get('package');
         $amount = $request->get('amount');
         $phone = $request->get('phone');
-        $payment = new Mpesa();
+        if($amount && $amount!=0){
 
-        $phone = '254'.substr($phone, 1);
+            $payment = new Mpesa();
 
-        $payment->generateToken();
+            $phone = '254'.substr($phone, 1);
 
-        $checkoutid = $payment->processRequest($phone,$amount);
+            $payment->generateToken();
+
+            $checkoutid = $payment->processRequest($phone,$amount);
+        }else{
+            $checkoutid='success';
+        }
 
         $username = '';
         $password = '';
 
         if ($checkoutid!='failed!'){
-            sleep(30);
-
-            $status = $payment->querySTKPush($checkoutid);
+            if($amount && $amount!=0){
+                sleep(30);
+                $status = $payment->querySTKPush($checkoutid);
+            }else{
+                $status = "success";
+            }
 
             if($status == 'success'){
                 //read mpesa transaction details
@@ -233,17 +248,20 @@ class clientsController extends Controller
                 }
 
                 $c_username = Auth::guard('customer')->user()->username??false;
-                $cust_trans = new Payment();
 
-                $cust_trans->phonenumber = $phone;
-                $cust_trans->transactionid= 'N/A';
-                $cust_trans->packagebought=$package;
-                $cust_trans->username=$username;
-                $cust_trans->amount = $amount;
-                $cust_trans->username = $username;
-                $cust_trans->transactiondate= date("Y/m/d");
+                if($amount && $amount!=0){
+                    $cust_trans = new Payment();
 
-                $cust_trans->save();
+                    $cust_trans->phonenumber = $phone;
+                    $cust_trans->transactionid= 'N/A';
+                    $cust_trans->packagebought=$package;
+                    $cust_trans->username=$username;
+                    $cust_trans->amount = $amount;
+                    $cust_trans->username = $username;
+                    $cust_trans->transactiondate= date("Y/m/d");
+
+                    $cust_trans->save();
+                }
                 
                 $userexist = DB::table('customers')->where('username',$c_username)->first();
                 if ($userexist){
