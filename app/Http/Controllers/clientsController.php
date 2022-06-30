@@ -90,13 +90,13 @@ class clientsController extends Controller
         }else{
             if(Auth::guard('customer')->check()){
                 $userid = Auth::guard('customer')->user()->id;
-                $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
-                if($customer_has_accounts>0){
+                // $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
+                // if($customer_has_accounts>0){
                     return redirect()->route('customer.accounts.all',['username'=>$username,'packageid'=>$id]);                    
 
-                }else{
-                    alert()->error("Contact administrator for initial subscription");
-                    return redirect()->back();
+                // }else{
+                    // alert()->error("Contact administrator for initial subscription");
+                    // return redirect()->back();
                 }
             }else{
                 $cost =0;
