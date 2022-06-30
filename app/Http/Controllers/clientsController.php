@@ -819,6 +819,13 @@ class clientsController extends Controller
     public function getFreeAccess(Request $request,$id,$acc=null){
         $account = $acc;
         $thispackage = DB::table('packages')->where('id',$id)->first();
+
+        //check if user has freeaccess
+        $userexist = DB::table('radusergroup')->where([['username','=',$account],['groupname','=',$thispackage->packagename]])->count();
+        if($userexist>0){
+            alert()->error("You are already subscribed to this free package");
+            return redirect()->back();
+        }
         return view('clients.getfreepackage',compact('thispackage','account'));
     }
 
