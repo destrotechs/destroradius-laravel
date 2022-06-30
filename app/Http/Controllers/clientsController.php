@@ -334,7 +334,12 @@ class clientsController extends Controller
                 //send message on success
                 if($status == 'success'){
                     //send message here...
-                    $sent=true;
+                    $Message=str_replace("<br />","",nl2br("Dear ".ucwords(strtolower($username)). " You have successfully purchased".$package.". Your Access Code is ".$username.".";
+
+                    $sms = new Message();
+ 
+                    
+                    $sent = $sms->sendSMS($phone,$message);
 
                     if ($sent){
                         if($request->ajax()){
