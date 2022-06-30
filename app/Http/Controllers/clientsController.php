@@ -17,7 +17,13 @@ class clientsController extends Controller
     	return view('auth.clientsauth.login');
     }
     public function getBundles(Request $request){
-        $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->orderBy('priority', 'desc')->get();
+        if(Auth::guard('customer')->check()){
+            $type =  Auth::guard('customer')->user()->type;           
+            $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->where('packages.users',$type)->orderBy('priority', 'desc')->get();
+        }else{
+            $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->where('packages.users','hotspot')->orderBy('priority', 'desc')->get();
+
+        }
     	return view('clients.bundles',compact('packages'));
     }
 
@@ -108,7 +114,15 @@ class clientsController extends Controller
                 if ($thispackage->amount==0){
                     return view('clients.getfreepackage',compact('thispackage'));
                 }else{
-                    $packages=DB::table('packages')->get();
+                    if(Auth::guard('customer')->check()){
+                        $type = Auth::guard('customer')->user()->type;
+                        $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=',$type],['package_prices.amount','!=',0]])->get();
+
+                    }else{
+                        $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();
+
+                    }
+
                     return view('clients.buybundle',compact('packages'));
                 }
 
@@ -329,12 +343,14 @@ class clientsController extends Controller
 
                     }
                 }
-
+                if(isset(Auth::guard('customer')->user()->name)){
+                    $c_name = Auth::guard('customer')->user()->name;
+                }
                 $status = self::purchasePackage($username,$password,$package,$amount,$phone);
                 //send message on success
                 if($status == 'success'){
                     //send message here...
-                    $message=str_replace("<br />","",nl2br("Dear ".ucwords(strtolower($username))). " You have successfully purchased".$package.". Your Access Code is ".$username.".");
+                    $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME')))." Dear ".nl2br(ucwords(strtolower($c_name??$username)))). " You have successfully purchased ".$package.". Your Access Code is ".$username.".");
 
                     $sms = new Message();
  
@@ -345,14 +361,14 @@ class clientsController extends Controller
                         if($request->ajax()){
                             return "success";
                         }else{
-                            alert()->success("success");
+                            alert()->success("Activation successfull");
                             return redirect()->route('client.bundles');
                         }
                     }else{
                         if($request->ajax()){
                             return "error";
                         }else{
-                            alert()->error("Error");
+                            alert()->error("Error sendign message");
                             return redirect()->back();
                         }
                     }
@@ -851,7 +867,7 @@ class clientsController extends Controller
 
         }
         if($account){
-            $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->get();  
+            $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();  
 
             return view('clients.buybundle',compact('packages','account'));
         }else{

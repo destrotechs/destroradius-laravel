@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>DestroRadius</title>
+        <title>{{ env('APP_NAME') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
@@ -72,9 +72,9 @@
             <div class="content">
                <div class="px-4 py-5 my-5 text-center">
                   <img src="{{ asset('/images/u1.png') }}" class="rounded-circle" height="100" width="100">
-                  <h1 class="display-5 fw-bold">DestroRadius</h1>
+                  <h1 class="display-5 fw-bold">{{ env('APP_NAME') }}</h1>
                   <div class="col-lg-6 mx-auto">
-                    <p class="lead mb-4">Web Management Portal for <b>Freeradius</b>. Easily manage Radius Hotspot Customers using DestroRadius on the web interface.</p>
+                    <p class="lead mb-4">Web Management Portal for <b>Freeradius</b>. Easily manage Radius Hotspot Customers using {{ env('APP_NAME') }} on the web interface.</p>
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                       <a href="{{ route('login') }}" class="btn btn-primary btn-lg px-4 me-sm-3">Go To Admin Login</a>
                     </div>

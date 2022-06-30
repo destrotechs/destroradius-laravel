@@ -20,11 +20,14 @@
 
 			<center>
 				<label>Enter Phone to receive Access Code</label>
+				<div class="ml-5 mr-5 row col-md-4 col-sm-12">					
 				<input type="text" name="phone" class="form-control" placeholder="07....." value="{{Auth::guard('customer')->user()->phone??''}}"></center>
+				<hr>
 			<input type="hidden" name="account" value="{{$account??null}}">
 			<input type="hidden" name="package" value="{{$thispackage->packagename}}">
-			<center><button class="btn btn-success btn-md" type="submit">ACTIVATE</button></center>
+			<center><button class="btn btn-success btn-md pb-2" type="submit">ACTIVATE</button></center>
 			{{ csrf_field() }}
+			</div>
 		</form>
 	</div>
 </div>

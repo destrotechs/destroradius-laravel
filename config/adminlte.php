@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'DestroRadius',
+    'title' => env('APP_NAME'),
     'title_prefix' => '',
     'title_postfix' => '',
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     public static function sendSMS($phone,$message){
-          $MobileNumbers="254".substr($phone,1);
+        $MobileNumbers="254".substr($phone,1);
         //write sms sending logic here
          $response=null;
         $Message1=$message . " To STOP sms from BUL S.H.G *456*9*5#";
@@ -42,13 +42,12 @@ class Message extends Model
     
     $response = curl_exec($curl);
     // { "ErrorCode": 0, "ErrorDescription": "Success", "Data": [ { "MobileNumber": "7894561230", "MessageId": "fc103131-5931-4530-ba8e-aa223c769536" }, { "MobileNumber": "7894561231", "MessageId": "f893293d-d6ea-45e8-b543-40f0df28e0c9" } ] }
-    
     curl_close($curl);
         $res_array = json_decode($response,true);
 
-        $error_description = $res_array['ErrorDescription'];
+        $error_code = $res_array['ErrorCode'];
 
-        if($error_description=='Success'){ // find if message was sent
+        if($error_code==0){ // find if message was sent
             return true;
         }
         return false;

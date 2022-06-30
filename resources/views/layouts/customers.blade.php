@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>DestroRadius-Users</title>
+	<title>{{ env('APP_NAME') }}-Users</title>
 	<script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->

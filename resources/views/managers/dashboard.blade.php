@@ -12,7 +12,7 @@ Manager dashboard
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1 class="display-4">Welcome {{ Auth::user()->name }}</h1>
-    <p class="lead">Manage your zone customers easily with destroradius.</p>
+    <p class="lead">Manage your zone customers easily with {{ env('APP_NAME') }}.</p>
   </div>
 </div>
 @endsection

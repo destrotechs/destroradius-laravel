@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'DestroRadius'),
+    'name' => env('APP_NAME', 'Laravel-App'),
 
     /*
     |--------------------------------------------------------------------------

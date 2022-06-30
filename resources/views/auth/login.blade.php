@@ -73,7 +73,7 @@ background-image: linear-gradient(180deg, #2af598 0%, #009efd 100%);
             </div>
         </div>
         <div class="col-md-7">
-            <center><h1 class="text-white mt-5 display-3">DestroRadius</h1><small class="text-white display-5">Web management portal for freeradius</small>
+            <center><h1 class="text-white mt-5 display-3">{{ env('APP_NAME') }}</h1><small class="text-white display-5">Web management portal for freeradius</small>
                 <br><h2 class="text-white mt-5 display-3">ADMIN</h2></center>
         </div>
     </div>
