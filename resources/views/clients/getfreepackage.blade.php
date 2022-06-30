@@ -17,9 +17,7 @@
 					<small>GET FREE ACCESS FOR {{$thispackage->validdays }} {{$thispackage->durationmeasure}} (s)</small>
 				</center>
 			<br>
-			@if($account!=null)
 			<input type="hidden" name="account" value="{{$account??null}}">
-			@endif
 			<input type="hidden" name="package" value="{{$thispackage->packagename}}">
 			<center><button class="btn btn-success btn-md" type="submit">ACTIVATE</button></center>
 			{{ csrf_field() }}
