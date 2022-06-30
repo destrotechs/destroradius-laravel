@@ -16,7 +16,7 @@
          <br>
 
          @endforelse
-         <input type="hidden" name="packageid" value="{{packageid}}">
+         <input type="hidden" name="packageid" value="{{packageid??null}}">
 			<button type="submit" class="btn btn-success btn-large">NEXT</button>
 			@csrf
 		</form>
