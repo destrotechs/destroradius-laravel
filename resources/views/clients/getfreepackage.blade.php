@@ -11,6 +11,7 @@
 <div class="card">
 	<div class="card-body">
 		<form action="{{ route('buybundle.post') }} " method="post">
+			<hr>
 			<div id="err"></div>
 				<center>
 					<div class="display-5">{{$thispackage->packagename}}</div>
