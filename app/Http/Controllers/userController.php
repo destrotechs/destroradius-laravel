@@ -11,6 +11,7 @@ use App\Zone;
 use DB;
 use Auth;
 use Hash;
+use PDF;
 use App\Helpers\CustomerHelper;
 class userController extends Controller
 {
@@ -1100,6 +1101,18 @@ class userController extends Controller
             alert()->success("Changes applied successfully");
             return redirect()->back();
         }
+    }
+    public function customerformpdf(Request $request,$account_no=100){
+        // return PDF::loadFile(public_path().'/templates/invoice.html')->save(public_path().'/docs/my_stored_file.pdf')->stream('download.pdf');
+        $account = $account_no;
+        $account_info = DB::table('customer_accounts')->where('account_no',$account)->first();
+        $owner_info = DB::table('customers')->where('username',$account_info->owner)->first();
+        $service_info = DB::table('packages')->where('packagename',$account_info->package_name)->first();
+        $account_items = DB::table('item_allocations')->join('items','items.id','=','item_allocations.item_id')->where('account_no',$account)->get();
+        
+        $pdf = PDF::loadView('services.customer_form',compact('account','owner_info','service_info','account_items','account_info'));
+        return $pdf->stream('customer_form.pdf');
+        return view('services.customer_form');
     }
 
 }

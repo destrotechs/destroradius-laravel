@@ -72,6 +72,9 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::get('/settings/system','settingsController@getIndex')->name('settings.index');
 	Route::get('/settings/commission','settingsController@getManagerCommission')->name('settings.managerrates');
 	Route::get('/zones/new','zonesController@newZone')->name('zone.new');
+	
+	Route::get('/company/details','HomeController@getCompanyDetails')->name('company.details');
+	Route::post('/company/details','HomeController@postCompanyDetails')->name('company.details.post');
 
 	Route::get('/zones/transfer/{id}','zonesController@transferZone')->name('zone.transfer');
 
@@ -189,7 +192,8 @@ Route::get('/payments/option','paymentsController@selectPayOption')->name('pay.o
 Route::get('/accounting/user','accountingController@getUserAccounting')->name('user.accounting');
 Route::get('/accounting/nas','accountingController@getNasAccounting')->name('nas.accounting');
 Route::get('/accounting/ip','accountingController@getIpAccounting')->name('ip.accounting');
-Route::get('/invpoice/doc','salesController@invoicepdf')->name('invoice.doc');
+Route::get('/invoice/doc','salesController@invoicepdf')->name('invoice.doc');
+Route::get('/customer_form/doc/{account_no}','userController@customerformpdf')->name('customer_form.doc');
 
 Route::post('/accounting/user/get','accountingController@returnUserAccounting')->name('getuseraccountingdetails');
 

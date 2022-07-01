@@ -20,6 +20,7 @@ class CustomerAccounts extends Migration
             $table->string('account_no')->unique();
             $table->string('access_code')->nullable();
             $table->string('address')->nullable();
+            $table->string('ipaddress')->nullable();
             $table->string('building')->nullable();
             $table->string('town')->nullable();
             $table->string('coordinates')->nullable();

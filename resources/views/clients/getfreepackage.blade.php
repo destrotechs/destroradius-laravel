@@ -22,7 +22,7 @@
 			<center>
 				<label>Enter Phone to receive Access Code</label>
 				<div class="ml-5 mr-5 row col-md-4 col-sm-12">					
-				<input type="text" name="phone" class="form-control" placeholder="07....." value="{{Auth::guard('customer')->user()->phone??''}}"></center>
+				<input type="text" required name="phone" class="form-control phn" placeholder="07....." value="{{Auth::guard('customer')->user()->phone??''}}"></center>
 				<hr>
 			<input type="hidden" name="account" value="{{$account??null}}">
 			<input type="hidden" name="package" value="{{$thispackage->packagename}}">
@@ -37,8 +37,18 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(".act").click(function(){
-			$(this).addAttr('disabled','disabled');
+			var phone = $(".phn").val();
+			if(phone!=""){
+				setTimeout(function(){
+					$(".act").attr('disabled','disabled');
+				},2000);
+
+			}
+			
 		})
+		setTimeout(function(){
+				$(".act").removeAttr('disabled');
+			},10000);
 	})
 </script>
 @endsection

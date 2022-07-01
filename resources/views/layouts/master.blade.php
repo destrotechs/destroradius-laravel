@@ -382,9 +382,9 @@
               
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{{ route('company.details') }}" class="nav-link">
                 <i class="fas fa-user"></i>
-                <span class="nav-link-text">Account types</span>
+                <span class="nav-link-text">Company Details</span>
               </a>
             </li>
 

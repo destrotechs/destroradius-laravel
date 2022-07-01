@@ -23,6 +23,8 @@ class ItemAllocation extends Migration
             $table->string('quantity_returned')->nullable();
             $table->string('purpose')->nullable();
             $table->string('status')->nullable();
+            $table->string('serial_number')->nullable();
+            $table->string('model_number')->nullable();
             $table->date('allocation_date')->nullable();
             $table->date('return_date')->nullable();
             $table->date('date_returned')->nullable();

@@ -225,6 +225,8 @@ class clientsController extends Controller
         $package = $request->get('package');
         $amount = $request->get('amount');
         $phone = $request->get('phone');
+
+
         if($amount && $amount!=0){
 
             $payment = new Mpesa();
@@ -235,6 +237,12 @@ class clientsController extends Controller
 
             $checkoutid = $payment->processRequest($phone,$amount);
         }else{
+        //check phone if already saved
+            $phone_activated = DB::table('free_account_details')->where([['phone','=',$phone]])->get();
+            if(count($phone_activated)>0){
+                alert()->error("You have already subscribed to the free package");
+                return redirect()->back();
+            }
             $checkoutid='success';
         }
 
@@ -279,6 +287,10 @@ class clientsController extends Controller
                     $cust_trans->transactiondate= date("Y/m/d");
 
                     $cust_trans->save();
+                }else{
+                    $freedetails = DB::table('free_account_details')->insert(
+                        ['account_no'=>$username,'phone'=>$phone,'owner'=>$c_username??'']
+                    );
                 }
                 
                 $userexist = DB::table('customers')->where('username',$c_username)->first();

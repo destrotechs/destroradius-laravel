@@ -133,7 +133,9 @@ User Information
                                     @else
                                     <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal8">Activate</a>
                                     @endif
-                                    <a href="#" class="btn btn-sm btn-success"><i class="fas fa-download"></i>&nbsp;Business Form</a>
+                                    {{-- @if($usertype!='hotspot') --}}
+                                    <a href="{{ route('customer_form.doc',['account_no'=>$c->account_no]) }}" target="_blank" class="btn btn-sm btn-success"><i class="fas fa-download"></i>&nbsp;Business Form</a>
+                                    {{-- @endif --}}
                                     <a href="{{ route('edit.customer.account',['acc'=>$c->account_no]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                                 </td>
@@ -241,49 +243,6 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 	</div>
 </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h5 class="modal-title" id="exampleModalLabel">Change User Package</h5>
-		  <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-		</div>
-		<div class="modal-body">
-            <form id="changepackage">
-                <label>Account</label>
-                <select name="account_no" class="form-control usac" id="acount_no">
-                    <option value="">Choose customer account ...</option>
-                    @forelse($customer_accounts as $ac)
-                    <option value="{{ $ac->account_no }}">{{ $ac->account_no }}</option>
-                    @empty
-                    <option value="">No accounts available</option>
-                    @endforelse
-                </select>
-                <label>Package</label>
-                <select class="form-control" name="package" id="package">
-                    <option value="">Choose New Package</option>
-                    <option value="nopackage">Non-regulated (no package)</option>
-                    @forelse($packages as $p)
-                        <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
-
-                    @empty
-
-                    <option value="">No package is available</option>
-                    @endforelse
-                    <input type="hidden" id="username" name="username" value="<?php echo $username;?>">
-                </select>
-
-		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		  <button type="submit" class="btn btn-primary">Save changes</button>
-		</div>
-        @csrf
-    </form>
-	  </div>
-	</div>
-  </div>
   <!-- Modal 6-->
   <div class="modal fade" id="exampleModal6" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

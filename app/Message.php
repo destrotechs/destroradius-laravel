@@ -46,6 +46,7 @@ class Message extends Model
     $response = curl_exec($curl);
     // { "ErrorCode": 0, "ErrorDescription": "Success", "Data": [ { "MobileNumber": "7894561230", "MessageId": "fc103131-5931-4530-ba8e-aa223c769536" }, { "MobileNumber": "7894561231", "MessageId": "f893293d-d6ea-45e8-b543-40f0df28e0c9" } ] }
     curl_close($curl);
+    dd($response);
         $res_array = json_decode($response,true);
 
         $error_code = $res_array['ErrorCode'];
