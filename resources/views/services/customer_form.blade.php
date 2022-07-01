@@ -279,9 +279,9 @@
 		</tr>
 		<tr>
 			<td><b>TX SIGNAL</b></td>
-			<td>{{$service_info->uploadspeed?($service_info->uploadspeed/(1024*1024)):''}} Mbps</td>
+			<td>{{isset($service_info->uploadspeed)?($service_info->uploadspeed/(1024*1024)):''}} Mbps</td>
 			<td><b>RX SIGNAL</b></td>
-			<td>{{$service_info->downloadspeed?($service_info->downloadspeed/(1024*1024)):''}} Mbps</td>
+			<td>{{isset($service_info->downloadspeed)?($service_info->downloadspeed/(1024*1024)):''}} Mbps</td>
 		</tr>
 		<tr>
 			<td><b>EXTRA IPs</b></td>
