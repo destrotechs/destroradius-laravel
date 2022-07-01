@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Log;
 use DB;
+use App\Message;
 use Illuminate\Http\Request;
 // use App\Charts\SalesChart;
 
@@ -58,5 +59,10 @@ class HomeController extends Controller
             alert()->error("There was an error updating company details");
             return redirect()->back();
         }
+    }
+    public function getSMSBalance(Request $request){
+        $message = new Message;
+        $balance = $message->smsBalance();
+        return $balance;
     }
 }

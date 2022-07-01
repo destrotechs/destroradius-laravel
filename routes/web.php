@@ -74,6 +74,7 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::get('/zones/new','zonesController@newZone')->name('zone.new');
 	
 	Route::get('/company/details','HomeController@getCompanyDetails')->name('company.details');
+	Route::get('/sms/balance','HomeController@getSMSBalance')->name('sms.balance');
 	Route::post('/company/details','HomeController@postCompanyDetails')->name('company.details.post');
 
 	Route::get('/zones/transfer/{id}','zonesController@transferZone')->name('zone.transfer');

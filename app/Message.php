@@ -46,7 +46,7 @@ class Message extends Model
     $response = curl_exec($curl);
     // { "ErrorCode": 0, "ErrorDescription": "Success", "Data": [ { "MobileNumber": "7894561230", "MessageId": "fc103131-5931-4530-ba8e-aa223c769536" }, { "MobileNumber": "7894561231", "MessageId": "f893293d-d6ea-45e8-b543-40f0df28e0c9" } ] }
     curl_close($curl);
-    dd($response);
+    
         $res_array = json_decode($response,true);
 
         $error_code = $res_array['ErrorCode'];
@@ -55,5 +55,32 @@ class Message extends Model
             return true;
         }
         return false;
+    }
+
+    public static function smsBalance(){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://api.onfonmedia.co.ke/v1/sms/Balance?ApiKey=+YVA7mZV/OaPoNjThgeKJK1BBOySDFhdrT4XqHh13jY=&ClientId=91e87d9a-7e43-46e1-8adf-73f1490edcd2',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'GET',
+          CURLOPT_HTTPHEADER => array(
+            'AccessKey: aTLVmWasvnIkCwp2GtzmnKbUJGUU4qLV',
+            'Content-Type: application/json',
+            ),
+        ));
+        
+        $response = curl_exec($curl);
+        //{"ErrorCode":0,"ErrorDescription":"Success","Data":[{"PluginType":"SMS","Credits":"KSh74.0000"}]}     KSh74.0000"}]}
+        curl_close($curl);
+       $balance= stristr($response,"KSh");
+       $balance= str_replace("KSh","",$balance);
+       $balance=str_replace('"'."}]}","",$balance);
+       return number_format(floatval($balance),2);
+       
     }
 }

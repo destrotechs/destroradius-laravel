@@ -42,8 +42,8 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                      <span class="h2 font-weight-bold mb-0">{{$total_users}}</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">SMS balance</h5>
+                      <span class="h2 font-weight-bold mb-0 smsb"></span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -172,14 +172,27 @@
     }, 60000);
   </script>
 
-   {{-- <script>
-        const chart = new Chartisan({
-            el: '#chart',
-            url: "@chart('my_chart')",
-            hooks: new ChartisanHooks()
-             .colors(['#4299E1','#FE0045','#C07EF1','#67C560','#ECC94B'])
-                .datasets('bar')
-                .axis(true)
-        });
-    </script> --}}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      getBalance();
+
+      setInterval(function(){
+        getBalance();
+      },5000);
+
+      function getBalance(){
+        $.ajax({
+          method:'GET',
+          url:"{{ route('sms.balance') }}",
+          success:function(balance){
+            if(balance){
+              $(".smsb").empty().html(balance);
+            }else{
+              $(".smsb").html("Loading...");
+            }
+          }
+        })
+      }
+    })
+  </script>
 @stop
