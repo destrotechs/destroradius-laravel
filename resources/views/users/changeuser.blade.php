@@ -133,9 +133,9 @@ User Information
                                     @else
                                     <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal8">Activate</a>
                                     @endif
-                                    {{-- @if($usertype!='hotspot') --}}
+                                    @if($usertype!='hotspot')
                                     <a href="{{ route('customer_form.doc',['account_no'=>$c->account_no]) }}" target="_blank" class="btn btn-sm btn-success"><i class="fas fa-download"></i>&nbsp;Business Form</a>
-                                    {{-- @endif --}}
+                                    @endif
                                     <a href="{{ route('edit.customer.account',['acc'=>$c->account_no]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                                 </td>
