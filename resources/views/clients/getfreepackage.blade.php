@@ -25,10 +25,19 @@
 				<hr>
 			<input type="hidden" name="account" value="{{$account??null}}">
 			<input type="hidden" name="package" value="{{$thispackage->packagename}}">
-			<center><button class="btn btn-success btn-md pb-2" type="submit">ACTIVATE</button></center>
+			<center><button class="btn btn-success btn-md pb-2 act" type="submit">ACTIVATE</button></center>
 			{{ csrf_field() }}
 			</div>
 		</form>
 	</div>
 </div>
+@endsection
+@section('js')
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".act").click(function(){
+			$(this).addAttr('disabled','disabled');
+		})
+	})
+</script>
 @endsection
