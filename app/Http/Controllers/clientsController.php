@@ -113,7 +113,14 @@ class clientsController extends Controller
                 $thispackage = $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where('packages.id','=',$id)->first();
 
                 if ($thispackage->amount==0){
-                    return view('clients.getfreepackage',compact('thispackage'));
+                    if(Auth::guard()->check()){
+                        $account = $username = Auth::guard('customer')->user()->username;
+                        return view('clients.getfreepackage',compact('thispackage','account'));
+                    }else{
+                        alert()->warning("You need to create an account in order to get the free access");
+                        return redirect()->route('get.customer.register');
+                    }
+                    // return view('clients.getfreepackage',compact('thispackage'));
                 }else{
                     if(Auth::guard('customer')->check()){
                         $type = Auth::guard('customer')->user()->type;
@@ -903,7 +910,13 @@ class clientsController extends Controller
             alert()->error("You are already subscribed to this free package");
             return redirect()->route('client.bundles');
         }
-        return view('clients.getfreepackage',compact('thispackage','account'));
+        if(Auth::guard()->check()){
+
+            return view('clients.getfreepackage',compact('thispackage','account'));
+        }else{
+            alert()->warning("You need to create an account in order to get the free access");
+            return redirect()->route('get.customer.register');
+        }
     }
 
     public function getSuspendAccount(){

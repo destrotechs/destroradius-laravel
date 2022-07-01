@@ -21,7 +21,7 @@
                         $load = sys_getloadavg();
                        
                       ?>
-                        <div class="progress" style="height: 30px;">
+                        <div class="progress" style="height: 14px;">
                           <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 25%;" aria-valuenow="{{ $load[0] }}" aria-valuemin="0" aria-valuemax="100">{{ $load[0] }}%</div>
                         </div>
                        </span>
@@ -178,7 +178,7 @@
 
       setInterval(function(){
         getBalance();
-      },5000);
+      },30000);
 
       function getBalance(){
         $.ajax({
