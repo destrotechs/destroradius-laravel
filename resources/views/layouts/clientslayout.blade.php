@@ -107,7 +107,7 @@
             <li><a class="dropdown-item" href="{{route('user.get.cleanstale')}}"><i class="fas fa-cross"></i> Can't Access Internet</a></li>
             <div class="dropdown-divider"></div>
             <li><a class="dropdown-item" href="{{route('user.changephone')}}"><i class="fas fa-phone"></i> Change Phone</a></li>
-            @if(isset(Auth::guard('customer')->user()->username))
+            @if(isset(Auth::guard('customer')->user()->username) && Auth::guard('customer')->user()->type!='hotspot')
             <li><a class="dropdown-item btn btn-danger btn-sm p-2 activate" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-success"></i> Activate Connection</a></li>
             
             <li><a class="dropdown-item btn btn-danger btn-sm p-2" href="#" id="{{ Auth::guard('customer')->user()->username }}" data-toggle="modal" data-target="#exampleModal6"><i class="fas fa-wifi text-danger"></i> Suspend Connection</a></li>
