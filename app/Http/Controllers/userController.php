@@ -250,7 +250,7 @@ class userController extends Controller
                     $totaldownload=DB::table('radacct')->where('username','=',$o->username)->sum('AcctInputOctets');
                     $totalupload=DB::table('radacct')->where('username','=',$o->username)->sum('AcctOutputOctets');
                     $output.="<tr>";
-                    $output.="<td>".$num."</td><td>".$o->username."</td><td>".$o->acctstarttime."</td><td>".$o->framedipaddress."</td><td>".$o->nasipaddress."</td><td>".$totaldownload."</td><td>".$totalupload."</td>";
+                    $output.="<td>".$num."</td><td>".$o->username."</td><td>".$o->acctstarttime."</td><td>".$o->framedipaddress."</td><td>".$o->nasipaddress."</td><td>".round($totaldownload/(1024*1024),2)."MBs</td><td>".round($totalupload/(1024*1024),2)." MBs</td>";
                     $output.="</tr>";
                 }
                 echo $output;
