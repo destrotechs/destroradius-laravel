@@ -79,7 +79,7 @@ New Tickets
 					$(".warn").html("You have not priced the selected package, please go to package pricing if its not free. <a class='text-primary' href='{{ route('package.price') }}'>package pricing</a>").addClass("alert alert-warning");
 				}else{
 					$(".warn").empty().removeClass("alert alert-warning");
-					cost=data;
+					cost=data[0];
 				}
 
 			})
@@ -112,9 +112,9 @@ New Tickets
 			if(num!="" && num!=NaN){
 				for (var i=0;i<num;i++){
 					var username=generateUsername();
-					var password=generatePassword();
+					var password=username;
 					var serialnumber=generateSerialNum();
-					var ticket='<div class="card m-1"><div class="card-header"><h5>Ticket '+parseInt(i+1)+'</h5></div><div class="card-body"><ul class="list-group list-group-flush"><li class="list-group-item">Username : '+username+'</li><li class="list-group-item">Password : '+password+'</li><li class="list-group-item">Serial Number: '+serialnumber+'</li></ul><input name="username[]" type="hidden" value="'+username+'"><input name="password[]" type="hidden" value="'+password+'"><input name="cost[]" type="hidden" value="'+cost+'"><input name="serialnumber[]" type="hidden" value="'+serialnumber+'"><input name="plan[]" type="hidden" value="'+package+'"></div></div>';
+					var ticket='<div class="card m-1"><div class="card-header"><h5>Ticket '+parseInt(i+1)+'</h5></div><div class="card-body"><ul class="list-group list-group-flush"><li class="list-group-item">Access Code : '+username+'</li><li class="list-group-item d-none">Password : '+password+'</li><li class="list-group-item">Serial Number: '+serialnumber+'</li></ul><input name="username[]" type="hidden" value="'+username+'"><input name="password[]" type="hidden" value="'+password+'"><input name="cost[]" type="hidden" value="'+cost+'"><input name="serialnumber[]" type="hidden" value="'+serialnumber+'"><input name="plan[]" type="hidden" value="'+package+'"></div></div>';
 					$(".tickets").append(ticket);
 					$(".sub").show();
 					$("#print1").show();
@@ -127,7 +127,7 @@ New Tickets
 		}
 		function generateUsername(){
 			var text = "";
-			var possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjklmnpqrstuvwxyz23456789";
+			var possible = "0123456789";
 
 		  	for (var i = 0; i < 6; i++)
 		    text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -136,7 +136,7 @@ New Tickets
 		}
 		function generatePassword(){
 			var text = "";
-			var possible = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+			var possible = "0123456789";
 
 		  	for (var i = 0; i < 5; i++)
 		    text += possible.charAt(Math.floor(Math.random() * possible.length));
