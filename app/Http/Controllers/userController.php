@@ -1055,8 +1055,18 @@ class userController extends Controller
         }else{
             $customerishotspot = DB::table('customers')->where('username',$request->owner)->first();
             if($customerishotspot->type=='hotspot'){
-                alert()->error("An hotspot user cannot have multiple accounts!");
-                return redirect()->back(); 
+                $accounts = DB::table('customer_accounts')->where('owner',$request->owner)->count();
+                if($accounts>0){
+                    alert()->error("An hotspot user cannot have multiple accounts!");
+                    return redirect()->back(); 
+                }else{
+                    //create new account for hotsport user
+                    $newaccount = DB::table('customer_accounts')->insert([
+                        'owner'=>$request->owner,'account_no'=>$request->owner,'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package')
+                    ]);
+                    alert()->success("A new hotspot account has been added successfully!");
+                    return redirect()->back(); 
+                }
             }else{
                $account = DB::table('customer_accounts')->insert(
                 ['owner'=>$request->get('owner'),'account_name'=>$request->get('account_name'),'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package')]

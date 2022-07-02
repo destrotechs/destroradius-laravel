@@ -885,7 +885,12 @@ class clientsController extends Controller
         }
         if($account){
             $today = date("Y-m-d");
-            $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();  
+            if(Auth::guard('customer')->check()){
+                $type = Auth::guard('customer')->user()->type;
+                $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=',$type],['package_prices.amount','!=',0]])->get();  
+            }else{
+                $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();  
+            }
 
             return view('clients.buybundle',compact('packages','account'));
         }else{

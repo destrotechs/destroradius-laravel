@@ -31,13 +31,13 @@ Pay Via Mpesa
     
 </div>
         <div class="card mn">
-            <div class="dropdown-divider mt-2"></div>
+            <div class="card-header">Paying for account <b>{{ $account??''}}</b>, Please select Package Here</div>
             <div class="card-body row">
                 <div class="col-md-4 mt-5">
                 <img height="250" width="250" src="{{ asset('images/mp.png') }}" class="rounded-circle">
                 <center><h3 class="text-bold amount"></h3></center>
                 </div>
-                <div class="col-md-8 border p-3 br-2">
+                <div class="col-md-8 border p-3">
                 <form>
                     <label>Package</label>
                     <select class="form-control" required name="package" id="package">
