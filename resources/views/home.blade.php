@@ -18,7 +18,8 @@
                       <h5 class="card-title text-uppercase text-muted mb-0">CPU traffic</h5>
                       <span class="h2 font-weight-bold mb-0">
                          <?php
-                        $load = sys_getloadavg();
+                        // $load = sys_getloadavg();
+                        $load = [0];
                        
                       ?>
                         <div class="progress" style="height: 14px;">

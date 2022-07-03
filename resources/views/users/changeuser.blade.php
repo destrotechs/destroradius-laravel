@@ -651,14 +651,16 @@ $(document).ready(function(){
             var type = $(this).val();
             if(type=='hotspot'){
                 var account = $("#ownerf").val();
-                $(".num").val(account).addAttr('disabled');
+                $(".num").val(account).attr('disabled','disabled');
             }else{
                 $(".num").val("")
+                $(".num").val(account).removeAttr('disabled')
             }
         })
 
         function generateNumber(){
-            return Math.floor((Math.random() * 10000) + 1);
+            var account_no = Math.floor((Math.random() * 1000000) + 1);
+            return "P"+account_no+"E";  
         }
 })
 </script>

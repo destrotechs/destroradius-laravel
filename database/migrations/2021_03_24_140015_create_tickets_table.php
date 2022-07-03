@@ -22,7 +22,7 @@ class CreateTicketsTable extends Migration
             $table->string('status',100)->default('closed');
             $table->string('package')->notNull();
             $table->string('serialnumber')->nullable();
-            $table->double('cost',(6,2))->notNull();
+            $table->double('cost',6)->notNull();
             $table->string ('type')->nullable();
             $table->string('password')->nullable();
             $table->string('subject')->nullable();
