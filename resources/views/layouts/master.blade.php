@@ -46,27 +46,92 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                <i class="ni ni-ungroup text-orange"></i>
-                <span class="nav-link-text">Managers</span>
+              <a class="nav-link" href="#network" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
+                <i class="fas fa-wifi text-orange"></i>
+                <span class="nav-link-text">&nbsp;Zones</span>
               </a>
-              <div class="collapse" id="navbar-examples">
+              <div class="collapse p-2" id="network">
                 <ul class="nav nav-sm flex-column">
+                  @if(Auth::user()->role_id==1)
                   <li class="nav-item">
-                    <a href="{{ route('manager.new.get') }}" class="nav-link">
-                      <span class="fas fa-plus"></span>&nbsp;
-                      <span class="sidenav-normal"> New Manager </span>
+                    <a href="{{route('zone.new')}}" class="nav-link">
+                      <span class="fas fa-plus-circle"></span>&nbsp;
+                      <span class="sidenav-normal">New zone/zone manager </span>
                     </a>
                   </li>
+                  @endif
                   <li class="nav-item">
-                    <a href="{{ route('managers.all') }}" class="nav-link">
+                    <a href="{{route('zone.all')}}" class="nav-link">
                       <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> All Managers </span>
+                      <span class="sidenav-normal"> view zones </span>
                     </a>
                   </li>
                 </ul>
               </div>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#nas" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
+                <i class="fas fa-globe text-orange"></i>
+                <span class="nav-link-text">&nbsp;Nas</span>
+              </a>
+              <div class="collapse p-2" id="nas">
+                <ul class="nav nav-sm flex-column">
+                  @if(Auth::user()->role_id==1)
+                  <li class="nav-item">
+                    <a href="{{route('nas.new')}}" class="nav-link">
+                      <span class="fas fa-plus-circle"></span>&nbsp;
+                      <span class="sidenav-normal"> New nas </span>
+                    </a>
+                  </li>
+                  @endif
+                  <li class="nav-item">
+                    <a href="{{route('nas.view')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> View nas </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('nas.accounting')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> Nas Traffic </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#packages" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
+                <i class="fas fa-receipt text-orange"></i>
+                <span class="nav-link-text">&nbsp;Packages</span>
+              </a>
+              <div class="collapse p-2" id="packages">
+                <ul class="nav nav-sm flex-column">
+                  @if(Auth::user()->role_id==1)
+                  <li class="nav-item">
+                    <a href="{{route('packages.new')}}" class="nav-link">
+                      <span class="fas fa-plus-circle"></span>&nbsp;
+                      <span class="sidenav-normal"> New package </span>
+                    </a>
+                  </li>
+                  @endif
+                  <li class="nav-item">
+                    <a href="{{route('packages.all')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> view packages </span>
+                    </a>
+                  </li>
+                  @if(Auth::user()->role_id==1)
+                  <li class="nav-item">
+                    <a href="{{route('package.price')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> package pricing</span>
+                    </a>
+                  </li>
+                  @endif
+                </ul>
+              </div>
+            </li>
+            
             <li class="nav-item">
               <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
                 <i class="fas fa-users text-orange"></i>
@@ -125,89 +190,28 @@
                 </ul>
               </div>
             </li>
+            
+            
+            
             <li class="nav-item">
-              <a class="nav-link" href="#nas" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                <i class="fas fa-globe text-orange"></i>
-                <span class="nav-link-text">&nbsp;Nas</span>
+              <a class="nav-link" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
+                <i class="ni ni-ungroup text-orange"></i>
+                <span class="nav-link-text">Managers</span>
               </a>
-              <div class="collapse p-2" id="nas">
+              <div class="collapse" id="navbar-examples">
                 <ul class="nav nav-sm flex-column">
-                  @if(Auth::user()->role_id==1)
                   <li class="nav-item">
-                    <a href="{{route('nas.new')}}" class="nav-link">
-                      <span class="fas fa-plus-circle"></span>&nbsp;
-                      <span class="sidenav-normal"> New nas </span>
+                    <a href="{{ route('manager.new.get') }}" class="nav-link">
+                      <span class="fas fa-plus"></span>&nbsp;
+                      <span class="sidenav-normal"> New Manager </span>
                     </a>
                   </li>
-                  @endif
                   <li class="nav-item">
-                    <a href="{{route('nas.view')}}" class="nav-link">
+                    <a href="{{ route('managers.all') }}" class="nav-link">
                       <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> View nas </span>
+                      <span class="sidenav-normal"> All Managers </span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="{{route('nas.accounting')}}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> Nas Traffic </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#network" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                <i class="fas fa-wifi text-orange"></i>
-                <span class="nav-link-text">&nbsp;Zones</span>
-              </a>
-              <div class="collapse p-2" id="network">
-                <ul class="nav nav-sm flex-column">
-                  @if(Auth::user()->role_id==1)
-                  <li class="nav-item">
-                    <a href="{{route('zone.new')}}" class="nav-link">
-                      <span class="fas fa-plus-circle"></span>&nbsp;
-                      <span class="sidenav-normal">New zone/zone manager </span>
-                    </a>
-                  </li>
-                  @endif
-                  <li class="nav-item">
-                    <a href="{{route('zone.all')}}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> view zones </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#packages" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                <i class="fas fa-receipt text-orange"></i>
-                <span class="nav-link-text">&nbsp;Packages</span>
-              </a>
-              <div class="collapse p-2" id="packages">
-                <ul class="nav nav-sm flex-column">
-                  @if(Auth::user()->role_id==1)
-                  <li class="nav-item">
-                    <a href="{{route('packages.new')}}" class="nav-link">
-                      <span class="fas fa-plus-circle"></span>&nbsp;
-                      <span class="sidenav-normal"> New package </span>
-                    </a>
-                  </li>
-                  @endif
-                  <li class="nav-item">
-                    <a href="{{route('packages.all')}}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> view packages </span>
-                    </a>
-                  </li>
-                  @if(Auth::user()->role_id==1)
-                  <li class="nav-item">
-                    <a href="{{route('package.price')}}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> package pricing</span>
-                    </a>
-                  </li>
-                  @endif
                 </ul>
               </div>
             </li>
