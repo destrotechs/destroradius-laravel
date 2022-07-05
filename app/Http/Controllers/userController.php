@@ -1062,7 +1062,7 @@ class userController extends Controller
                 }else{
                     //create new account for hotsport user
                     $newaccount = DB::table('customer_accounts')->insert([
-                        'owner'=>$request->owner,'account_no'=>$request->owner,'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package')
+                        'owner'=>$request->owner,'account_no'=>$request->owner,'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package'),'account_name'=>$request->get('account_name')
                     ]);
                     alert()->success("A new hotspot account has been added successfully!");
                     return redirect()->back(); 

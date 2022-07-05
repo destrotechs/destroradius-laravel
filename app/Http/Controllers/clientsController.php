@@ -251,7 +251,7 @@ class clientsController extends Controller
 
         if ($checkoutid!='failed!'){
             if($amount && $amount!=0){
-                sleep(30);
+                sleep(30);//wait for user to enter MPESA pin and check if the transaction has completed
                 $status = $payment->querySTKPush($checkoutid);
             }else{
                 $status = "success";
@@ -320,7 +320,7 @@ class clientsController extends Controller
                                   
                                 }else{
                                     //hold funds
-                        $available_funds = DB::table('customer_funds')->where([['username','=',$username]])->first();
+                                    $available_funds = DB::table('customer_funds')->where([['username','=',$username]])->first();
 
                                     $held_funds = DB::table('customer_funds')->updateOrInsert([
                                         'username'=>$username],['available_funds'=>(floatval($amount)+floatval($available_funds->available_funds??0)),'added_on'=>date("Y/m/d")

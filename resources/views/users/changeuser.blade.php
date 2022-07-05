@@ -109,6 +109,7 @@ User Information
                         <table class="table table-sm">
                             <tr>
                                 <th>#</th>
+                                <th>Account Name</th>
                                 <th>Account Code</th>
                                 <th>Package</th>
                                 <th>Status</th>
@@ -117,6 +118,7 @@ User Information
                             @foreach($customer_accounts as $k=>$c)
                             <tr>
                                 <td>{{ $k+1 }}</td>
+                                <td>{{ $c->account_name }}</td>
                                 <td>{{ $c->account_no }}</td>
                                 <td>{{ $c->package_name }}</td>
                                 <td>
@@ -456,6 +458,8 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                 <option value="">No Packages available</option>
                 @endforelse
             </select>
+            <label>Account Name</label>
+            <input name="account_name" type="text" class="form-control" placeholder="Account Name" required>
             <label>Account No</label>
             <input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
             <hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
