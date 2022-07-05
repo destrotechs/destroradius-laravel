@@ -139,16 +139,17 @@
               </a>
               <div class="collapse p-2" id="users">
                 <ul class="nav nav-sm flex-column">
-                  <li class="nav-item">
-                    <a href="{{route('user.new')}}" class="nav-link">
-                      <span class="fas fa-plus-circle"></span>&nbsp;
-                      <span class="sidenav-normal"> New User </span>
-                    </a>
-                  </li>
+                  
                   <li class="nav-item">
                     <a href="{{ route('user.all')}}" class="nav-link">
                       <span class="fas fa-users"></span>&nbsp;
                       <span class="sidenav-normal"> All users </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('user.new')}}" class="nav-link">
+                      <span class="fas fa-plus-circle"></span>&nbsp;
+                      <span class="sidenav-normal"> New User </span>
                     </a>
                   </li>
                   <li class="nav-item">

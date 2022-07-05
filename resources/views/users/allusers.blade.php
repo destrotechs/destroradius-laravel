@@ -1,4 +1,11 @@
 @extends('layouts.master')
+@section('buttons')
+@if(Auth::user()->role_id==1)
+<div class="col-lg-6 text-right">
+  <a href="{{route('user.new')}}" class="btn btn-sm btn-white"><i class="fas fa-plus-circle"></i> New User</a>
+</div>
+@endif
+@endsection
 @section('content_header')
     All Users
 @endsection
