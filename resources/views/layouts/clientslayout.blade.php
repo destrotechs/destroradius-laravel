@@ -154,7 +154,7 @@
               <select name="username" required class="form-control">
                 <option value="">select ...</option>
                 @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
-                <option value="{{ $p->account_no }}">{{ $p->account_no }}</option>
+                <option value="{{ $p->account_no }}">{{ $p->account_name }}</option>
                 @empty
                 <option value="">No Accounts available</option>
                 @endforelse
@@ -194,7 +194,7 @@
             <select name="username" required class="form-control">
                 <option value="">select ...</option>
                 @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
-                <option value="{{ $p->account_no }}">{{ $p->account_no }}</option>
+                <option value="{{ $p->account_no }}">{{ $p->account_name }}</option>
                 @empty
                 <option value="">No Accounts available</option>
                 @endforelse

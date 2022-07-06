@@ -251,7 +251,7 @@ class clientsController extends Controller
         $password = '';
 
         if ($checkoutid!='failed!'){
-            if($amount && $amount!=0){
+            if(isset($amount) && $amount!=0){
                 sleep(30);//wait for user to enter MPESA pin and check if the transaction has completed
                 $status = $payment->querySTKPush($checkoutid);
             }else{
@@ -276,7 +276,7 @@ class clientsController extends Controller
 
                 $c_username = Auth::guard('customer')->user()->username??false;
 
-                if($amount && $amount!=0){
+                if(isset($amount) && $amount!=0){
                     $cust_trans = new Payment();
 
                     $cust_trans->phonenumber = $phone;
@@ -302,8 +302,9 @@ class clientsController extends Controller
                     );
                     $package_info = DB::table('packages')->where('packagename',$package)->first();
                     if($package_info->users=='pppoe'){
-                        $userinpackage = DB::table('customerpackages')->where([['packageid','=',$package_info->id],['customerid','=',$username]])->count();
-                        if($userinpackage>0){
+                        // $userinpackage = DB::table('customerpackages')->where([['packageid','=',$package_info->id],['customerid','=',$username]])->count();
+                        // if($userinpackage>0){
+                        if(1==1){
                             $packageprice = DB::table('package_prices')->where('packageid',$package_info->id)->first();
 
                             //check if user connection is expired
@@ -314,7 +315,13 @@ class clientsController extends Controller
                                     $newdatetodisconnect=self::checkDaysToActivate($amount,$packageprice);
                                     if($newdatetodisconnect!=false){
                                           $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
-                                            return "success";
+                                          $sent = self::newMessage($package,$account_name,$username,$phone);
+                                          if($sent){
+                                          return "success";
+                                            
+                                          } else{
+                                            return "error";
+                                          } 
                                     }else{
                                         return "error";
                                     }
@@ -329,12 +336,25 @@ class clientsController extends Controller
                                     $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                                     alert()->success("You have an active account, the funds have been added to your wallet");
                                     if($request->ajax()){
+                                        $sent = self::newMessage($package,$account_name,$username,$phone);
+                                        if($sent){
                                         return "success";
+                                          
+                                        } else{
+                                          return "error";
+                                        } 
                                     }else{
-                                        alert()->success("success");
-                                        // return redirect()->route('client.bundles');
-
-                                        return Redirect::to('http://familywifi.net/login');
+                                        $sent = self::newMessage();
+                                        if($sent){
+                                            alert()->success("success");
+                                            // return redirect()->route('client.bundles');
+    
+                                            return Redirect::to('http://familywifi.net/login');
+                                            
+                                          } else{
+                                            return "error";
+                                          } 
+                                        
                                     }
 
                                 }
@@ -430,6 +450,31 @@ class clientsController extends Controller
         }
 
 
+    }
+    public static function newMessage($package,$account_name,$username,$phone){
+        if(Auth::guard('customer')->check()){
+            if(Auth::guard('customer')->user()->type=='pppoe'){
+                $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);
+
+            }else{
+                $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package.". Your Access Code is ".$username.".");
+
+            }
+        }else{
+            $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear  Customer You have successfully purchased ".$package.". Your Access Code is ".$username.".");
+        
+        }
+
+        $sms = new Message();
+
+        
+        $sent = $sms->sendSMS($phone,$message);
+
+        if ($sent){
+           return true;
+        }else{
+           return false;
+        }
     }
     public static function purchasePackage($username,$password,$package,$amount,$phone){
 
@@ -878,9 +923,15 @@ class clientsController extends Controller
     public function getAllUserAccounts(Request $request,$username,$packageid){
         if($username){
             $pid=$packageid;
-            $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
-            toast("You have been redirected to your subscribed accounts","warning");
-            return view('clients.client_accounts',compact('accounts','pid'));
+            if(Auth::guard('customer')->check()){
+                $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
+                toast("You have been redirected to your subscribed accounts","warning");
+                return view('clients.client_accounts',compact('accounts','pid'));
+            }else{
+                alert()->error("You should be logged in to a access the requested page");
+                return redirect()->route('client.bundles');
+            }
+            
         }
     }
     public function AccountsPayFor(Request $request){

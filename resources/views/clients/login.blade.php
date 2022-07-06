@@ -13,13 +13,13 @@
             <form method="POST" action="{{ route('post.customer.login') }}">
 
                 <div class="form-group">
-                  <label for="exampleInputEmail1">username</label>
-                  <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  <label for="exampleInputEmail1">Username</label>
+                  <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Your username">
 
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
-                  <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+                  <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="******">
                 </div>
                 @csrf
                 <div class="form-row">

@@ -43,7 +43,7 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th>Access Code</th>
+				<th>Account Name</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
@@ -52,7 +52,7 @@
 			@foreach($accounts as $k=>$ac)
 			<tr>
 				<td>{{ $k+1 }}</td>
-				<td>{{ $ac->account_no }}</td>
+				<td>{{ $ac->account_name }}</td>
 				<td>{{ $ac->status }}</td>
 				<td>
 					@if(CustomerHelper::isSuspended($ac->account_no) || $ac->status=='inactive')
