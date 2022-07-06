@@ -331,7 +331,7 @@ class clientsController extends Controller
                                     if($request->ajax()){
                                         return "success";
                                     }else{
-                                        // alert()->success("success");
+                                        alert()->success("success");
                                         // return redirect()->route('client.bundles');
 
                                         return Redirect::to('http://familywifi.net/login');
@@ -347,7 +347,7 @@ class clientsController extends Controller
                                 if($request->ajax()){
                                     return "success";
                                 }else{
-                                    // alert()->success("success");
+                                    alert()->success("success");
                                     // return redirect()->route('client.bundles');
                                     return Redirect::to('http://familywifi.net/login');
                                 }
@@ -389,7 +389,7 @@ class clientsController extends Controller
                         if($request->ajax()){
                             return "success";
                         }else{
-                            // alert()->success("Activation successfull");
+                            alert()->success("Activation successfull");
                             // return redirect()->route('client.bundles');
                             return Redirect::to('http://familywifi.net/login');
                         }
@@ -397,7 +397,7 @@ class clientsController extends Controller
                         if($request->ajax()){
                             return "error";
                         }else{
-                            alert()->error("Error sendign message");
+                            alert()->error("Error sending message");
                             return redirect()->back();
                         }
                     }
