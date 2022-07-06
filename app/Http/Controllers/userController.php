@@ -123,10 +123,7 @@ class userController extends Controller
         $request->validate([
             'username'=>'required|unique:customers|unique:radcheck|allowed_username',
             'password'=>'required|min:6',
-            // 'zoneid'=>'required',
             'phone'=>'required|numeric',
-            // 'package'=>'required',
-            // 'nasid'=>'required',
         ]);
         
 
@@ -136,7 +133,7 @@ class userController extends Controller
         $c->password=Hash::make($request->get('password'));
         $c->zone=$request->get('zoneid');
         $c->phone=$request->get('phone');
-        $c->address=$request->get('address');
+        $c->address=$request->get('address'); 
         $c->type=$request->get('type');
         $c->name=$request->get('name');
         $c->email=$request->get('email');
@@ -156,7 +153,7 @@ class userController extends Controller
         //calculate validdays for this customer
         if($request->get('type')!='hotspot'){
             alert()->success("User created successfully");
-            return redirect()->back()->with("success","user added successfully");
+            return redirect()->route('user.all');
         }else if($request->get('type')=='hotspot'){
             $useraccount = DB::table('customer_accounts')->updateOrInsert(
                 ['owner'=>$c_username,'account_no'=>$c_username],
@@ -164,7 +161,7 @@ class userController extends Controller
             );
 
             alert()->success("User created successfully");
-            return redirect()->back()->with("success","user added successfully");
+            return redirect()->route('user.all');
 
         }
     }
@@ -242,7 +239,7 @@ class userController extends Controller
         $output="";
         $num=0;
         if ($usertype=='radius') {
-            $onlineusers=DB::table('radacct')->where('acctstoptime','=',NULL)->orWhere('acctstoptime','=','0000-00-00 00:00:00')->paginate(15);
+            $onlineusers=DB::table('radacct')->where('acctstoptime','=',NULL)->orWhere('acctstoptime','=','0000-00-00 00:00:00')->get();
             if (count($onlineusers)>0) {
                 $num++;
 
