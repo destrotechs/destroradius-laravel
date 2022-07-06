@@ -225,6 +225,7 @@ class clientsController extends Controller
         $package = $request->get('package');
         $amount = $request->get('amount');
         $phone = $request->get('phone');
+        $account_name = $request->get('account_name');
 
 
         if($amount && $amount!=0){
@@ -366,7 +367,18 @@ class clientsController extends Controller
                 //send message on success
                 if($status == 'success'){
                     //send message here...
-                    $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME')))." Dear ".nl2br(ucwords(strtolower($c_name??$username)))). " You have successfully purchased ".$package.". Your Access Code is ".$username.".");
+                    if(Auth::guard('customer')->check()){
+                        if(Auth::guard('customer')->user()->type=='pppoe'){
+                            $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);
+
+                        }else{
+                            $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package.". Your Access Code is ".$username.".");
+
+                        }
+                    }else{
+                        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear  Customer You have successfully purchased ".$package.". Your Access Code is ".$username.".");
+                    
+                    }
 
                     $sms = new Message();
  
@@ -873,6 +885,7 @@ class clientsController extends Controller
     }
     public function AccountsPayFor(Request $request){
         $account= $request->get('account');
+        $account_name = DB::table('customer_accounts')->where('account_no',$account)->first();
         $packageid = $request->get('packageid');
         if($packageid){
             $thispackage=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.id','=',$packageid]])->select('packages.*','package_prices.amount')->first();
@@ -892,7 +905,7 @@ class clientsController extends Controller
                 $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();  
             }
 
-            return view('clients.buybundle',compact('packages','account'));
+            return view('clients.buybundle',compact('packages','account','account_name'));
         }else{
             alert()->error("Please select an account");
             return redirect()->back();

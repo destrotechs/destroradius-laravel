@@ -31,7 +31,7 @@ Pay Via Mpesa
     
 </div>
         <div class="card mn">
-            <div class="card-header">Paying for account <b>{{ $account??''}}</b>, Please select Package Here</div>
+            <div class="card-header">Paying for account <b>{{ $account_name->account_name??''}}</b>, Please select Package Here</div>
             <div class="card-body row">
                 <div class="col-md-4 mt-5">
                 <img height="250" width="250" src="{{ asset('images/mp.png') }}" class="rounded-circle">
@@ -53,6 +53,8 @@ Pay Via Mpesa
                         <br>
                         {{-- <input type="hidden" name="username" value="{{ $account??'' }}"> --}}
                         <input type="hidden" id="account" name="account" value="{{ $account??'' }}">
+                        <input type="hidden" id="account_name" name="account_name" value="{{ $account_name->account_name??'' }}">
+
                     <label>Phone Number</label>
                     <input type="text" required name="phone" class="form-control">
                     <br>
@@ -76,6 +78,8 @@ Pay Via Mpesa
             var package=$("#package").val();
             var amount=$("input[name='amount']").val();
             var account=$("input[name='account']").val();
+            var account_name=$("input[name='account_name']").val();
+
             var phone=$("input[name='phone']").val();
             var _token=$("input[name='_token']").val();
             if(phone!=''){
@@ -91,7 +95,7 @@ Pay Via Mpesa
                     var req=$.ajax({
                         method:'POST',
                         url:" {{ route('buybundle.post') }} ",
-                        data:{phone:phone,package:package,amount:amount,_token:_token,account:account},
+                        data:{phone:phone,package:package,amount:amount,_token:_token,account:account,account_name:account_name},
                     });
                 
                     req.done(function(data){
