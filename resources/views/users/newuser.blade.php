@@ -36,7 +36,13 @@
                     <select class="form-control" name="nasid" id="nases"></select>
                     <label>Phone</label>
                     <input name="phone" class="form-control" placeholder="users phone number">
-                    <label>User Package</label>
+                    <label>Is Reseller</label>
+                        <select name="isreseller" class="form-control">
+                            <option value="">Is Reseller? </option>
+                            <option value="reseller">Yes</option>
+                            <option value="not reseller">No</option>
+                        </select>
+                    {{-- <label>User Package</label>
                     <select name="package" class="form-control">
                         <option value="">Choose user package ...</option>
 
@@ -46,7 +52,7 @@
                         <option value="">no package is available, please add a package</option>
                         @endforelse
                         <option value="none">None</option>
-                    </select>
+                    </se lect>--}}
 
                 </div>
                 <div class="card card-body col-md-6">
@@ -65,8 +71,6 @@
                         <label>Type</label>
                         <select name="type" class="form-control">
                             <option value="">Choose user type ...</option>
-                            <option value="prepaid">Prepaid</option>
-                            <option value="postpaid">Postpaid</option>
                             <option value="hotspot">Hotspot User</option>
                             <option value="pppoe">PPPOE User</option>
                         </select>
@@ -79,12 +83,7 @@
                             <option value="female">Female</option>
                             <option value="prefer not to say">Prefer Not To Say</option>
                         </select>
-                        <label>Is Reseller</label>
-                        <select name="isreseller" class="form-control">
-                            <option value="">Is Reseller? </option>
-                            <option value="reseller">Yes</option>
-                            <option value="not reseller">No</option>
-                        </select>
+                        
                       </div>
                 </div>
             </div>

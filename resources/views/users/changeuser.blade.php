@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('buttons')
+<div class="col-lg-6 col-5 text-right">
+<a href="#" class="btn btn-white btn-sm" data-toggle="modal" data-target="#exampleModal7"><i class="fas fa-plus"></i>&nbsp;New User Account</a>
+</div>
+@endsection
 @section('content_header')
 User Information
 @endsection
@@ -91,98 +96,62 @@ User Information
             </div>
             </div>
                     <div class="card">
-                      <div class="card-header" id="headingOne">
-                        <h2 class="mb-0">
-                          <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                           <i class="fa fa-hourglass" aria-hidden="true"></i>&nbsp; Per user limits
-                          </button>
-                        </h2>
-                      </div>
-
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                        <div class="card-body">
-                            @if(count($preplyattributes)>0 || count($pcheckattributes)>0)
-                            <table class="table table-sm table-responsivetable-sm table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Limit Name</th>
-                                        <th>Value</th>
-                                        <th>Edit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($preplyattributes as $ra)
-                                    <form method="post" action="{{ route('edit_attr.post') }}">
-                                    <tr>
-                                        <input name="table" value="reply" type="hidden">
-                                        <input type="hidden" name="attr_id" value="{{ $ra->id }}">
-                                        <td><input class="form-control" type="text" name="limit" value="{{ $ra->attribute }}" readonly></td>
-                                        <td><input class="form-control" type="text" name="limitvalue" value="{{ $ra->value }}"></td>
-                                        <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-save"></i></button><a href="#" id="{{ $ra->id }}" class="btn btn-sm btn-danger trashr"><i class="fas fa-trash"></i></a></td>
-                                    </tr>
-                                    @csrf
-                                    </form>
-                                    @endforeach
-                                    @foreach($pcheckattributes as $ca)
-                                    <form method="post" action="{{ route('edit_attr.post') }}">
-                                    @csrf
-                                    <tr>
-                                        @if($ca->attribute=='Cleartext-Password')
-
-                                        <?php
-                                            $pass = $ca->value;
-                                        ?>
-                                        @endif
-                                        <input name="table" value="check" type="hidden">
-                                        <input type="hidden" name="attr_id" value="{{ $ca->id }}">
-                                        <td><input class="form-control" type="text" name="limit" value="{{ $ca->attribute }}" readonly></td>
-                                        <td><input class="form-control" type="text" name="limitvalue" value="{{ $ca->value }}"></td>
-                                        <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-save"></i></button>
-                                            <a href="#" id="{{ $ca->id }}" class="btn btn-sm btn-danger trashc"><i class="fas fa-trash"></i></a></td>
-
-                                    </tr>
-                                    </form>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            @else
-                            <div class="alert alert-warning">No user specific attributes</div>
-                            @endif
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
                         <div class="card-header" id="headingTwo">
                           <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                              <i class="fa fa-info" aria-hidden="true"></i>&nbsp; Package Details
+                              <i class="fa fa-info" aria-hidden="true"></i>&nbsp; User Accounts
                             </button>
                           </h2>
                         </div>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                           <div class="card-body">
-                            @if(count($packagedetails)>0)                        
-                              <ul class="list-group list-group-flush">
-                                <li class="list-group-item bg-grey">Package Details ({{ $userpackage[0] }})                                   
-                                </li>
-                                  @foreach($packagedetails as $d)
-                                <li class="list-group-item"><b>Down Speed :</b> {{ $d->downloadspeed/(1024*1024) }} mbps</li>
-                                <li class="list-group-item"><b>Up Speed:</b> {{ $d->uploadspeed/(1024*1024) }} mbps</li>
-                                <li class="list-group-item"><b>Max time: </b>{{ $d->validdays }}{{ $d->durationmeasure }}</li>
-                                <li class="list-group-item"><b>Quota:</b> 
-                                    @if($d->quota!=0)
-                                    {{ $d->quota/(1024*1024) }}MBs
+                            @if(count($customer_accounts)>0)
+                        <table class="table table-sm">
+                            <tr>
+                                <th>#</th>
+                                <th>Account Name</th>
+                                <th>Account Code</th>
+                                <th>Package</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            @foreach($customer_accounts as $k=>$c)
+                            <tr>
+                                <td>{{ $k+1 }}</td>
+                                <td>{{ $c->account_name }}</td>
+                                <td>{{ $c->account_no }}</td>
+                                <td>{{ $c->package_name }}</td>
+                                <td>
+                                    @if($c->status=='active')
+                                    <span class="badge badge-success">Active</span>
                                     @else
-                                    {{ 'UNLIMITED' }}
+                                    <span class="badge badge-danger">Inactive</span>
                                     @endif
-                                </li>
-                                <li class="list-group-item"><b>Time Spent  Online:</b> {{ $usertimespent/3600 }} Hours</li>
-                                <li class="list-group-item"><b>Used Bundles :</b> {{ $userquotaspent/(1024*1024) }}(MBs)</li>
-                              @endforeach
-                              </ul>
-                            @else
-                            <div class="alert alert-warning">User has no package allocated</div>
-                            @endif
+                                </td>
+                                <td>
+                                    @if($c->status=='active')
+                                    <a href="#" id="{{ $c->account_no }}" class="btn btn-sm btn-danger diact">Suspend</a>
+                                    <a href="{{ route('services.testconnectivity',['user'=>$c->account_no]) }}" class="btn btn-info btn-sm">Test Connectivity</a>
+                                    @else
+                                    <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal8">Activate</a>
+                                    @endif
+                                    @if($usertype!='hotspot')
+                                    <a href="{{ route('customer_form.doc',['account_no'=>$c->account_no]) }}" target="_blank" class="btn btn-sm btn-success"><i class="fas fa-download"></i>&nbsp;Business Form</a>
+                                    @endif
+                                    <a href="{{ route('edit.customer.account',['acc'=>$c->account_no]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+
+                                </td>
+                            </tr>
+                            @endforeach
+                            
+                        </table>                            
+
+
+                        @else
+                    
+                        <div class="text-danger text-sm">User has no associated accounts</div>
+                                
+                        @endif
                           </div>
                         </div>
                       </div>
@@ -212,6 +181,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                            <tr>
                                <th>#</th>
                                <th>Item</th>
+                               <th>Account</th>
                                <th>Quantity Allocated</th>
                                <th>Allocation Date</th>
                                <th>Status</th>
@@ -227,8 +197,8 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                                     <td>
                                         {{ $i->name }}
                                     </td>
-                                    <td>{{ $i->quantity }}
-                                    </td>
+                                    <td>{{ $i->account_no??'' }}</td>
+                                    <td>{{ $i->quantity }}</td>
                                     <td>{{ $i->allocation_date }}
                                     </td>
                                     <td class="{{ $i->status=='RETURNED'? 'text-success':'text-info' }}">{{ $i->status }}
@@ -266,59 +236,15 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-                @if(CustomerHelper::userAllocatedPackage($username))
-                @if($usertype!='pppoe' && $usertype!='prepaid')
-				<button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-link" aria-hidden="true"></i>Change package</button>
-				@endif
-                @if($usertype=='pppoe' || $usertype=='prepaid')
-                <button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal6"><i class="fa fa-link" aria-hidden="true"></i>Reactivate Customer</button>
-                @endif
-                @else
-                <button class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-link" aria-hidden="true"></i>Change package</button>
-                @endif
-                <a href="#" class="btn btn-outline-warning btn-md" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-exclamation-triangle"></i> Per user limits</a>
-                <a href="{{ route('services.testconnectivity',['user'=>$username,'cleart'=>$pass??'']) }}" class="btn btn-outline-success btn-md"><i class="fas fa-globe"></i> Test User Connectivity</a>
-                <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a>
-                <a href="#" id="{{ $username }}" class="btn btn-outline-warning btn-md trashrec"><i class="fas fa-close"></i> Remove Accounting records</a>
+                <a href="#" class="btn btn-outline-danger btn-md" data-toggle="modal" data-target="#exampleModal2"><i class="fas fa-trash"></i> Delete user</a> 
+                @if($usertype!='hotspot')  
                 <a href="#" class="btn btn-outline-primary btn-md" data-toggle="modal" data-target="#exampleModal4"><i class="fa fa-hashtag"></i>&nbsp;Allocate Equipment</a>
+                @endif             
             </div>
 		</div>
 	</div>
 </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h5 class="modal-title" id="exampleModalLabel">Change User Package</h5>
-		  <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-		</div>
-		<div class="modal-body">
-            <form id="changepackage">
-                <select class="form-control" name="package" id="package">
-                    <option value="">Choose New Package</option>
-                    <option value="nopackage">Non-regulated (no package)</option>
-                    @forelse($packages as $p)
-                        <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
-
-                    @empty
-
-                    <option value="">No package is available</option>
-                    @endforelse
-                    <input type="hidden" id="username" name="username" value="<?php echo $username;?>">
-                </select>
-
-		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		  <button type="submit" class="btn btn-primary">Save changes</button>
-		</div>
-        @csrf
-    </form>
-	  </div>
-	</div>
-  </div>
   <!-- Modal 6-->
   <div class="modal fade" id="exampleModal6" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -433,6 +359,15 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         </div>
         <div class="modal-body">
             <form method="POST" action="{{ route('post.new.equipment') }}">
+                <label>Account</label>
+                <select name="account_no" class="form-control account_type">
+                    <option value="">select ...</option>
+                    @forelse($customer_accounts as $ac)
+                    <option value="{{ $ac->account_no }}">{{ $ac->account_no }}</option>
+                    @empty
+                    <option value="">No accounts available</option>
+                    @endforelse
+                </select>
                 <label>Item/Equipment</label>
                 <select class="form-control" name="item_id" id="item_id">
 
@@ -471,7 +406,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New Equipment Allocation</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Return Equipment</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -484,7 +419,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Allocate</button>
+          <button type="submit" class="btn btn-primary">Return</button>
         </div>
         @csrf
     </form>
@@ -492,20 +427,97 @@ echo "KSH ".CustomerHelper::availableFunds($username);
     </div>
   </div>
 {{-- end of modal 5 --}}
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal7" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Customer Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ route('customer.accounts.post') }}">
+            <label>User </label>
+            <input type="hidden" name="owner" id="ownerf" value="{{ $username }}">
+
+            <label>Account Type</label>
+            <select name="account_name" class="form-control account_type">
+                <option value="">select ...</option>
+                <option value="pppoe"> PPPoE</option>
+                <option value="hotspot">HOTSPOT</option>
+            </select>
+            <label>Select Package</label>
+            <select name="package" required class="form-control">
+                <option value="">select ...</option>
+                @forelse($packages as $p)
+                <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
+                @empty
+                <option value="">No Packages available</option>
+                @endforelse
+            </select>
+            <label>Account Name</label>
+            <input name="account_name" type="text" class="form-control" placeholder="Account Name" required>
+            <label>Account No</label>
+            <input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
+            <hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add New Account</button>
+      </div>
+      @csrf
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal8" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Activate Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ route('customer.changepackage.post') }}">
+        <input type="hidden" name="username" id="ausername">
+        <input type="hidden" name="account_no" id="aaccount_no">
+        <input type="hidden" name="package" id="apackage">
+        <h3>Are you sure you want to Activate this account?</h3>        
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">NOPE</button>
+        <button type="submit" class="btn btn-success">YES!</button>
+      </div>
+      @csrf
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 @section('js')
 <script type="text/javascript">
 $(document).ready(function(){
+    var account_no = null;
+    $(".usac").change(function(){
+        alert();
+        account_no = $(this).val();
+        console.log(account_no);
+    });
     $("#changepackage").submit(function(event){
         var package = $("#package").val();
         var username = $("#username").val();
         var _token = $("input[name='_token']").val();
 
-        if(package!= "" && username!=""){
+        if(package!= "" && username!="" && account_no!=""){
             var request = $.ajax({
                 url: "{{ route('customer.changepackage.post') }}",
                 method:"post",
-                data:{username:username,package:package,_token:_token},
+                data:{username:username,package:package,_token:_token,account_no:account_no},
             });
 
             request.done(function(response){
@@ -603,6 +615,57 @@ $(document).ready(function(){
     $(".return_item").click(function(){
         $("#alloc_id").val($(this).attr('id'));
     })
+
+    $(".gen").click(function(){
+            var account = generateNumber();
+            $(".num").val(account);
+        })
+
+        $(".activate").click(function(){
+            var account_id = $(this).attr('id');
+            $.ajax({
+                method:'GET',
+                url:'/user/accounts/'+account_id,
+                success:function(data){
+                    $("#ausername").val(data[0]['owner']);
+                    $("#aaccount_no").val(data[0]['account_no']);
+                    $("#apackage").val(data[0]['package_name']);
+                    console.log(data[0]['package_name'])
+                }
+            })
+        });
+
+        $(".diact").click(function(){
+            var account = $(this).attr('id');
+            if(account){
+                if(confirm("Are you sure you want to deactivate this account?")){
+                    $.ajax({
+                        method:'GET',
+                        url:'/client/account/suspend/'+account,
+                        success:function(data){
+                            alert(data);
+                        }
+                    })
+                }
+                
+            }
+        })
+
+        $(".account_type").change(function(){
+            var type = $(this).val();
+            if(type=='hotspot'){
+                var account = $("#ownerf").val();
+                $(".num").val(account).attr('disabled','disabled');
+            }else{
+                $(".num").val("")
+                $(".num").val(account).removeAttr('disabled')
+            }
+        })
+
+        function generateNumber(){
+            var account_no = Math.floor((Math.random() * 1000000) + 1);
+            return "P"+account_no+"E";  
+        }
 })
 </script>
 @endsection

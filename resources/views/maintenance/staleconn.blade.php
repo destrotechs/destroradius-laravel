@@ -14,11 +14,11 @@ Clean stale connections
 </div>
 @endif
 <div class="card card-body" style="width: 40em;">
-	<p>Enter username here and click clean</p>
+	<p>Enter Access Code here and click clean</p>
 	<div class="dropdown-divider"></div>
 	<form method="post" action="{{ route('clean.stale') }}">
-		<label>Username</label>
-		<input type="text" class="form-control" name="username" placeholder="enter username">
+		<label>Access Code</label>
+		<input type="text" required class="form-control" name="username" placeholder="enter access code">
 		<span class="usernames"></span>
 		<hr>
 		<button class="btn btn-success" type="submit">clean</button>

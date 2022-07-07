@@ -16,10 +16,14 @@ class CompanyDetails extends Migration
         Schema::create('company_details', function (Blueprint $table) {
             $table->id();
             $table->string('name')->notNull();
-            $table->integer('address')->nullable;
+            $table->string('address')->nullable();
+            $table->string('building')->nullable();
+            $table->string('address2')->nullable();
             $table->string('phone')->nullable();
             $table->string('city')->nullable();
             $table->string('street')->nullable();
+            $table->string('phone2')->nullable();
+            $table->string('phone3')->nullable();
             $table->string('pin')->nullable();
             $table->timestamps();
         });

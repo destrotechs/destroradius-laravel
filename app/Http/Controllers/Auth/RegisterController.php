@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Customer;
 use DB;
+use Alert;
 use Illuminate\Http\Request;
 
 
@@ -93,7 +94,13 @@ class RegisterController extends Controller
             'gender'=>$request['gender'],
             'cleartextpassword'=>$request['password'],
             'password' => Hash::make($request['password']),
+            'type' => $request['type'],
         ]);
+        $useraccount = DB::table('customer_accounts')->updateOrInsert(
+                ['owner'=>$request['username'],'account_no'=>$request['username']],
+                ['status'=>'inactive']
+            );
+        alert()->success("Account created successfully, Please login");
         return redirect()->intended('customer/login');
 
     }

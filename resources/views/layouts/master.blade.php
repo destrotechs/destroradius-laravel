@@ -46,80 +46,24 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                <i class="ni ni-ungroup text-orange"></i>
-                <span class="nav-link-text">Managers</span>
+              <a class="nav-link" href="#network" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
+                <i class="fas fa-wifi text-orange"></i>
+                <span class="nav-link-text">&nbsp;Zones</span>
               </a>
-              <div class="collapse" id="navbar-examples">
+              <div class="collapse p-2" id="network">
                 <ul class="nav nav-sm flex-column">
+                  @if(Auth::user()->role_id==1)
                   <li class="nav-item">
-                    <a href="{{ route('manager.new.get') }}" class="nav-link">
-                      <span class="fas fa-plus"></span>&nbsp;
-                      <span class="sidenav-normal"> New Manager </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ route('managers.all') }}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> All Managers </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                <i class="fas fa-users text-orange"></i>
-                <span class="nav-link-text">Users</span>
-              </a>
-              <div class="collapse p-2" id="users">
-                <ul class="nav nav-sm flex-column">
-                  <li class="nav-item">
-                    <a href="{{route('user.new')}}" class="nav-link">
+                    <a href="{{route('zone.new')}}" class="nav-link">
                       <span class="fas fa-plus-circle"></span>&nbsp;
-                      <span class="sidenav-normal"> New User </span>
+                      <span class="sidenav-normal">New zone/zone manager </span>
                     </a>
                   </li>
+                  @endif
                   <li class="nav-item">
-                    <a href="{{ route('user.all')}}" class="nav-link">
-                      <span class="fas fa-users"></span>&nbsp;
-                      <span class="sidenav-normal"> All users </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{route('user.online')}}" class="nav-link">
-                      <span class="fas fa-circle text-green"></span>&nbsp;
-                      <span class="sidenav-normal"> Online users </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{route('geteditcustomer')}}" class="nav-link">
-                      <span class="fas fa-edit text-success"></span>&nbsp;
-                      <span class="sidenav-normal"> Edit user </span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ route('getuserlimits') }}" class="nav-link">
-                      <span class="fas fa-edit text-success"></span>&nbsp;
-                      <span class="sidenav-normal"> User Limits</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{route('user.balance')}}" class="nav-link">
-                      <span class="fas fa-circle text-success"></span>&nbsp;
-                      <span class="sidenav-normal"> Bundle Balance</span>
-                    </a>
-                  </li>
-                  {{-- <li class="nav-item">
-                    <a href="{{route('user.unpaid')}}" class="nav-link">
-                      <span class="fas fa-circle text-danger"></span>&nbsp;
-                      <span class="sidenav-normal"> Unpaid users </span>
-                    </a>
-                  </li> --}}
-                  <li class="nav-item">
-                    <a href="{{route('user.accounting')}}" class="nav-link">
-                      <span class="fas fa-circle text-danger"></span>&nbsp;
-                      <span class="sidenav-normal"> User traffic </span>
+                    <a href="{{route('zone.all')}}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> view zones </span>
                     </a>
                   </li>
                 </ul>
@@ -156,30 +100,6 @@
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#network" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
-                <i class="fas fa-wifi text-orange"></i>
-                <span class="nav-link-text">&nbsp;Zones</span>
-              </a>
-              <div class="collapse p-2" id="network">
-                <ul class="nav nav-sm flex-column">
-                  @if(Auth::user()->role_id==1)
-                  <li class="nav-item">
-                    <a href="{{route('zone.new')}}" class="nav-link">
-                      <span class="fas fa-plus-circle"></span>&nbsp;
-                      <span class="sidenav-normal">New zone/zone manager </span>
-                    </a>
-                  </li>
-                  @endif
-                  <li class="nav-item">
-                    <a href="{{route('zone.all')}}" class="nav-link">
-                      <span class="fas fa-bars"></span>&nbsp;
-                      <span class="sidenav-normal"> view zones </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#packages" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
                 <i class="fas fa-receipt text-orange"></i>
                 <span class="nav-link-text">&nbsp;Packages</span>
@@ -208,6 +128,91 @@
                     </a>
                   </li>
                   @endif
+                </ul>
+              </div>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
+                <i class="fas fa-users text-orange"></i>
+                <span class="nav-link-text">Users</span>
+              </a>
+              <div class="collapse p-2" id="users">
+                <ul class="nav nav-sm flex-column">
+                  
+                  <li class="nav-item">
+                    <a href="{{ route('user.all')}}" class="nav-link">
+                      <span class="fas fa-users"></span>&nbsp;
+                      <span class="sidenav-normal"> All users </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('user.new')}}" class="nav-link">
+                      <span class="fas fa-plus-circle"></span>&nbsp;
+                      <span class="sidenav-normal"> New User </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('user.online')}}" class="nav-link">
+                      <span class="fas fa-circle text-green"></span>&nbsp;
+                      <span class="sidenav-normal"> Online users </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('customer.accounts')}}" class="nav-link">
+                      <span class="fas fa-edit text-success"></span>&nbsp;
+                      <span class="sidenav-normal"> User Accounts </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('getuserlimits') }}" class="nav-link">
+                      <span class="fas fa-edit text-success"></span>&nbsp;
+                      <span class="sidenav-normal"> User Limits</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('user.balance')}}" class="nav-link">
+                      <span class="fas fa-circle text-success"></span>&nbsp;
+                      <span class="sidenav-normal"> Bundle Balance</span>
+                    </a>
+                  </li>
+                  {{-- <li class="nav-item">
+                    <a href="{{route('user.unpaid')}}" class="nav-link">
+                      <span class="fas fa-circle text-danger"></span>&nbsp;
+                      <span class="sidenav-normal"> Unpaid users </span>
+                    </a>
+                  </li> --}}
+                  <li class="nav-item">
+                    <a href="{{route('user.accounting')}}" class="nav-link">
+                      <span class="fas fa-circle text-danger"></span>&nbsp;
+                      <span class="sidenav-normal"> User traffic </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples">
+                <i class="ni ni-ungroup text-orange"></i>
+                <span class="nav-link-text">Managers</span>
+              </a>
+              <div class="collapse" id="navbar-examples">
+                <ul class="nav nav-sm flex-column">
+                  <li class="nav-item">
+                    <a href="{{ route('manager.new.get') }}" class="nav-link">
+                      <span class="fas fa-plus"></span>&nbsp;
+                      <span class="sidenav-normal"> New Manager </span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('managers.all') }}" class="nav-link">
+                      <span class="fas fa-bars"></span>&nbsp;
+                      <span class="sidenav-normal"> All Managers </span>
+                    </a>
+                  </li>
                 </ul>
               </div>
             </li>
@@ -362,6 +367,30 @@
                 </ul>
 
               </div>
+            </li>
+
+          </ul>
+          <!-- Divider -->
+          <hr class="my-3">
+          <!-- Heading -->
+          <h6 class="navbar-heading p-0 text-muted">
+            <span class="fa fas fa-cogs">&nbsp;SETTINGS</span>
+          </h6>
+          <!-- Navigation -->
+          <ul class="navbar-nav mb-md-3">
+
+            <li class="nav-item">
+              <a href="{{route('settings.index')}}" class="nav-link">
+                <i class="fas fa-cog text-orange"></i>
+                <span class="nav-link-text">&nbsp;General settings</span>
+              </a>
+              
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('company.details') }}" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span class="nav-link-text">Company Details</span>
+              </a>
             </li>
 
           </ul>

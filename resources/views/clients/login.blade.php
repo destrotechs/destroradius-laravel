@@ -13,16 +13,25 @@
             <form method="POST" action="{{ route('post.customer.login') }}">
 
                 <div class="form-group">
-                  <label for="exampleInputEmail1">username</label>
-                  <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  <label for="exampleInputEmail1">Username</label>
+                  <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Your username">
 
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
-                  <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+                  <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="******">
                 </div>
                 @csrf
-                <button type="submit" class="btn btn-primary">Login</button>
+                <div class="form-row">
+                    <div class="col-md-6 col-sm-12">                        
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                    @if(isset($usertype) && $usertype=='hotspot')
+                    <div class="col-md-6 col-sm-12">
+                        <a href="{{ route('get.customer.register') }}" class="nav-link">New User? Register an account.</a>
+                    </div>
+                    @endif
+                </div>
               </form>
         </div>
     </div>

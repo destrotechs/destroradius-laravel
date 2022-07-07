@@ -68,6 +68,8 @@ class packagesController extends Controller
         $package->burstdown=$burstdown;
         $package->profile=$request->get('profile');
         $package->durationmeasure=$request->get('period');
+        $package->priority=$request->get('priority');
+        $package->validuntil=$request->get('validuntil');
         $package->numberofdevices=$request->get('numberofdevices');
         $package->description=$request->get('description');
         $package->validdays=$request->get('validdays');
@@ -288,15 +290,15 @@ class packagesController extends Controller
         return view('packages.pricing',compact('packages','pricedpackages'));
     }
     public function savePackagePrice(Request $request){
-        if($request->get('amount')<1){
-           return redirect()->back()->with("error","price of a package should be 1 plus"); 
+        if($request->get('amount')<0){
+           return redirect()->back()->with("error","price of a package should be real value plus"); 
         }else{
 
             $packageprice=DB::table('package_prices')->updateOrInsert(
                 ['packageid'=>$request->get('packageid')],
                 ['currency'=>$request->get('currency'),'amount'=>$request->get('amount'),'rate'=>'null']
             );
-
+            alert()->success("Package price set successfully");
             return redirect()->back()->with("success","Package price added successfully");
         }
 

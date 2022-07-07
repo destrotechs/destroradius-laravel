@@ -1,2 +1,2 @@
-# destroradius-laravel
+# {{ env('APP_NAME') }}-laravel
 ##Installation

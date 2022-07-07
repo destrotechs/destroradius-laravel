@@ -15,8 +15,8 @@ class Customerpackages extends Migration
     {
         Schema::create('customerpackages', function (Blueprint $table) {
             $table->id();
-            $table->integer('customerid');
-            $table->integer('packageid');
+            $table->string('customerid');
+            $table->string('packageid');
             $table->timestamps();
         });
     }

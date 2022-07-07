@@ -9,13 +9,22 @@ use App\Payment;
 use Morris\Mpesa\Mpesa;
 use App\Message;
 use Alert;
+use Redirect;
+use App\Helpers\CustomerHelper;
+
 class clientsController extends Controller
 {
     public function getLogin(Request $request){
     	return view('auth.clientsauth.login');
     }
     public function getBundles(Request $request){
-        $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->get();
+        if(Auth::guard('customer')->check()){
+            $type =  Auth::guard('customer')->user()->type;           
+            $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->where('packages.users',$type)->orderBy('priority', 'desc')->get();
+        }else{
+            $packages = DB::table('package_prices')->join('packages','packages.id','=','package_prices.packageid')->where('packages.users','hotspot')->orderBy('priority', 'desc')->get();
+
+        }
     	return view('clients.bundles',compact('packages'));
     }
 
@@ -25,32 +34,39 @@ class clientsController extends Controller
         $user_info = '';
         $user_type = '';
         $username='';
+        $accounts = null;
         if(Auth::guard('customer')->check()){
 
             $username = Auth::guard('customer')->user()->username;
             $user_type = Auth::guard('customer')->user()->type;
 
             if(Auth::guard('customer')->user()->type=='pppoe' || Auth::guard('customer')->user()->type=='prepaid'){
+                $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
                 $user_info = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
                 // array_push($user_info,$info);
 
             }
 
         }
-        return view('clients.checkbalance',compact('user_info','user_type','username'));
+        return view('clients.checkbalance',compact('user_info','user_type','username','accounts'));
     }
     public function fetchBalance(Request $request){
         $username=$request->get('username');
 
         $user=DB::table('radcheck')->where('username','=',$username)->get();
+        $userpackage=DB::table('radusergroup')->where('username','=',$username)->first();
         $mbsused=0;
         $totalbytesrecord=0;
         $remainder=0;
         if(count($user)>0){
+            $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->groupname??'']])->first();
+            if(!$userdata){
             $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
-            foreach ($userdata as $key => $data) {
-                $totalbytesrecord=$data->value;
+
             }
+            if($userdata){
+            $totalbytesrecord=$userdata->value??0;
+            
             $totaldownbs=DB::table('radacct')->where('username','=',$username)->sum('AcctInputOctets');
             $totalupbs=DB::table('radacct')->where('username','=',$username)->sum('AcctOutputOctets');
             $mbsused=($totaldownbs+$totalupbs);
@@ -60,6 +76,9 @@ class clientsController extends Controller
             $remainder=$totalbytesrecord-$mbsused;
 
              echo '<tr><td>'.round($totalbytesrecord,2).' MBs</td><td>'.round($mbsused,2).' MBs</td><td>'.round($remainder,2).' MBs</td></tr>';
+         }else{
+            return "error";
+         }
         }else{
             echo "error";
         }
@@ -75,27 +94,46 @@ class clientsController extends Controller
             $usertype = Auth::guard('customer')->user()->type;
             $balance = self::getBBalance($username);
         }
-
         if($balance>0){
             alert()->warning("You have an active package, you cannot purchase a new one");
             return redirect()->route('client.bundles');
-        }else if($usertype=='pppoe' || $usertype=='prepaid'){
-            $userid = Auth::guard('customer')->user()->id;
-            $pid = DB::table('customerpackages')->where('customerid',$userid)->first();
-            if($pid){
-                $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->leftJoin('customerpackages','customerpackages.packageid','packages.id')->where([['packages.id','=',$pid->packageid],['customerid','=',$userid]])->get();  
+        }else{
+            if(Auth::guard('customer')->check()){
+                $userid = Auth::guard('customer')->user()->id;
+                // $customer_has_accounts = count(CustomerHelper::getUserAccounts($username));
+                // if($customer_has_accounts>0){
+                    return redirect()->route('customer.accounts.all',['username'=>$username,'packageid'=>$id]);                    
 
-                alert()->warning("You have been redirected to the package subscribed to, if you wish to change your subscription, contact admin");
-                return view('clients.buybundle',compact('package','balance'));
-
+                // }else{
+                    // alert()->error("Contact administrator for initial subscription");
+                    // return redirect()->back();
+                // }
             }else{
-                alert()->error("Contact administrator for initial subscription");
-                return redirect()->back();
+                $cost =0;
+                $thispackage = $package=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where('packages.id','=',$id)->first();
+
+                if ($thispackage->amount==0){
+                    return view('clients.getfreepackage',compact('thispackage'));
+                }else{
+                    if(Auth::guard('customer')->check()){
+                        $type = Auth::guard('customer')->user()->type;
+                        $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=',$type],['package_prices.amount','!=',0]])->get();
+
+                    }else{
+                        $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();
+
+                    }
+
+                    return view('clients.buybundle',compact('packages'));
+                }
+
             }
             
-        }else{
-            return view('clients.buybundle',compact('package','balance'));
         }
+            
+        // }else{
+        //     return view('clients.buybundle',compact('package','balance'));
+        // }
 
     }
     public static function getBBalance($username){
@@ -103,6 +141,7 @@ class clientsController extends Controller
         $mbsused=0;
         $totalbytesrecord=0;
         $remainder=0;
+
         if(count($user)>0){
             $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
             foreach ($userdata as $key => $data) {
@@ -186,21 +225,38 @@ class clientsController extends Controller
         $package = $request->get('package');
         $amount = $request->get('amount');
         $phone = $request->get('phone');
-        $payment = new Mpesa();
+        $account_name = $request->get('account_name');
 
-        $phone = '254'.substr($phone, 1);
 
-        $payment->generateToken();
+        if($amount && $amount!=0){
 
-        $checkoutid = $payment->processRequest($phone,$amount);
+            $payment = new Mpesa();
+
+            $phone = '254'.substr($phone, 1);
+
+            $payment->generateToken();
+
+            $checkoutid = $payment->processRequest($phone,$amount);
+        }else{
+        //check phone if already saved
+            $phone_activated = DB::table('free_account_details')->where([['phone','=',$phone]])->get();
+            if(count($phone_activated)>0){
+                alert()->error("You have already subscribed to the free package");
+                return redirect()->back();
+            }
+            $checkoutid='success';
+        }
 
         $username = '';
         $password = '';
 
         if ($checkoutid!='failed!'){
-            sleep(30);
-
-            $status = $payment->querySTKPush($checkoutid);
+            if(isset($amount) && $amount!=0){
+                sleep(30);//wait for user to enter MPESA pin and check if the transaction has completed
+                $status = $payment->querySTKPush($checkoutid);
+            }else{
+                $status = "success";
+            }
 
             if($status == 'success'){
                 //read mpesa transaction details
@@ -208,96 +264,206 @@ class clientsController extends Controller
 
                 
 
-                $permitted_chars_username = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                $permitted_chars_username = '123456789';
     	        $permitted_chars_password = '23456789abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
-                if(isset(Auth::guard('customer')->user()->username)){
-                    $username = Auth::guard('customer')->user()->username;
-                    $password = Auth::guard('customer')->user()->cleartextpassword;
+                if(Auth::guard('customer')->check()){                     
+                    $username = $request->get('account');
+                    $password = $request->get('account');
                 }else{
-                    $username=substr(str_shuffle($permitted_chars_username), 0, 6);
-		    		$password= substr(str_shuffle($permitted_chars_password), 0, 5);
+                    $username=rand(1000,100000);
+		    		$password= $username;
                 }
 
-                $cust_trans = new Payment();
+                $c_username = Auth::guard('customer')->user()->username??false;
 
-                $cust_trans->phonenumber = $phone;
-                $cust_trans->transactionid= 'N/A';
-                $cust_trans->packagebought=$package;
-                $cust_trans->username=$username;
-                $cust_trans->amount = $amount;
-                $cust_trans->username = $username;
-                $cust_trans->transactiondate= date("Y/m/d");
+                if(isset($amount) && $amount!=0){
+                    $cust_trans = new Payment();
 
-                $cust_trans->save();
+                    $cust_trans->phonenumber = $phone;
+                    $cust_trans->transactionid= 'N/A';
+                    $cust_trans->packagebought=$package;
+                    $cust_trans->username=$username;
+                    $cust_trans->amount = $amount;
+                    $cust_trans->username = $username;
+                    $cust_trans->transactiondate= date("Y/m/d");
+
+                    $cust_trans->save();
+                }else{
+                    $freedetails = DB::table('free_account_details')->insert(
+                        ['account_no'=>$username,'phone'=>$phone,'owner'=>$c_username??'']
+                    );
+                }
                 
-                $userexist = DB::table('customers')->where('username',$username)->first();
+                $userexist = DB::table('customers')->where('username',$c_username)->first();
                 if ($userexist){
+                    $newuseraccount = DB::table('customer_accounts')->updateOrInsert(
+                        ['owner'=>$c_username,'account_no'=>$username],
+                        ['package_name'=>$package,'status'=>'active']
+                    );
                     $package_info = DB::table('packages')->where('packagename',$package)->first();
                     if($package_info->users=='pppoe'){
-                        $userinpackage = DB::table('customerpackages')->where([['packageid','=',$package_info->id],['customerid','=',$userexist->id]])->count();
-                        if($userinpackage>0){
+                        // $userinpackage = DB::table('customerpackages')->where([['packageid','=',$package_info->id],['customerid','=',$username]])->count();
+                        // if($userinpackage>0){
+                        if(1==1){
                             $packageprice = DB::table('package_prices')->where('packageid',$package_info->id)->first();
 
                             //check if user connection is expired
                             $date_to_disconnect = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
+                            $remove_maxallmb = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->delete();
                             if($date_to_disconnect){                                
                                 if(!self::checkIfUserIsExpired($username)){
                                     $newdatetodisconnect=self::checkDaysToActivate($amount,$packageprice);
                                     if($newdatetodisconnect!=false){
                                           $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
-                                            return "success";
+                                          $sent = self::newMessage($package,$account_name,$username,$phone);
+                                          if($sent){
+                                          return "success";
+                                            
+                                          } else{
+                                            return "error";
+                                          } 
                                     }else{
                                         return "error";
                                     }
                                   
                                 }else{
                                     //hold funds
-                        $available_funds = DB::table('customer_funds')->where([['username','=',$username]])->first();
+                                    $available_funds = DB::table('customer_funds')->where([['username','=',$username]])->first();
 
                                     $held_funds = DB::table('customer_funds')->updateOrInsert([
                                         'username'=>$username],['available_funds'=>(floatval($amount)+floatval($available_funds->available_funds??0)),'added_on'=>date("Y/m/d")
                                     ]);
+                                    $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                                     alert()->success("You have an active account, the funds have been added to your wallet");
-                                    return "success";
+                                    if($request->ajax()){
+                                        $sent = self::newMessage($package,$account_name,$username,$phone);
+                                        if($sent){
+                                        return "success";
+                                          
+                                        } else{
+                                          return "error";
+                                        } 
+                                    }else{
+                                        $sent = self::newMessage();
+                                        if($sent){
+                                            alert()->success("success");
+                                            // return redirect()->route('client.bundles');
+    
+                                            return Redirect::to('http://familywifi.net/login');
+                                            
+                                          } else{
+                                            return "error";
+                                          } 
+                                        
+                                    }
 
                                 }
                             }else{
-                                $newdatetodisconnect = self::calculateTime($packageinfo->durationmeasure,$packageinfo->validdays,'pppoe');
+
+                                // $newdatetodisconnect = self::calculateTime($package_info->durationmeasure,$package_info->validdays,'pppoe');
+                                $newdatetodisconnect=self::checkDaysToActivate($amount,$packageprice);
                                 $updateexpiration = DB::table('radcheck')->updateOrInsert(['username'=>$username,'attribute'=>'Expiration'],['op'=>':=','value'=>$newdatetodisconnect]);
+                                $activated_acc = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                                if($request->ajax()){
                                     return "success";
+                                }else{
+                                    alert()->success("success");
+                                    // return redirect()->route('client.bundles');
+                                    return Redirect::to('http://familywifi.net/login');
+                                }
 
                             }
                             
                             
                         }
+                    }else{
+
                     }
                 }
-
+                if(isset(Auth::guard('customer')->user()->name)){
+                    $c_name = Auth::guard('customer')->user()->name;
+                }
                 $status = self::purchasePackage($username,$password,$package,$amount,$phone);
                 //send message on success
                 if($status == 'success'){
                     //send message here...
-                    $sent=true;
+                    if(Auth::guard('customer')->check()){
+                        if(Auth::guard('customer')->user()->type=='pppoe'){
+                            $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);
+
+                        }else{
+                            $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package.". Your Access Code is ".$username.".");
+
+                        }
+                    }else{
+                        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear  Customer You have successfully purchased ".$package.". Your Access Code is ".$username.".");
+                    
+                    }
+
+                    $sms = new Message();
+ 
+                    
+                    $sent = $sms->sendSMS($phone,$message);
 
                     if ($sent){
-                        return "success";
+                        if($request->ajax()){
+                            return "success";
+                        }else{
+                            alert()->success("Activation successfull");
+                            // return redirect()->route('client.bundles');
+                            return Redirect::to('http://familywifi.net/login');
+                        }
                     }else{
-                        return 'error';
+                        if($request->ajax()){
+                            return "error";
+                        }else{
+                            alert()->error("Error sending message");
+                            return redirect()->back();
+                        }
                     }
 
                 }else{
-                    return "error";
+                    if($request->ajax()){
+                        return "error";
+                    }else{
+                        alert()->error("Error");
+                        return redirect()->back();
+                    }
                 }
 
             }else{
-                return "error";
+                if($request->ajax()){
+                    return "error";
+                }else{
+                    alert()->error("Error");
+                    return redirect()->back();
+                }
             }
         }
         else{
-            return "error";
+            if($request->ajax()){
+                return "error";
+            }else{
+                alert()->error("Error");
+                return redirect()->back();
+            }
         }
 
 
+    }
+    public static function newMessage($package,$account_name,$username,$phone){
+        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);  
+
+        $sms = new Message();
+
+        
+        $sent = $sms->sendSMS($phone,$message);
+
+        if ($sent){
+           return true;
+        }else{
+           return false;
+        }
     }
     public static function purchasePackage($username,$password,$package,$amount,$phone){
 
@@ -305,6 +471,8 @@ class clientsController extends Controller
           $user_exist = DB::table('radcheck')->where('username','=',$username)->count();
 
             if($user_exist>0){
+                $remove_pppoe_details = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
+                $remove_pppoe_details = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
                 //check if user is registered to use bundle mbs
                 $bundle_user = DB::table('radgroupreply')->where([['groupname','=',$package],['attribute','=','Max-All-MB']])->count();
 
@@ -623,7 +791,12 @@ class clientsController extends Controller
         }
 
     }
-    public function suspendAccount(Request $request,$username){
+    public function suspendAccount(Request $request,$username=null){
+
+        if($request->get('username')){
+            $username = $request->get('username');
+        }
+        // dd($username);
         $userisactive = DB::table('radcheck')->where('username',$username)->get();
         if(count($userisactive)>0){            
             $expiration = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
@@ -642,7 +815,12 @@ class clientsController extends Controller
 
 
             $activation_code = rand(1,10000);
+            if($expiration){                
             $expval = $expiration->value;
+            }else{
+                $expiration = DB::table('radreply')->where([['username','=',$username],['attribute','=','WISPr-Session-Terminate-Time']])->first();
+                $expval = $expiration->value;
+            }
             $ot = implode("N", $other_attrs);
             $sus = DB::table('user_access_suspensions')->insert(
                 ['username'=>$username,'activation_code'=>$activation_code,'expiration'=>$expval,'cleartextpassword'=>$cltpass,'otherattributes'=>$ot,'suspended_on'=>date("Y/m/d")]
@@ -652,7 +830,9 @@ class clientsController extends Controller
                 //clear radcheck to disable connection
                 $userout = DB::table('radcheck')->where('username',$username)->delete();
                 if ($userout){
-                    echo "Account suspended successfull, Please use code ".$activation_code." to reactivate again";
+
+                $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'inactive']);
+                    echo "Account suspended successfully, Please use code ".$activation_code." to reactivate again";
                 }
             }else{
                 echo "There was an error suspending your account, try again!";
@@ -680,6 +860,8 @@ class clientsController extends Controller
             }
             $accountissuspended = DB::table('user_access_suspensions')->where([['username','=',$username],['activation_code','=',$activation_code],['activation_used','=',false]])->update(['activation_used'=>true]);
             
+            $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+
             alert()->success("Account has been reactivated successfully!");
             return redirect()->back();
 
@@ -727,8 +909,66 @@ class clientsController extends Controller
 
 
     }
+    public function getAllUserAccounts(Request $request,$username,$packageid){
+        if($username){
+            $pid=$packageid;
+            if(Auth::guard('customer')->check()){
+                $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
+                toast("You have been redirected to your subscribed accounts","warning");
+                return view('clients.client_accounts',compact('accounts','pid'));
+            }else{
+                alert()->error("You should be logged in to a access the requested page");
+                return redirect()->route('client.bundles');
+            }
+            
+        }
+    }
+    public function AccountsPayFor(Request $request){
+        $account= $request->get('account');
+        $account_name = DB::table('customer_accounts')->where('account_no',$account)->first();
+        $packageid = $request->get('packageid');
+        if($packageid){
+            $thispackage=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.id','=',$packageid]])->select('packages.*','package_prices.amount')->first();
 
+            if($thispackage->amount==0){
+                return redirect()->route('clients.freepackage',['id'=>$thispackage->id,'acc'=>$account]);
+                // return view('clients.getfreepackage',compact('thispackage','account'));
+            }
 
+        }
+        if($account){
+            $today = date("Y-m-d");
+            if(Auth::guard('customer')->check()){
+                $type = Auth::guard('customer')->user()->type;
+                $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=',$type],['package_prices.amount','!=',0]])->get();  
+            }else{
+                $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();  
+            }
+
+            return view('clients.buybundle',compact('packages','account','account_name','packageid'));
+        }else{
+            alert()->error("Please select an account");
+            return redirect()->back();
+        }
+    }
+    public function getFreeAccess(Request $request,$id,$acc=null){
+        $account = $acc;
+        $thispackage = DB::table('packages')->where('id',$id)->first();
+
+        //check if user has freeaccess
+        $userexist = DB::table('radusergroup')->where([['username','=',$account],['groupname','=',$thispackage->packagename]])->count();
+        if($userexist>0){
+            alert()->error("You are already subscribed to this free package");
+            return redirect()->route('client.bundles');
+        }
+        return view('clients.getfreepackage',compact('thispackage','account'));
+    }
+
+    public function getSuspendAccount(){
+        $user = Auth::guard('customer')->user()->username;
+        $accounts = DB::table('customer_accounts')->where('owner',$user)->get();
+        return view('clients.suspend_account',compact('accounts'));
+    }
 
     public function getLogout(Request $request){
         Auth::guard('customer')->logout();

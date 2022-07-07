@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'DestroRadius'),
+    'name' => env('APP_NAME', 'Laravel-App'),
 
     /*
     |--------------------------------------------------------------------------
@@ -238,7 +238,7 @@ return [
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'CustomerHelper' => App\Helpers\CustomerHelper::class,
-
+        'CompanyHelper' => App\Helpers\CompanyHelper::class,
 
     ],
 

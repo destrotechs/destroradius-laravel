@@ -43,9 +43,10 @@ class LoginController extends Controller
         $this->middleware('guest:customer')->except('logout');
         // $this->middleware('guest:writer')->except('logout')
     }
-    public function showCustomerLoginForm()
+    public function showCustomerLoginForm($usertype=null)
     {
-        return view('clients.login', ['url' => 'customers']);
+        $type = $usertype;
+        return view('clients.login', ['url' => 'customers','usertype'=>$type]);
     }
     public function customerLogin(Request $request)
     {

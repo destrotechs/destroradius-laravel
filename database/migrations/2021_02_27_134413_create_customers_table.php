@@ -19,8 +19,8 @@ class CreateCustomersTable extends Migration
             $table->string('username',50)->notNull();
             $table->string('password',255)->notNull();
             $table->string('phone',20)->notNull();
-            $table->string('zone',50);
-            $table->string('type',100)->default('prepaid');
+            $table->string('zone',50)->nullable();
+            $table->string('type',100)->default('hotspot');
             $table->string('address',200)->nullable();
             $table->string('email')->unique();
             $table->string('cleartextpassword');

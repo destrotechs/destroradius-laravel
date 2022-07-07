@@ -12,7 +12,7 @@
 			<label>Username</label>
 			<input type="text" name="username" id="username" class="form-control" value="{{ $user }}">
 			<label>Password</label>
-			<input type="text" name="password" id="password" class="form-control" value="{{ $cleart }}">
+			<input type="text" name="password" id="password" class="form-control" value="{{ $cleart==''?$user:'' }}">
 			<label>Radius port</label>
 			<input type="text" name="radiusport" id="radiusport" readonly class="form-control" value="1812">
 			<label>Radius server Address</label>
@@ -22,7 +22,7 @@
 			<label>Nas Secret</label>
 			<input type="text" name="secret" id="nassecret" class="form-control" value="testing123">
 			<hr>
-			<button type="button" class="btn btn-success btn-md test">Test</button>
+			<button type="button" class="btn btn-success btn-sm test">Test</button>
 			{{ csrf_field() }}
 		</form>
 	</div>

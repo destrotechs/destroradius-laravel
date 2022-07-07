@@ -26,7 +26,7 @@
                         <label for="exampleInputEmail1">Email</label>
                         <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
-
+                <input type="hidden" name="type" value="hotspot">
             </div>
             <div class="form-row">
                 <div class="col-md-6 col-sm-12">

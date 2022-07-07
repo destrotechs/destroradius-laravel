@@ -72,6 +72,10 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::get('/settings/system','settingsController@getIndex')->name('settings.index');
 	Route::get('/settings/commission','settingsController@getManagerCommission')->name('settings.managerrates');
 	Route::get('/zones/new','zonesController@newZone')->name('zone.new');
+	
+	Route::get('/company/details','HomeController@getCompanyDetails')->name('company.details');
+	Route::get('/sms/balance','HomeController@getSMSBalance')->name('sms.balance');
+	Route::post('/company/details','HomeController@postCompanyDetails')->name('company.details.post');
 
 	Route::get('/zones/transfer/{id}','zonesController@transferZone')->name('zone.transfer');
 
@@ -99,7 +103,7 @@ Route::middleware(['role:admin'])->group(function(){
 	Route::post('/inventory/categories','inventoryController@post_category')->name('category.new');
 	Route::post('/inventory/subcategories','inventoryController@post_sub_category')->name('sub_category.new');
 	//tickets pos
-	Route::post('/tickets/getcost','ticketsController@getPackageCost')->name('get.package.cost');
+	
 	Route::post('/tickets/new/auto','ticketsController@saveAutoGenTickets')->name('save.auto.tickets');
 	//zone post routes
 	Route::post('/zones/add','zonesController@addZone')->name('zones.add.new');
@@ -168,6 +172,12 @@ Route::get('/manager/profile','profileController@getProfile')->name('manager.pro
 
 //tickets routes
 Route::get('/tickets/open','ticketsController@render_tickets_open')->name('tickets.open');
+Route::get('/user/accounts','userController@getUserAccounts')->name('customer.accounts');
+Route::get('/user/accounts/edit/{acc?}','userController@getAccountEdit')->name('edit.customer.account');
+Route::post('/user/accounts/edit','userController@postAccountUpdate')->name('edit.customer.account.post');
+Route::get('/user/accounts/{id}','apiController@getAccount')->name('customer.accounts.one');
+Route::get('/user/accounts/all/{username?}/{packageid?}','clientsController@getAllUserAccounts')->name('customer.accounts.all');
+Route::post('/user/accounts','userController@postUserAccount')->name('customer.accounts.post');
 
 //settings routes
 
@@ -183,7 +193,8 @@ Route::get('/payments/option','paymentsController@selectPayOption')->name('pay.o
 Route::get('/accounting/user','accountingController@getUserAccounting')->name('user.accounting');
 Route::get('/accounting/nas','accountingController@getNasAccounting')->name('nas.accounting');
 Route::get('/accounting/ip','accountingController@getIpAccounting')->name('ip.accounting');
-Route::get('/invpoice/doc','salesController@invoicepdf')->name('invoice.doc');
+Route::get('/invoice/doc','salesController@invoicepdf')->name('invoice.doc');
+Route::get('/customer_form/doc/{account_no}','userController@customerformpdf')->name('customer_form.doc');
 
 Route::post('/accounting/user/get','accountingController@returnUserAccounting')->name('getuseraccountingdetails');
 
@@ -210,7 +221,7 @@ Route::post('/settings/man/comm','settingsController@addManagerCommission')->nam
 
 ///special posts
 Route::post('/user/nas','userController@getNas')->name('getnas');
-
+Route::post('/tickets/getcost','apiController@getPackageCost')->name('get.package.cost');
 //user equipments
 Route::post('user/equipment/new','userController@allocateEquipmet')->name('post.new.equipment');
 Route::post('user/equipment/return','userController@returnEquipment')->name('return.equipment');
@@ -236,24 +247,28 @@ Route::get('/client/bundles','clientsController@getBundles')->name('client.bundl
 
 Route::get('/connections/manage','clientsController@getCleanStale')->name('user.get.cleanstale');
 Route::post('/connection/staleconn','clientsController@cleanStaleConn')->name('user.post.cleanstale');
-Route::get('/buybundle/{id}','clientsController@buyBundlePlan')->name('user.buybundleplan');
+Route::get('/buybundle/{id}/{account?}','clientsController@buyBundlePlan')->name('user.buybundleplan');
+Route::post('/accounts/payfor','clientsController@AccountsPayFor')->name('account.payfor');
 Route::get('/changephone','clientsController@getChangePhone')->name('user.changephone');
+Route::get('/clients/accounts/suspend','clientsController@getSuspendAccount')->name('user.accounts.suspend');
 Route::post('/changephone','clientsController@postChangePhone')->name('user.post.changephone');
 
 Route::get('/bundlebalance','clientsController@bundlebalance')->name('user.balance');
+Route::get('/packages/free/{id}/{acc?}','clientsController@getFreeAccess')->name('clients.freepackage');
 Route::post('/bundlebalance','clientsController@fetchBalance')->name('user.check.balance');
 Route::post('/buybundle','clientsController@payToGetCredentials')->name('pay.forcredentials');
 Route::get('/transactions','clientsController@getTransactions')->name('user.transactions');
 // Route::post('/purchase','clientsController@purchasePackage')->name('buybundle.post');
 Route::post('/purchase','clientsController@payToGetCredentials')->name('buybundle.post');
 
-Route::get('/customer/login', 'Auth\LoginController@showCustomerLoginForm')->name('get.customer.login');
+Route::get('/customer/login/{usertype?}', 'Auth\LoginController@showCustomerLoginForm')->name('get.customer.login');
 Route::get('/customer/register', 'Auth\RegisterController@showCustomerRegisterForm')->name('get.customer.register');
 Route::post('/login/customer', 'Auth\LoginController@customerLogin')->name('post.customer.login');
 Route::post('/register/customer', 'Auth\RegisterController@createCustomer')->name('post.customer.register');
 Route::get('/customer/logout','clientsController@getLogout')->name('user.logout');
 Route::get('/hotspot/packages','apiController@getHotspotPackages')->name('hotspot.packages');
 Route::get('/client/account/suspend/{username}','clientsController@suspendAccount')->name('suspend.account');
+Route::post('/client/account/suspend','clientsController@suspendAccount')->name('suspend.account');
 Route::post('/account/activate','clientsController@activateSuspendedAccount')->name('activate.account');
 Route::post('/account/pppoe/ractivate','userController@reactivatePPPoeAccount')->name('reactivate_pppoeuser');
 Route::post('/riskfee','settingsController@postRiskFee')->name('post-risk-fee');

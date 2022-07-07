@@ -27,6 +27,7 @@ Pay Via Mpesa
             </center>
         </div>
     </div>
+
 </div>
         <div class="card mn">
             <div class="dropdown-divider mt-2"></div>
@@ -127,7 +128,7 @@ Pay Via Mpesa
                     url:"{{ route('get.package.cost') }}",
                     data:{package:package,_token:_token},
                     success:function(data){
-                        $(".amnt").val(data);
+                        $(".amnt").val(data[0]);
                     }
                 })
             }else{

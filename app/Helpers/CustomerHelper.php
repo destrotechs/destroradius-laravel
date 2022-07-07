@@ -5,9 +5,8 @@ use Auth;
 use DB;
 class CustomerHelper
 {
-    public static function isSuspended()
+    public static function isSuspended($username)
     {
-        $username = Auth::guard('customer')->user()->username;
         $accountissuspended = DB::table('user_access_suspensions')->where([['username','=',$username],['activation_used','=',false]])->get();
         if(count($accountissuspended)>0){
             return true;
@@ -31,6 +30,10 @@ class CustomerHelper
         }else{
             return false;
         }
+    }
+    public static function getUserAccounts($username,$account_id=null){
+        $accounts = DB::table('customer_accounts')->where([['owner','=',$username]])->get();
+        return $accounts;
     }
 }
 ?>

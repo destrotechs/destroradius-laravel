@@ -11,6 +11,7 @@ use App\Zone;
 use DB;
 use Auth;
 use Hash;
+use PDF;
 use App\Helpers\CustomerHelper;
 class userController extends Controller
 {
@@ -49,6 +50,7 @@ class userController extends Controller
         $myzones=DB::table('zonemanagers')->where('managerid',$role_id)->pluck('zoneid');
         if ($role_id==1) {
             $customers=DB::table('customers')
+                // ->leftJoin('customer_accounts','customer_accounts.owner','=','customer')
                 ->leftJoin('customerpackages','customerpackages.customerid','=','customers.id')
                 ->leftJoin('packages','packages.id','=','customerpackages.packageid')
                 ->leftJoin("zones",'zones.id','=','customers.zone')
@@ -121,10 +123,7 @@ class userController extends Controller
         $request->validate([
             'username'=>'required|unique:customers|unique:radcheck|allowed_username',
             'password'=>'required|min:6',
-            'zoneid'=>'required',
             'phone'=>'required|numeric',
-            // 'package'=>'required',
-            'nasid'=>'required',
         ]);
         
 
@@ -134,7 +133,7 @@ class userController extends Controller
         $c->password=Hash::make($request->get('password'));
         $c->zone=$request->get('zoneid');
         $c->phone=$request->get('phone');
-        $c->address=$request->get('address');
+        $c->address=$request->get('address'); 
         $c->type=$request->get('type');
         $c->name=$request->get('name');
         $c->email=$request->get('email');
@@ -142,6 +141,7 @@ class userController extends Controller
         $c->gender=$request->get('gender');
         $c->created_by=Auth::user()->email;
 
+        $c_username=$request->get('username');
 
         $c->save();
         $customerid=$c->id;
@@ -149,62 +149,19 @@ class userController extends Controller
         $log=" Created New user ".$request->get('username');
         $logwrite=Log::createTxtLog($user,$log);
         $packageusers = DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('users');
+
         //calculate validdays for this customer
-        if($request->get('package')!="none" && $packageusers=='hotspot'){
-            $customerdays=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('validdays');
-            $customermaxmbs=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('quota');
+        if($request->get('type')!='hotspot'){
+            alert()->success("User created successfully");
+            return redirect()->route('user.all');
+        }else if($request->get('type')=='hotspot'){
+            $useraccount = DB::table('customer_accounts')->updateOrInsert(
+                ['owner'=>$c_username,'account_no'=>$c_username],
+                ['package_name'=>$package??'','status'=>'inactive']
+            );
 
-            $expireafter=$customerdays[0]*24*60*60;
-            $maximumbytes=$customermaxmbs[0];
-            //adduser to radcheck
-            if($maximumbytes>0){
-                DB::table('radcheck')->insert([
-                    ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-                    ['username'=>$request->get('username'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$maximumbytes],
-                ]);
-                //create user attributes to radreply
-                DB::table('radreply')->insert([
-                    ['username'=>$request->get('username'),'attribute'=>'Max-All-MB','op'=>':=','value'=>$maximumbytes],
-                ]);
-            }else{
-                DB::table('radcheck')->insert([
-                    ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-                ]);
-            }
-
-
-
-
-            //apply package to the user
-            DB::table('radusergroup')->insert(['username'=>$request->get('username'),'groupname'=>$request->get('package'),'priority'=>'10']);
-            //add customer to customerpackages
-            $packageid=DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('id');
-            $pid=$packageid[0];
-
-            DB::table('customerpackages')->insert([
-                ['packageid'=>$pid,'customerid'=>$customerid],
-            ]);
-
-            //add user to nas disabled mode
-
-            //return success
-            return redirect()->back()->with("success","user added successfully");
-        }else if ($packageusers=='pppoe') {
-           
-            DB::table('radcheck')->insert([
-                ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-            ]);
-            //add user to PPOE Profile
-             DB::table('radcheck')->insert([
-                ['username'=>$request->get('username'),'attribute'=>'User-Profile','op'=>':=','value'=>$request->get('package').'_Profile'],
-            ]);
-            return redirect()->back()->with("success","user added successfully");
-
-        }else{
-            DB::table('radcheck')->insert([
-                ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password','op'=>':=','value'=>$request->get('password')],
-            ]);
-            return redirect()->back()->with("success","user added successfully");
+            alert()->success("User created successfully");
+            return redirect()->route('user.all');
 
         }
     }
@@ -282,7 +239,7 @@ class userController extends Controller
         $output="";
         $num=0;
         if ($usertype=='radius') {
-            $onlineusers=DB::table('radacct')->where('acctstoptime','=',NULL)->orWhere('acctstoptime','=','0000-00-00 00:00:00')->paginate(15);
+            $onlineusers=DB::table('radacct')->where('acctstoptime','=',NULL)->orWhere('acctstoptime','=','0000-00-00 00:00:00')->get();
             if (count($onlineusers)>0) {
                 $num++;
 
@@ -290,7 +247,7 @@ class userController extends Controller
                     $totaldownload=DB::table('radacct')->where('username','=',$o->username)->sum('AcctInputOctets');
                     $totalupload=DB::table('radacct')->where('username','=',$o->username)->sum('AcctOutputOctets');
                     $output.="<tr>";
-                    $output.="<td>".$num."</td><td>".$o->username."</td><td>".$o->acctstarttime."</td><td>".$o->framedipaddress."</td><td>".$o->nasipaddress."</td><td>".$totaldownload."</td><td>".$totalupload."</td>";
+                    $output.="<td>".$num."</td><td>".$o->username."</td><td>".$o->acctstarttime."</td><td>".$o->framedipaddress."</td><td>".$o->nasipaddress."</td><td>".round($totaldownload/(1024*1024),2)."MBs</td><td>".round($totalupload/(1024*1024),2)." MBs</td>";
                     $output.="</tr>";
                 }
                 echo $output;
@@ -381,11 +338,12 @@ class userController extends Controller
             $packages = DB::table('packages')->get();
             $customlimits = DB::table('custom_limits')->get();
 
-            $useritems = DB::table('customers')->join('item_allocations','item_allocations.customer_id','=','customers.id')->join('items','items.id','=','item_allocations.item_id')->select('customers.id as cid,username','items.id as item_id','items.item_code','items.name','item_allocations.quantity','item_allocations.allocation_date','item_allocations.status','item_allocations.date_returned','item_allocations.id as alloc_id','item_allocations.quantity_returned')->where('customers.username','=',$username)->get();
+            $useritems = DB::table('customers')->join('item_allocations','item_allocations.customer_id','=','customers.id')->join('items','items.id','=','item_allocations.item_id')->select('customers.id as cid,username','items.id as item_id','items.item_code','items.name','item_allocations.quantity','item_allocations.allocation_date','item_allocations.status','item_allocations.date_returned','item_allocations.id as alloc_id','item_allocations.quantity_returned','item_allocations.account_no')->where('customers.username','=',$username)->get();
 
             $items = DB::table('items')->get();
+            $customer_accounts = DB::table('customer_accounts')->where('owner',$username)->get();
 
-            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent','zones','useritems','items'));
+            return view('users.changeuser',compact('packages','customlimits','userdetails','userpackage','replyattributes','checkattributes','preplyattributes','pcheckattributes','packagedetails','usertimespent','userquotaspent','zones','useritems','items','customer_accounts'));
 
         }else{
             return redirect()->route('geteditcustomer',compact('zones'));
@@ -484,7 +442,12 @@ class userController extends Controller
     }
     public function changeCustomerPackage(Request $request){
         $package = $request->get('package');
-        $username = $request->get('username');
+        $username = $request->get('account_no'); //username becomes the account no to be activated
+        if(!$package){
+            alert()->error("Assign the account to a package first");
+            return redirect()->back();
+        }
+        $c_username = $request->get('username');
         $user = Auth::user()->email;
         $log="Changed ".$username." Package to ".$package;
         $logwrite=Log::createTxtLog($user,$log);
@@ -493,33 +456,186 @@ class userController extends Controller
 
         $packageusers = DB::table('packages')->where('packagename','=',$package)->pluck('users');
 
-        $user_id = DB::table('customers')->where('username','=',$username)->pluck('id');
+        $user_id = DB::table('customers')->where('username','=',$c_username)->pluck('id');
+
+
 
         if($username){
-                $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');
-
-                $radcheckuser = DB::table('radcheck')->updateOrInsert(
-                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$pass[0]],
-                );
+                $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');                
         }
 
         
         if ($package == 'nopackage'){
-            $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id)->delete();
+            $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$username)->delete();
 
             $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
             $remove_radusergroup = DB::table('radreply')->where('username','=',$username)->delete();
             $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
                 $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
-
+            $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
+            $radcheckuser = DB::table('radcheck')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                );
             echo "user activated on non-regulated mode";
 
         }else if($packageusers[0] == 'hotspot'){
 
-            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$user_id[0]],['packageid','=',$package_id[0]]])->count();
+            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$username],['packageid','=',$package_id[0]]])->count();
+
+                $userinradcheck = DB::table('radcheck')->where('username',$username)->count();
+            if ($user_on_package > 0 && $userinradcheck>0) {
+                echo "user is already on the selected package";
+
+            }else{
+                $delete_user_replies = DB::table('radreply')->where('username','=',$username)->delete();
+
+                //get valid days for the said package and add disconnect time
+                $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
+                $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
+                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0]);
+
+                $rad_reply = DB::table('radreply')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$dateToDisconnect]
+                );
+
+                //remove from radusergroup
+                $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id[0])->delete();
+
+
+                $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
+
+                $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
+                $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
+
+                $new_radusergrouprecord = DB::table('radusergroup')->insert([
+                    'username'=>$username,'groupname'=>$package,'priority'=>10,
+                ]);
+
+                $new_userpackage = DB::table('customerpackages')->insert([
+                    'customerid'=>$username,'packageid'=>$package_id[0],
+                ]);
+                $radcheckuser = DB::table('radcheck')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                );
+
+                if ($new_radusergrouprecord){
+                     $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
+                    $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                    if($request->ajax()){
+                        echo "user package has been changed successfully";
+
+                    }else{
+                        toast("Success","success");
+                        return redirect()->back();
+                    }
+                    
+                }
+                else{
+                    if($request->ajax()){
+                        echo "user package could not be  changed, Try again.";
+
+                    }else{
+                        toast("Action Failed","error");
+                        return redirect()->back();
+                    }
+                }
+
+            }
+        }else if ($packageusers[0] =='pppoe'){
+            $radcheckuser = DB::table('radcheck')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                );
+            $mpackage = DB::table('packages')->where('packagename','=',$package)->first();
+            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$username],['packageid','=',$package_id[0]]])->count();
 
             if ($user_on_package > 0) {
                 echo "user is already on the selected package";
+
+            }
+            DB::table('radusergroup')->where('username','=',$username)->delete();
+
+            // DB::table('radcheck')->updateOrInsert(
+            //     ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$request->get('password')]
+            // );
+            //add user to PPOE Profile
+             DB::table('radcheck')->updateOrInsert(
+                ['username'=>$username,'attribute'=>'User-Profile'],['op'=>':=','value'=>$mpackage->profile??$package.'_Profile']
+            );
+                $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
+                $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
+                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0],'pppoe');
+                $expiration = explode("H",$dateToDisconnect)[0];
+                $wispr = explode("H",$dateToDisconnect)[1];
+
+              $rad_reply = DB::table('radreply')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$wispr]
+                );
+              DB::table('radcheck')->insert(
+                ['username'=>$username,'attribute'=>'Expiration','op'=>':=','value'=>$expiration]
+              );
+             //remove user from package
+              $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$username)->delete();
+              //add user to the news package
+              $new_userpackage = DB::table('customerpackages')->insert([
+                    'customerid'=>$username,'packageid'=>$package_id[0],
+                ]);
+
+                $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                 $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
+                if($request->ajax()){
+                    return "PPOE Package applied successfully!";
+
+                }else{
+                    toast("Success","success");
+                    return redirect()->back();
+                }
+
+
+        }
+
+    }
+    public static function changeAccountPackage($account,$package,$customer_username){
+        $package = $package;
+        $username = $account; //username becomes the account no to be activated
+        $c_username = $customer_username;
+        $user = Auth::user()->email;
+        $log="Changed ".$username." Package to ".$package;
+        $logwrite=Log::createTxtLog($user,$log);
+
+        $package_id = DB::table('packages')->where('packagename','=',$package)->pluck('id');
+
+        $packageusers = DB::table('packages')->where('packagename','=',$package)->pluck('users');
+
+        $user_id = DB::table('customers')->where('username','=',$c_username)->pluck('id');
+
+
+
+        if($username){
+                $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');
+
+                $radcheckuser = DB::table('radcheck')->updateOrInsert(
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                );
+        }
+
+        
+        if ($package == 'nopackage'){
+            $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$username)->delete();
+
+            $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
+            $remove_radusergroup = DB::table('radreply')->where('username','=',$username)->delete();
+            $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
+                $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
+            $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
+            return true;
+
+        }else if($packageusers[0] == 'hotspot'){
+
+            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$username],['packageid','=',$package_id[0]]])->count();
+
+            if ($user_on_package > 0) {
+                // echo "user is already on the selected package";
+                return true;
 
             }
             else{
@@ -548,33 +664,36 @@ class userController extends Controller
                 ]);
 
                 $new_userpackage = DB::table('customerpackages')->insert([
-                    'customerid'=>$user_id[0],'packageid'=>$package_id[0],
+                    'customerid'=>$username,'packageid'=>$package_id[0],
                 ]);
 
                 if ($new_radusergrouprecord){
-                    echo "user package has been changed successfully";
+                     $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
+                    $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                   return true;
+                    
                 }
                 else{
-                    echo "user package could not be  changed, Try again.";
+                    return false;
                 }
 
             }
         }else if ($packageusers[0] =='pppoe'){
             $mpackage = DB::table('packages')->where('packagename','=',$package)->first();
-            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$user_id[0]],['packageid','=',$package_id[0]]])->count();
+            $user_on_package = DB::table('customerpackages')->where([['customerid','=',$username],['packageid','=',$package_id[0]]])->count();
 
             if ($user_on_package > 0) {
                 echo "user is already on the selected package";
 
             }
-            DB::table('radusergroup')->where('username','=',$request->get('username'))->delete();
+            DB::table('radusergroup')->where('username','=',$username)->delete();
 
             // DB::table('radcheck')->updateOrInsert(
             //     ['username'=>$request->get('username'),'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$request->get('password')]
             // );
             //add user to PPOE Profile
              DB::table('radcheck')->updateOrInsert(
-                ['username'=>$request->get('username'),'attribute'=>'User-Profile'],['op'=>':=','value'=>$mpackage->profile??$package.'_Profile']
+                ['username'=>$username,'attribute'=>'User-Profile'],['op'=>':=','value'=>$mpackage->profile??$package.'_Profile']
             );
                 $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
                 $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
@@ -589,29 +708,21 @@ class userController extends Controller
                 ['username'=>$username,'attribute'=>'Expiration','op'=>':=','value'=>$expiration]
               );
              //remove user from package
-              $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id[0])->delete();
+              $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$username)->delete();
               //add user to the news package
               $new_userpackage = DB::table('customerpackages')->insert([
-                    'customerid'=>$user_id[0],'packageid'=>$package_id[0],
+                    'customerid'=>$username,'packageid'=>$package_id[0],
                 ]);
 
+                $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
+                 $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
+                return true;
 
-             return "PPOE Package applied successfully!";
 
         }
 
     }
 
-    // public static function calculateDateToDisconnectPPPoE($packagecost=0,$paid_amount=0,$timemeasure=0,$num=0)
-    // {
-    //     $year=date("Y");
-    //     $month=date("n");
-    //     $day=date("j");
-    //     $hour=date("H");
-    //     $min=date("i");
-    //     $sec=date("s");
-
-    // }
     public static function calculateTime($timemeasure,$num,$usertype='hotspot'){
         $year=date("Y");
         $month=date("n");
@@ -792,7 +903,7 @@ class userController extends Controller
         }
         if(($quantity_in_stock+$stock_total)>0 && ($quantity_in_stock+$stock_total)>= $request->get('quantity')){
                 $allocation = DB::table('item_allocations')->insertGetId(
-                ['item_id'=>$request->get('item_id'),'customer_id'=>$request->get('userid'),'quantity'=>$request->get('quantity'),'status'=>$request->get('status'),'return_date'=>$request->get('return_date'),'added_by'=>$added_by,'allocation_date'=>$today_date]
+                ['item_id'=>$request->get('item_id'),'customer_id'=>$request->get('userid'),'quantity'=>$request->get('quantity'),'status'=>$request->get('status'),'return_date'=>$request->get('return_date'),'added_by'=>$added_by,'allocation_date'=>$today_date,'account_no'=>$request->get('account_no')]
             );
             DB::table('item_stock')->insert(
                 ['item_id'=>$request->get('item_id'),'allocation_id'=>$allocation,'narration'=>'CUSTOMER ALLOCATION','added_by'=>$added_by,'quantity_in'=>-($request->get('quantity'))]
@@ -914,4 +1025,101 @@ class userController extends Controller
         }        
 
     }
+    public function getUserAccounts(Request $request){
+        $customers = DB::table('customers')->get();
+        $customer_accounts = array();
+        $packages = DB::table('packages')->get();
+
+
+        if($customers){
+            foreach($customers as $c){
+                $accounts = DB::table('customer_accounts')->where([['owner','=',$c->username]])->get();
+                if($accounts){
+
+                array_push($customer_accounts, $accounts);
+                }
+            }
+        }
+
+        
+        return view('user_accounts.user_accounts', compact('customers','customer_accounts','packages'));
+    }
+    public function postUserAccount(Request $request){
+        // $account_exist = DB::table('customer_accounts')->where([['owner','=',$request->get('owner')],['package_name','=',$request->get('package')]])->get();
+        // if(count($account_exist)>0){
+        //  alert()->error("User has an account linked to this package!");
+        //  return redirect()->back();   
+        // }else{
+            $customerishotspot = DB::table('customers')->where('username',$request->owner)->first();
+            if($customerishotspot->type=='hotspot'){
+                $accounts = DB::table('customer_accounts')->where('owner',$request->owner)->count();
+                if($accounts>0){
+                    alert()->error("An hotspot user cannot have multiple accounts!");
+                    return redirect()->back(); 
+                }else{
+                    //create new account for hotsport user
+                    $newaccount = DB::table('customer_accounts')->insert([
+                        'owner'=>$request->owner,'account_no'=>$request->owner,'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package'),'account_name'=>$request->get('account_name')
+                    ]);
+                    alert()->success("A new hotspot account has been added successfully!");
+                    return redirect()->back(); 
+                }
+            }else{
+               $account = DB::table('customer_accounts')->insert(
+                ['owner'=>$request->get('owner'),'account_name'=>$request->get('account_name'),'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package')]
+                );
+                if($account){
+                    toast("Account added successfully!","success");
+                    return redirect()->back();
+                }else{
+                     toast("Account could not be added successfully!","error");
+                    return redirect()->back();
+                } 
+            }
+
+            
+        // }
+        
+    }
+    
+    public function getAccountEdit(Request $request,$acc){
+        $account = DB::table('customer_accounts')->where('account_no',$acc)->first();
+        $usertype = DB::table('customers')->where('username',$account->owner)->first();
+        // $packages = DB::table('packages')->where('users',$usertype->type)->get();
+        $packages = DB::table('packages')->get();
+        return view('user_accounts.edit_customer_accounts',compact('account','packages'));
+    }
+    public function postAccountUpdate(Request $request){
+        $account_package = DB::table('customer_accounts')->where('account_no',$request->get('account_no'))->first();
+        if($account_package->package_name!=$request->package_name){
+            $status = self::changeAccountPackage($request->get('account_no'),$request->get('package_name'),$account_package->owner);
+            
+            if($status){
+                $updated_account = DB::table('customer_accounts')->where('account_no',$request->get('account_no'))->update(['account_name'=>$request->get('account_name'),'town'=>$request->get('town'),'address'=>$request->get('address'),'building'=>$request->get('building'),'coordinates'=>$request->get('coordinates'),'package_name'=>$request->get('package_name')]);
+                 alert()->success("Changes applied successfully");
+                return redirect()->back();
+            }else{
+                alert()->error("There was an error saving your changes, try again");
+                return redirect()->back();
+            }
+        }else{
+            $updated_account = DB::table('customer_accounts')->where('account_no',$request->get('account_no'))->update(['account_name'=>$request->get('account_name'),'town'=>$request->get('town'),'address'=>$request->get('address'),'building'=>$request->get('building'),'coordinates'=>$request->get('coordinates'),'package_name'=>$request->get('package_name')]);
+
+            alert()->success("Changes applied successfully");
+            return redirect()->back();
+        }
+    }
+    public function customerformpdf(Request $request,$account_no=100){
+        // return PDF::loadFile(public_path().'/templates/invoice.html')->save(public_path().'/docs/my_stored_file.pdf')->stream('download.pdf');
+        $account = $account_no;
+        $account_info = DB::table('customer_accounts')->where('account_no',$account)->first();
+        $owner_info = DB::table('customers')->where('username',$account_info->owner)->first();
+        $service_info = DB::table('packages')->where('packagename',$account_info->package_name)->first();
+        $account_items = DB::table('item_allocations')->join('items','items.id','=','item_allocations.item_id')->where('account_no',$account)->get();
+        
+        $pdf = PDF::loadView('services.customer_form',compact('account','owner_info','service_info','account_items','account_info'));
+        return $pdf->stream('customer_form.pdf');
+        return view('services.customer_form');
+    }
+
 }
