@@ -38,12 +38,13 @@ Pay Via Mpesa
                 <center><h3 class="text-bold amount"></h3></center>
                 </div>
                 <div class="col-md-8 border p-3">
+                    <div class="err"></div>
                 <form>
-                    <label>Package</label>
+                    <label>Package<small class="text-danger">*</small></label>
                     <select class="form-control" required name="package" id="package">
                         <option value="">Choose Package to purchase...</option>
                         @forelse($packages as $p)
-                            <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
+                            <option value="{{ $p->packagename }}" {{ isset($packageid)?($packageid==$p->id? 'selected':null):null }}>{{ $p->packagename }}</option>
 
                         @empty
 
@@ -55,10 +56,10 @@ Pay Via Mpesa
                         <input type="hidden" id="account" name="account" value="{{ $account??'' }}">
                         <input type="hidden" id="account_name" name="account_name" value="{{ $account_name->account_name??'' }}">
 
-                    <label>Phone Number</label>
+                    <label>Phone Number<small class="text-danger">*</small></label>
                     <input type="text" required name="phone" class="form-control">
                     <br>
-                    <label>Amount</label>
+                    <label>Amount <small class="text-danger">*</small></label>
                     <input name="amount" required class="form-control amnt" type="text">
                     <br>
                     <button type="button" class="btn btn-primary btn-md sub" name="submit">Process Payment</button>
@@ -82,7 +83,7 @@ Pay Via Mpesa
 
             var phone=$("input[name='phone']").val();
             var _token=$("input[name='_token']").val();
-            if(phone!=''){
+            if(phone!='' && amount!=''){
                 if (confirm("Are you sure you want to purchase "+package+ " at "+amount)) {
                     if(confirm("A prompt will be sent to your phone,input your M-Pesa pin to proceed")){
                     $(".btn-success").empty().html('processing, please wait...').addClass('btn-danger');
@@ -127,7 +128,7 @@ Pay Via Mpesa
                 }
 
             }else{
-                $(".err").html("Enter a valid phone number and select a bundle plan").addClass("alert alert-danger");
+                $(".err").html("All Fields are Required!").addClass("alert alert-danger");
             }
             e.preventDefault();
         })

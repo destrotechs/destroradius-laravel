@@ -945,7 +945,7 @@ class clientsController extends Controller
                 $packages=DB::table('packages')->join('package_prices','packages.id','=','package_prices.packageid')->where([['packages.users','=','hotspot'],['package_prices.amount','!=',0]])->get();  
             }
 
-            return view('clients.buybundle',compact('packages','account','account_name'));
+            return view('clients.buybundle',compact('packages','account','account_name','packageid'));
         }else{
             alert()->error("Please select an account");
             return redirect()->back();

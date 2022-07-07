@@ -9,12 +9,11 @@
     @if(count($accounts)>0)
 		@foreach($accounts as $acc)
 		<input type="hidden" name="package" value="{{ $acc->package_name }}">
-			<div class="custom-control custom-radio custom-control p-3">
+		<div class="custom-control custom-radio custom-control p-3">
         <input type="radio" id="customRadioInline" name="account" class="custom-control-input" value="{{ $acc->account_no}}">
         <label class="custom-control-label" for="customRadioInline"><b>({{ $acc->account_name??'' }})</b><small class="badge ml-5 badge-{{ $acc->status=='active'?'success':'danger' }}">{{ $acc->status }}</small></label>
-      </div>        
-
-         @endforeach
+      </div>      
+      @endforeach
          <input type="hidden" name="packageid" value="{{$pid??null}}">
          <hr>
 			<button type="submit" class="btn btn-success btn-large">CONTINUE&nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
