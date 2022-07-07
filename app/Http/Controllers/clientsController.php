@@ -452,18 +452,7 @@ class clientsController extends Controller
 
     }
     public static function newMessage($package,$account_name,$username,$phone){
-        if(Auth::guard('customer')->check()){
-            if(Auth::guard('customer')->user()->type=='pppoe'){
-                $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);
-
-            }else{
-                $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package.". Your Access Code is ".$username.".");
-
-            }
-        }else{
-            $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear  Customer You have successfully purchased ".$package.". Your Access Code is ".$username.".");
-        
-        }
+        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);  
 
         $sms = new Message();
 

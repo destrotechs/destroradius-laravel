@@ -1045,11 +1045,11 @@ class userController extends Controller
         return view('user_accounts.user_accounts', compact('customers','customer_accounts','packages'));
     }
     public function postUserAccount(Request $request){
-        $account_exist = DB::table('customer_accounts')->where([['owner','=',$request->get('owner')],['package_name','=',$request->get('package')]])->get();
-        if(count($account_exist)>0){
-         alert()->error("User has an account linked to this package!");
-         return redirect()->back();   
-        }else{
+        // $account_exist = DB::table('customer_accounts')->where([['owner','=',$request->get('owner')],['package_name','=',$request->get('package')]])->get();
+        // if(count($account_exist)>0){
+        //  alert()->error("User has an account linked to this package!");
+        //  return redirect()->back();   
+        // }else{
             $customerishotspot = DB::table('customers')->where('username',$request->owner)->first();
             if($customerishotspot->type=='hotspot'){
                 $accounts = DB::table('customer_accounts')->where('owner',$request->owner)->count();
@@ -1078,7 +1078,7 @@ class userController extends Controller
             }
 
             
-        }
+        // }
         
     }
     
