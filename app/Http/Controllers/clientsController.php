@@ -58,6 +58,11 @@ class clientsController extends Controller
         $mbsused=0;
         $totalbytesrecord=0;
         $remainder=0;
+        $account_info = DB::table('customer_accounts')->where('account_name',$username)->first();
+        $userispppoe=DB::table('radcheck')->where([['username','=',$account_info->account_no??$username],['attribute','=','Expiration']])->first();
+        if($userispppoe){
+            return '<tr><td colspan="2"> You Account is valid until '.$userispppoe->value.'</td></tr>';
+        }
         if(count($user)>0){
             $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->groupname??'']])->first();
             if(!$userdata){
