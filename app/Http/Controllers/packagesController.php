@@ -137,9 +137,9 @@ class packagesController extends Controller
         
 
         if($newpackage){
-            alert()->success('Success','Package created successfully');
+            alert()->success('Success','Package created successfully, Please set a price for this package');
 
-            return redirect()->back()->with("success","Package created successfully!");
+            return redirect()->route('package.price')->with("success","Package created successfully!");
         }
         
     }
@@ -277,7 +277,7 @@ class packagesController extends Controller
             DB::table('packages')->where('id','=',$id)->delete();
             toast('package removed successfully','success');
 
-            return redirect()->back()->with("success","package removed successfully");
+            return redirect()->route('packages.all')->with("success","package removed successfully");
 
         }catch(Exception $e){
              return redirect()->back()->with("error","There was an error removing the selected package, try again!");
