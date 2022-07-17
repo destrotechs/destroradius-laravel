@@ -44,7 +44,7 @@ Pay Via Mpesa
                     <select class="form-control" required name="package" id="package">
                         <option value="">Choose Package to purchase...</option>
                         @forelse($packages as $p)
-                            <option value="{{ $p->packagename }}" {{ isset($packageid)?($packageid==$p->id? 'selected':null):null }}>{{ $p->packagename }}</option>
+                            <option value="{{ $p->packagename }}" {{ isset($packageid)?($packageid==$p->id? 'selected':null):null }}>{{ $p->packagename }} @ {{$p->amount}}</option>
 
                         @empty
 
@@ -128,12 +128,17 @@ Pay Via Mpesa
                 }
 
             }else{
+                var package= $("#package").va();
+                getCost(package);
                 $(".err").html("All Fields are Required!").addClass("alert alert-danger");
             }
             e.preventDefault();
         })
         $("#package").change(function(){
             var package = $(this).val();
+            getCost(package);
+        })
+        function getCost(package){
             var _token=$("input[name='_token']").val();
 
             if(package){
@@ -155,7 +160,7 @@ Pay Via Mpesa
             }else{
                 $(".amnt").val('');
             }
-        })
+        }
         function startTimer() {
           var presentTime = document.getElementById('timer').innerHTML;
           var timeArray = presentTime.split(/[:]+/);
