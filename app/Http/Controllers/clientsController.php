@@ -35,6 +35,7 @@ class clientsController extends Controller
         $user_type = '';
         $username='';
         $accounts = null;
+        $valid_until = array();
         if(Auth::guard('customer')->check()){
 
             $username = Auth::guard('customer')->user()->username;
@@ -42,13 +43,18 @@ class clientsController extends Controller
 
             if(Auth::guard('customer')->user()->type=='pppoe' || Auth::guard('customer')->user()->type=='prepaid'){
                 $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
+                foreach($accounts as $a){
+
+                    $info = DB::table('radcheck')->where([['username','=',$a->account_no],['attribute','=','Expiration']])->first();
+                    array_push($valid_until, $info->value??null);
+                }
                 $user_info = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
                 // array_push($user_info,$info);
 
             }
 
         }
-        return view('clients.checkbalance',compact('user_info','user_type','username','accounts'));
+        return view('clients.checkbalance',compact('user_info','user_type','username','accounts','valid_until'));
     }
     public function fetchBalance(Request $request){
         $username=$request->get('username');

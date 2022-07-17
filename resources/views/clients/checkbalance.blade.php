@@ -45,6 +45,7 @@
 				<th>#</th>
 				<th>Account Name</th>
 				<th>Status</th>
+				<th>Expiry</th>
 				<th>Action</th>
 			</tr>
 		</thead>
@@ -54,6 +55,7 @@
 				<td>{{ $k+1 }}</td>
 				<td>{{ $ac->account_name }}</td>
 				<td><span class="badge badge-{{$ac->status=='active'?'success':'danger'}}"> {{ $ac->status }}</span></td>
+				<td>{{$valid_until[$k]}}</td>
 				<td>
 					@if(CustomerHelper::isSuspended($ac->account_no) || $ac->status=='inactive')
 		            <a class="btn btn-primary btn-sm p-2 activate" href="#" id="{{ $ac->account_no }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-danger"></i> Activate Connection</a>
