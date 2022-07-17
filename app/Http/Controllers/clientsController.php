@@ -799,7 +799,8 @@ class clientsController extends Controller
             $d = date('j',$packageValidDate);
             $y = date('Y',$packageValidDate);
 
-            return $d." ".$mnth." ".$y. " 12:00"."H".$dateToDisconnect;
+            return $d." ".$mnth." ".$y. " 12:00";
+            // return $d." ".$mnth." ".$y. " 12:00"."H".$dateToDisconnect;
         }
 
     }
