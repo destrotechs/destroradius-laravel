@@ -46,7 +46,7 @@ class clientsController extends Controller
                 foreach($accounts as $a){
 
                     $info = DB::table('radcheck')->where([['username','=',$a->account_no],['attribute','=','Expiration']])->first();
-                    array_push($valid_until, $info->value??null);
+                    array_push($valid_until, $info->value??'Disconnected');
                 }
                 $user_info = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
                 // array_push($user_info,$info);
