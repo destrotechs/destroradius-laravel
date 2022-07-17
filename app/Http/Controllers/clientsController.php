@@ -458,7 +458,7 @@ class clientsController extends Controller
 
     }
     public static function newMessage($package,$account_name,$username,$phone){
-        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);  
+        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME')))).". Dear Customer, You have successfully purchased ".$package." for account ".$account_name);  
 
         $sms = new Message();
 
@@ -930,7 +930,6 @@ class clientsController extends Controller
         }
     }
     public function AccountsPayFor(Request $request){
-        dd($request->all());
         $account= $request->get('account');
         $account_name = DB::table('customer_accounts')->where('account_no',$account)->first();
         $packageid = $request->get('packageid');
