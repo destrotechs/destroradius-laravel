@@ -70,7 +70,7 @@ class nasController extends Controller
             self::restartServer();
         }
         toast('Nas saved successfully','success');
-        return redirect()->back()->with("success","Nas saved successfully");
+        return redirect()->route('nas.view')->with("success","Nas saved successfully");
     }
     public function removeNas(Request $request,$id){
         $nas=DB::table('nas')->where('id',$id)->delete();
@@ -86,7 +86,7 @@ class nasController extends Controller
         }else{
         toast('There was an error removing the requested nas, try again later','error');
 
-            return redirect()->back()->with("error","There was an error removing the requested nas, try again later");
+            return redirect()->route('nas.view')->with("error","There was an error removing the requested nas, try again later");
         }
     }
     public function editNasSave(Request $request){
@@ -114,7 +114,7 @@ class nasController extends Controller
         }else{
             toast('There was an error saving the changes, try again later','error');
 
-            return redirect()->back()->with("error","There was an error saving the changes, try again later");
+            return redirect()->route('nas.view')->with("error","There was an error saving the changes, try again later");
         }
        
     }

@@ -58,6 +58,11 @@ class clientsController extends Controller
         $mbsused=0;
         $totalbytesrecord=0;
         $remainder=0;
+        $account_info = DB::table('customer_accounts')->where('account_name',$username)->first();
+        $userispppoe=DB::table('radcheck')->where([['username','=',$account_info->account_no??$username],['attribute','=','Expiration']])->first();
+        if($userispppoe){
+            return '<tr><td colspan="2"> You Account is valid until '.$userispppoe->value.'</td></tr>';
+        }
         if(count($user)>0){
             $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->groupname??'']])->first();
             if(!$userdata){
@@ -227,6 +232,7 @@ class clientsController extends Controller
         $phone = $request->get('phone');
         $account_name = $request->get('account_name');
 
+        $package_info = DB::table('packages')->where('packagename',$package)->first();
 
         if($amount && $amount!=0){
 
@@ -268,10 +274,10 @@ class clientsController extends Controller
     	        $permitted_chars_password = '23456789abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
                 if(Auth::guard('customer')->check()){                     
                     $username = $request->get('account');
-                    $password = $request->get('account');
+                    $password = $package_info->users=='pppoe'?$request->get('account'):'';
                 }else{
                     $username=rand(1000,100000);
-		    		$password= $username;
+		    		$password= $package_info->users=='pppoe'?$username:'';
                 }
 
                 $c_username = Auth::guard('customer')->user()->username??false;
@@ -924,6 +930,7 @@ class clientsController extends Controller
         }
     }
     public function AccountsPayFor(Request $request){
+        dd($request->all());
         $account= $request->get('account');
         $account_name = DB::table('customer_accounts')->where('account_no',$account)->first();
         $packageid = $request->get('packageid');

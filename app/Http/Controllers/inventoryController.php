@@ -98,7 +98,7 @@ class inventoryController extends Controller
         	$item->save();
 
         	if ($item) {
-        		return redirect()->back()->with('success','Item added successfully');
+        		return redirect()->route('inventory.items')->with('success','Item added successfully');
         	}else{
         		return redirect()->back()->with('error','new item could not be added, try again ...
         			');
