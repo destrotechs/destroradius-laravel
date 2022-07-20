@@ -1,0 +1,19 @@
+{
+    "name": "morris/mpesa",
+    "description": "laravel mpesa package for online payments",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Morris\\Mpesa\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "morris destro",
+            "email": "morrisdestro@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

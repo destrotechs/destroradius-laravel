@@ -1,0 +1,13 @@
+{
+    "name": "morris/routeros",
+    "description": "routeros api",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Morris Destro",
+            "email": "morrisdestro@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
