@@ -25,6 +25,7 @@ User accounts
 				@forelse($customers as $key=>$ac)
 				<?php
 					$username = $ac->username;
+					$usertype = $ac->type;
 				?>
 				<tr>
 					<td>{{ $key+1 }}</td>
@@ -36,19 +37,33 @@ User accounts
 							<tr>
 								<td>Accesscode</td>
 								<td>Status</td>
+								{{-- <td>Action</td> --}}
 								<td>Action</td>
 							</tr>
 							@foreach($customer_accounts[$key] as $k=>$c)
 							<tr>
 								<td>{{ $c->account_no }}</td>
 								<td>{{ $c->status }}</td>
-								<td>
+								{{-- <td>
 									@if($c->status=='active')
 									<a href="#" id="{{ $c->id }}" class="btn btn-sm btn-danger diactivate">Diactivate</a>
 									@else
 									<a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal2">Activate</a>
 									@endif
-								</td>
+								</td> --}}
+								<td>
+                                    @if($c->status=='active')
+                                    <a href="#" id="{{ $c->account_no }}" class="btn btn-sm btn-danger diact">Suspend</a>
+                                    <a href="{{ route('services.testconnectivity',['user'=>$c->account_no]) }}" class="btn btn-info btn-sm">Test Connectivity</a>
+                                    @else
+                                    <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal2">Activate</a>
+                                    @endif
+                                    @if($usertype!='hotspot')
+                                    <a href="{{ route('customer_form.doc',['account_no'=>$c->account_no]) }}" target="_blank" class="btn btn-sm btn-success"><i class="fas fa-download"></i>&nbsp;Business Form</a>
+                                    @endif
+                                    <a href="{{ route('edit.customer.account',['acc'=>$c->account_no]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+
+                                </td>
 							</tr>
 							@endforeach
 							
@@ -76,7 +91,7 @@ User accounts
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Customer User Account</h5>
+        <h5 class="modal-title" id="exampleModalLabel">New Customer Account</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -105,6 +120,8 @@ User accounts
         		<option value="">No Packages available</option>
         		@endforelse
         	</select>
+        	<label>Account Name</label>
+            <input name="account_name" type="text" class="form-control" placeholder="Account Name" required>
         	<label>Account No</label>
         	<input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
         	<hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
@@ -147,6 +164,33 @@ User accounts
 @section('js')
 <script type="text/javascript">
 	$(document).ready(function(){
+		$(".diact").click(function(){
+            var account = $(this).attr('id');
+            if(account){
+                if(confirm("Are you sure you want to deactivate this account?")){
+                    $.ajax({
+                        method:'GET',
+                        url:'/client/account/suspend/'+account,
+                        success:function(data){
+                            alert(data);
+                        }
+                    })
+                }
+                
+            }
+        })
+
+        $(".account_type").change(function(){
+            var type = $(this).val();
+            if(type=='hotspot'){
+                var account = $("#ownerf").val();
+                $(".num").val(account).attr('disabled','disabled');
+            }else{
+                $(".num").val("")
+                $(".num").val(account).removeAttr('disabled')
+            }
+        })
+
 		$(".gen").click(function(){
 			var account = generateNumber();
 			$(".num").val(account);
@@ -167,8 +211,19 @@ User accounts
 		})
 
 		function generateNumber(){
-			return Math.floor((Math.random() * 10000) + 1);
-		}
+            var account_no = Math.floor((Math.random() * 1000000) + 1);
+            return "P"+account_no+getLastLetter();  
+        }
+      function getLastLetter(length=1) {
+          var result           = '';
+          var characters       = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+          var charactersLength = characters.length;
+          for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * 
+       charactersLength));
+         }
+         return result;
+      }
 	})
 </script>
 @endsection

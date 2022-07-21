@@ -664,7 +664,17 @@ $(document).ready(function(){
 
         function generateNumber(){
             var account_no = Math.floor((Math.random() * 1000000) + 1);
-            return "P"+account_no+"E";  
+            return "P"+account_no+getLastLetter();  
+        }
+        function getLastLetter(length=1) {
+            var result           = '';
+            var characters       = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+            var charactersLength = characters.length;
+            for ( var i = 0; i < length; i++ ) {
+              result += characters.charAt(Math.floor(Math.random() * 
+         charactersLength));
+           }
+           return result;
         }
 })
 </script>
