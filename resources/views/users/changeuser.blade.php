@@ -644,6 +644,8 @@ $(document).ready(function(){
                         url:'/client/account/suspend/'+account,
                         success:function(data){
                             alert(data);
+                            window.location.reload()
+                            
                         }
                     })
                 }

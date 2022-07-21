@@ -31,13 +31,15 @@ User accounts
 				        @if(count($customer_accounts)>0 && count($customer_accounts[$key])>0)
 						<table class="table table-sm table-responsive table-bordered">
 							<tr>
-								<td>Accesscode</td>
+								<td>{{ '#' }}</td>
+								<td>Account No</td>
 								<td>Status</td>
 								{{-- <td>Action</td> --}}
 								<td>Action</td>
 							</tr>
 							@foreach($customer_accounts[$key] as $k=>$c)
 							<tr>
+								<td>{{ $k+1 }}</td>
 								<td>{{ $c->account_no }}</td>
 								<td>{{ $c->status }}</td>
 								{{-- <td>
@@ -170,6 +172,7 @@ User accounts
                         url:'/client/account/suspend/'+account,
                         success:function(data){
                             alert(data);
+                            window.location.reload()
                         }
                     })
                 }
