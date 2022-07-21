@@ -35,6 +35,7 @@ class clientsController extends Controller
         $user_type = '';
         $username='';
         $accounts = null;
+        $valid_until = array();
         if(Auth::guard('customer')->check()){
 
             $username = Auth::guard('customer')->user()->username;
@@ -42,13 +43,18 @@ class clientsController extends Controller
 
             if(Auth::guard('customer')->user()->type=='pppoe' || Auth::guard('customer')->user()->type=='prepaid'){
                 $accounts = DB::table('customer_accounts')->where('owner',$username)->get();
+                foreach($accounts as $a){
+
+                    $info = DB::table('radcheck')->where([['username','=',$a->account_no],['attribute','=','Expiration']])->first();
+                    array_push($valid_until, $info->value??'Disconnected');
+                }
                 $user_info = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->first();
                 // array_push($user_info,$info);
 
             }
 
         }
-        return view('clients.checkbalance',compact('user_info','user_type','username','accounts'));
+        return view('clients.checkbalance',compact('user_info','user_type','username','accounts','valid_until'));
     }
     public function fetchBalance(Request $request){
         $username=$request->get('username');
@@ -458,7 +464,7 @@ class clientsController extends Controller
 
     }
     public static function newMessage($package,$account_name,$username,$phone){
-        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME'))))." Dear Customer, You have successfully purchased ".$package." for account ".$account_name);  
+        $message=str_replace("<br />","",nl2br("FROM ".ucwords(strtoupper(env('APP_NAME')))).". Dear Customer, You have successfully purchased ".$package." for account ".$account_name);  
 
         $sms = new Message();
 
@@ -793,7 +799,8 @@ class clientsController extends Controller
             $d = date('j',$packageValidDate);
             $y = date('Y',$packageValidDate);
 
-            return $d." ".$mnth." ".$y. " 12:00"."H".$dateToDisconnect;
+            return $d." ".$mnth." ".$y. " 12:00";
+            // return $d." ".$mnth." ".$y. " 12:00"."H".$dateToDisconnect;
         }
 
     }
@@ -930,7 +937,6 @@ class clientsController extends Controller
         }
     }
     public function AccountsPayFor(Request $request){
-        dd($request->all());
         $account= $request->get('account');
         $account_name = DB::table('customer_accounts')->where('account_no',$account)->first();
         $packageid = $request->get('packageid');

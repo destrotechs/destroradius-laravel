@@ -10,10 +10,9 @@
     <form method="POST" action="{{ route('account.payfor') }}">
       <input type="hidden" name="package" class="package">
 		@foreach($accounts as $acc)
-         <div class="custom-control custom-radio custom-control p-3">
-         <input type="radio" id="{{ $acc->package_name }}" name="account" class="custom-control-input acc" value="{{ $acc->account_no}}">
-         <label class="custom-control-label" for="customRadioInline"><b>({{ $acc->account_name??'' }})</b><small class="badge ml-5 badge-{{ $acc->status=='active'?'success':'danger' }}">{{ $acc->status }}</small></label>
-         </div>
+         <input type="radio" name="account" class="acc" id="{{$acc->package_name}}" value="{{$acc->account_no}}">
+         <label>{{$acc->account_name}} &nbsp;<span class="badge badge-{{$acc->status=='active'?'success':'danger'}}">{{$acc->status}}</label>
+         <br>
       @endforeach
          <hr>
          <input type="hidden" name="packageid" value="{{$pid??null}}">
@@ -33,7 +32,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
    $(".acc").click(function(){
-      alert($(this).attr('id'));
+      $(".package").val($(this).attr('id'));
    })
 })
 </script>
