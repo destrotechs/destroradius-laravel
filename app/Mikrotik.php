@@ -11,7 +11,6 @@ class Mikrotik extends Model
 {
 	/*
 	This class is responsible for mikrotik connection and operations
-
 	#viewing live online users, available customers,changing pppoe settings
 	*/
 
@@ -30,13 +29,10 @@ class Mikrotik extends Model
 			    	$uptime=$response->getProperty('uptime');
 			    	$download = $response->getProperty('bytes-in');
 			    	$upload = $response->getProperty('bytes-out');
-
 			    	$user_details = array($user,$ip,$uptime,$download,$upload,$nas->nasname);
-
 			    	array_push($users,$user_details);
 			        // echo 'User: ', $response->getProperty('user'),
 			        // "\n";
-
 			    }
 			}
 			return $users;
