@@ -11,29 +11,25 @@ User accounts
 <div class="card">
 	{{-- <div class="card-header"><h5>Logs</h5></div> --}}
 	<div class="card-body">
-		<table class="table table-xs table-striped table-hover">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Name</th>
-					<th>Account(s)</th>
-					<th></th>
-				</tr>
-			</thead>
-			<?php $username='';?>
-			<tbody>
 				@forelse($customers as $key=>$ac)
 				<?php
 					$username = $ac->username;
 					$usertype = $ac->type;
 				?>
-				<tr>
-					<td>{{ $key+1 }}</td>
-					<td>{{ $ac->name }}</td>
-					{{-- <td>{{ count($customer_accounts[$key])?? 'None' }}</td> --}}
-					<td>
-						@if(count($customer_accounts)>0 && count($customer_accounts[$key])>0)
-						<table class="table table-xs table-bordered">
+				<div class="accordion" id="accordionExample">
+				  <div class="card">
+				    <div class="card-header" id="headingOne">
+				      <h2 class="mb-0">
+				        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne{{ $ac->id }}" aria-expanded="true" aria-controls="collapseOne">
+				          <h3 class="text-bold">{{ $ac->name }}</h3>
+				        </button>
+				      </h2>
+				    </div>
+
+				    <div id="collapseOne{{ $ac->id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+				      <div class="card-body">
+				        @if(count($customer_accounts)>0 && count($customer_accounts[$key])>0)
+						<table class="table table-sm table-responsive table-bordered">
 							<tr>
 								<td>Accesscode</td>
 								<td>Status</td>
@@ -75,12 +71,13 @@ User accounts
 						<div class="text-danger text-sm">User has no associated accounts</div>
 								
 						@endif
-					</td>
-				</tr>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				
 				@empty
-				<tr>
-					<td colspan="3">No user accounts available</td>
-				</tr>
+					<div class="text-danger">No user accounts available</div>
 				@endforelse
 			</tbody>
 		</table>
