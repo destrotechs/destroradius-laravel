@@ -52,14 +52,14 @@
               </a>
               <div class="collapse p-2" id="network">
                 <ul class="nav nav-sm flex-column">
-                  @if(Auth::user()->role_id==1)
+                  {{-- @if(Auth::user()->role_id==1)
                   <li class="nav-item">
                     <a href="{{route('zone.new')}}" class="nav-link">
                       <span class="fas fa-plus-circle"></span>&nbsp;
                       <span class="sidenav-normal">New zone/zone manager </span>
                     </a>
                   </li>
-                  @endif
+                  @endif --}}
                   <li class="nav-item">
                     <a href="{{route('zone.all')}}" class="nav-link">
                       <span class="fas fa-bars"></span>&nbsp;

@@ -17,6 +17,19 @@ New nas
         </ul>
     </div>
 @endif
+<div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('nas.view')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+        
+	</div>
+</div>
 <div class="">
     <div class="row">
         <div class="col-md-7 card">

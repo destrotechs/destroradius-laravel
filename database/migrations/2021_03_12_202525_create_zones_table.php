@@ -16,7 +16,7 @@ class CreateZonesTable extends Migration
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
             $table->string('zonename',50);
-            $table->string('networktype')->default('hotspot');
+            $table->string('networktype')->nullable();
             $table->timestamps();
         });
     }

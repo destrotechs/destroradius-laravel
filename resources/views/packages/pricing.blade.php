@@ -19,6 +19,19 @@ Package pricing
 
 <?php $num=0; ?>
 <div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('packages.all')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+        
+	</div>
+</div>
+<div class="row">
 	<div class="col-md-5">
 		<div class="card card-body">
 			<h5>New Package Price</h5><hr>

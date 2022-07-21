@@ -167,7 +167,10 @@ User accounts
 		})
 
 		function generateNumber(){
-			return Math.floor((Math.random() * 10000) + 1);
+			const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+			var lastPart=alphabet[Math.floor(Math.random() * alphabet.length)];  			 
+			var accountnum='P' + Math.floor(100000 + Math.random() * 9000000) + lastPart;
+			return accountnum;
 		}
 	})
 </script>

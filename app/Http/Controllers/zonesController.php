@@ -47,17 +47,17 @@ class zonesController extends Controller
     	
     	return view('zones.allzones',compact('zones'));
     }
+
+
     public function addZone(Request $request){
     	$request->validate([
     		'zonename'=>'required|unique:zones',
-    		'networktype'=>'required',
+    		// 'networktype'=>'required',
     	]);
     	$z= new Zone;
-    	$z->zonename=$request->get('zonename');
-    	$z->networktype=$request->get('networktype');
+    	$z->zonename=ucWords(strToLower($request->get('zonename')));
+    	// $z->networktype=$request->get('networktype');
     	$z->save();
-
-
     	if ($z) {
             return redirect()->route('zone.all')->with("success","A new zone has been added, add the zone manager");
     	}else{
@@ -65,6 +65,8 @@ class zonesController extends Controller
     		return redirect()->back()->with('error','There was a problem adding a new zone, try again');
     	}
     }
+
+
     public function zoneManager(Request $request){
     	
     	$request->validate([
@@ -84,11 +86,15 @@ class zonesController extends Controller
     		return redirect()->back()->with('error','There was an error adding zone manager, try again');
     	}
     }
+
+
     public function transferZone($id){
     	$zone=Zone::find($id);
         $managers=User::all();
     	return view('zones.zonetransfer',compact('zone','managers'));
     }
+
+
     public function transferZoneSave(Request $request){
     	$request->validate([
     		'managerid'=>'required',
@@ -111,23 +117,24 @@ class zonesController extends Controller
     		return redirect()->back()->with('error','zone transfer failed, try again');
     	}
     }
+
+
     public function editZone($id){
         $zone=Zone::find($id);
         return view('zones.editzone',compact('zone'));
     }
+
+
     public function saveEditedZone(Request $request){
         $request->validate([
             'zonename'=>'required',
-            'networktype'=>'required',
+            // 'networktype'=>'required',
         ]);
         $id=$request->get('id');
         $z=Zone::find($id);
-        $z->zonename=$request->get('zonename');
-        $z->networktype=$request->get('networktype');
-
+        $z->zonename=ucWords(strToUpper($request->get('zonename')));
+        // $z->networktype=$request->get('networktype');
         $z->save();
-
-
         if ($z) {
 
             //log the action
@@ -144,13 +151,12 @@ class zonesController extends Controller
             return redirect()->back()->with('error','There was a problem updating the zone, try again');
         }
     }
+
     public function deleteZone($id){
         $zone=Zone::find($id);
-
         $zone->delete();
         DB::table('zonemanagers')->where('zoneid','=',$id)->delete();
             toast('Zone has been removed successfully','success');
-
         return redirect()->route('zone.all')->with("success","Zone has been removed successfully");
     }
 }

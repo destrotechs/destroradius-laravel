@@ -14,6 +14,19 @@ Edit Package
     </div>
 @endif
 <div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('packages.all')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+        
+	</div>
+</div>
+<div class="row">
     <div class="col-md-7">
         <div class="card card-body">
             <form action="{{ route('packages.edit.save') }}" method="post" class="form-group">

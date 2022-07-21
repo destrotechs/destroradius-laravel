@@ -21,6 +21,7 @@ class nasController extends Controller
         }
         $this->middleware('auth');
     }
+
     public function viewNas(Request $request){
         $zones=array();
         $id=Auth::user()->id;
@@ -36,17 +37,19 @@ class nasController extends Controller
         
         return view('nas.view',compact('nas'));
     }
+
     public function newNas(Request $request){
         // $m = new Mikrotik();
-        
         $zones=Zone::all();
         return view('nas.newnas',compact('zones'));
     }
+
     public function editNas(Request $request,$id){
         $nas=DB::table('nas')->where('id','=',$id)->get();
         $zones=Zone::all();
         return view('nas.editnas',compact('nas','zones'));
     }
+
     public function addNewNas(Request $request){
         $request->validate([
             'nassecret'=>['required'],
@@ -54,7 +57,11 @@ class nasController extends Controller
             'nasshortname'=>['required'],
         ]);
         $nasid=DB::table('nas')->insertGetId([
-            'secret'=>$request->get('nassecret'),'nasname'=>$request->get('nasname'),'shortname'=>$request->get('nasshortname'),'type'=>$request->get('nastype'),'description'=>$request->get('nasdescription'),
+            'secret'=>$request->get('nassecret'),
+            'nasname'=>$request->get('nasname'),
+            'shortname'=>$request->get('nasdescription'),
+            'type'=>ucWords(strToLower($request->get('nastype'))),
+            'description'=>ucWords(strToLower($request->get('nasdescription'))),
         ]);
         
         //associate nas with zone
@@ -72,6 +79,7 @@ class nasController extends Controller
         toast('Nas saved successfully','success');
         return redirect()->route('nas.view')->with("success","Nas saved successfully");
     }
+
     public function removeNas(Request $request,$id){
         $nas=DB::table('nas')->where('id',$id)->delete();
         if ($this->logs_enabled==1) {
@@ -89,6 +97,7 @@ class nasController extends Controller
             return redirect()->route('nas.view')->with("error","There was an error removing the requested nas, try again later");
         }
     }
+
     public function editNasSave(Request $request){
         $request->validate([
             'nassecret'=>['required'],
@@ -96,9 +105,16 @@ class nasController extends Controller
             'nasshortname'=>['required'],
         ]);
         $naschange=DB::table('nas')->where('id',$request->get('id'))->update([
-            'secret'=>$request->get('nassecret'),'nasname'=>$request->get('nasname'),'shortname'=>$request->get('nasshortname'),'type'=>$request->get('nastype'),'description'=>$request->get('nasdescription'),
+            'secret'=>$request->get('nassecret'),
+            'nasname'=>$request->get('nasname'),
+            'shortname'=>$request->get('nasdescription'),
+            'type'=>ucWords(strToLower($request->get('nastype'))),
+            'description'=>ucWords(strToLower($request->get('nasdescription'))),
         ]);
-        if($naschange==true){
+        $nasZode=DB::table('naszones')->where('nasid',$request->get('id'))->update(array(
+            'zoneid'=>$request->get('nasshortname')
+        ));
+        if($naschange==1 || $nasZode == 1){
             //log query
             if ($this->logs_enabled==1) {
                 $log=" edited nas id ".$request->get('id');
@@ -118,16 +134,20 @@ class nasController extends Controller
         }
        
     }
+
     public static function restartServer(){
         system("systemctl restart freeradius.service");
         return true;
     }
+
     public static function restartMysql(){
         system("systemctl restart mysql.service");
         return true;
     }
+
     public static function restartApache(){
         system("systemctl restart apache2.service");
         return true;
     }
+
 }

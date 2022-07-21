@@ -124,8 +124,7 @@ class userController extends Controller
             'username'=>'required|unique:customers|unique:radcheck|allowed_username',
             'password'=>'required|min:6',
             'phone'=>'required|numeric',
-        ]);
-        
+        ]);        
 
         //add user to customers table
         $c = new Customer;
@@ -149,21 +148,22 @@ class userController extends Controller
         $log=" Created New user ".$request->get('username');
         $logwrite=Log::createTxtLog($user,$log);
         $packageusers = DB::table('packages')->where('packagename','=',$request->get('package'))->pluck('users');
+        alert()->success("User created successfully");
+        return redirect()->route('user.all');
+        // //calculate validdays for this customer
+        // if($request->get('type')!='hotspot'){
+        //     alert()->success("User created successfully");
+        //     return redirect()->route('user.all');
+        // }else if($request->get('type')=='hotspot'){
+        //     $useraccount = DB::table('customer_accounts')->updateOrInsert(
+        //         ['owner'=>$c_username,'account_no'=>$c_username],
+        //         ['package_name'=>$package??'','status'=>'inactive']
+        //     );
 
-        //calculate validdays for this customer
-        if($request->get('type')!='hotspot'){
-            alert()->success("User created successfully");
-            return redirect()->route('user.all');
-        }else if($request->get('type')=='hotspot'){
-            $useraccount = DB::table('customer_accounts')->updateOrInsert(
-                ['owner'=>$c_username,'account_no'=>$c_username],
-                ['package_name'=>$package??'','status'=>'inactive']
-            );
+        //     alert()->success("User created successfully");
+        //     return redirect()->route('user.all');
 
-            alert()->success("User created successfully");
-            return redirect()->route('user.all');
-
-        }
+        // }
     }
     public function suspendedUsers(){
         return view('users.suspended');

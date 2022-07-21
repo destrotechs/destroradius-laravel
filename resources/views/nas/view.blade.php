@@ -27,9 +27,9 @@ All nas
         <thead>
             <tr>
                 <th>#</th>
-                <th>Name</th>
+                <th>Ip Address</th>                
                 <th>Make</th>
-                <th>Ip Address</th>
+                <th>Zone</th>
                 <th>Description</th>
                 @if(Auth::user()->role_id==1)
                 <th></th>
@@ -42,9 +42,9 @@ All nas
             <?php $num++;?>
                 <tr>
                     <td><?php echo $num;?></td>
-                    <td>{{ $n->zonename }}</td>
-                    <td>{{ $n->type }}</td>
                     <td>{{ $n->nasname }}</td>
+                    <td>{{ $n->type }}</td>
+                    <td>{{ $n->zonename }}</td>
                     <td>{{ $n->description }}</td>
                     @if(Auth::user()->role_id==1)
                     <td><a href="{{ route('nas.edit',['id'=>$n->id]) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i><a><a href="{{ route('nas.remove',['id'=>$n->id]) }}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i><a></td>
