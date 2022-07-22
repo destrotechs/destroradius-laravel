@@ -176,6 +176,7 @@ Route::get('/user/accounts','userController@getUserAccounts')->name('customer.ac
 Route::get('/user/accounts/edit/{acc?}','userController@getAccountEdit')->name('edit.customer.account');
 Route::post('/user/accounts/edit','userController@postAccountUpdate')->name('edit.customer.account.post');
 Route::get('/user/accounts/{id}','apiController@getAccount')->name('customer.accounts.one');
+Route::get('/get/packages/{id}','apiController@getPackages')->name('get.packages.special');
 Route::get('/user/accounts/all/{username?}/{packageid?}','clientsController@getAllUserAccounts')->name('customer.accounts.all');
 Route::post('/user/accounts','userController@postUserAccount')->name('customer.accounts.post');
 

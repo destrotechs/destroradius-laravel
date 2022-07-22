@@ -36,9 +36,15 @@ New Package
 </div>
 <div class="row">
     <div class="col-md-7">
-        <div class="card card-body">
+        <div class="card card-body" style="background: rgb(247, 189, 83)">
             <form action="{{ route('package.save') }}" method="post" class="form-group">
                 {{ csrf_field() }}
+
+                <style>
+                    label{
+                        color: black;
+                    }
+                </style>
 
                 <div class="form-row">
                     <div class="col">

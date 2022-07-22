@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use PDF;
+use Auth;
+use Hash;
+use App\Log;
+use App\Zone;
 use App\Package;
 use App\Customer;
 use App\Mikrotik;
-use App\Log;
-use App\Zone;
-use DB;
-use Auth;
-use Hash;
-use PDF;
+use Illuminate\Http\Request;
 use App\Helpers\CustomerHelper;
+use Illuminate\Support\Facades\DB;
 class userController extends Controller
 {
     public function __construct(){
@@ -23,6 +23,8 @@ class userController extends Controller
         }
         $this->middleware('auth');
     }
+
+
     public function newUser(){
         $packages=Package::all();
         $role_id=Auth::user()->role_id;
@@ -34,6 +36,8 @@ class userController extends Controller
         }
         return view('users.newuser',compact('packages','zones'));
     }
+
+
     public function getNas(Request $request){
         $id=$request->get('id');
         $nas=DB::table('nas')
@@ -44,6 +48,8 @@ class userController extends Controller
         }
         return $output;
     }
+
+
     public function allUsers(){
         $customers=array();
         $role_id=Auth::user()->role_id;
@@ -113,11 +119,11 @@ class userController extends Controller
                         array_push($remainingdays, $remaindays);
             }
     }
-
-
     }
         return view('users.allusers',compact('customers','remainingdays'));
     }
+
+
     public function saveNewCustomer(Request $request){
         //validate details
         $request->validate([
@@ -165,27 +171,37 @@ class userController extends Controller
 
         // }
     }
+
+
     public function suspendedUsers(){
         return view('users.suspended');
     }
+
+
     public function deletedUsers(){
         return view('users.deleted');
     }
+
+
     public function pendingUsers(){
         return view('users.pending');
     }
+
+
     public function changeUserPackage(){
         return view('users.changepackage');
     }
+
     public function onlineUsers(){
         $nas = DB::table('nas')->get();
         return view('users.onlineusers',compact('nas'));
     }
+
     public function offlineUsers(){
         return view('users.offlineusers');
     }
-    public function paidUsers(){
 
+    public function paidUsers(){
          $role_id=Auth::user()->role_id;
          $myzones=DB::table('zonemanagers')->where('managerid',$role_id)->pluck('zoneid');
         if ($role_id==2) {
@@ -231,9 +247,13 @@ class userController extends Controller
 
         return view('users.paidusers',compact('paidusers'));
     }
+
+
     public function unpaidUsers(){
         return view('users.unpaidusers');
     }
+
+
     public function getOnlineUser(Request $request){
         $usertype=$request->get('usertype');
         $output="";
@@ -274,9 +294,13 @@ class userController extends Controller
             echo $output;
         }
     }
+
+
     public function getUserEdit(){
         return view('users.edituser');
     }
+
+
     public function getUserToEdit(Request $request){
         $username=$request->get('username');
         $userexist=DB::table('customers')->where('username','=',$username)->get();
@@ -286,6 +310,8 @@ class userController extends Controller
             return redirect()->back()->with("error","The searched user does not exist");
         }
     }
+
+
     public function getUserChange($username){
 
         if($username){
@@ -349,6 +375,8 @@ class userController extends Controller
             return redirect()->route('geteditcustomer',compact('zones'));
         }
     }
+
+
     public function postUserPersonalDetails(Request $request){
         $id = $request->get('id');
          $userupdated = DB::table('customers')
@@ -362,6 +390,8 @@ class userController extends Controller
             return redirect()->back();
         }
     }
+
+
     public static function updateBundlesForExistingCustomer($username,$package){
         $total_mbs_bought = DB::table('radgroupcheck')->where([['groupname','=',$package],['attribute','=','Max-All-MB']])->pluck('value');
 
@@ -440,8 +470,12 @@ class userController extends Controller
             return $remaining;
         }
     }
+
+
     public function changeCustomerPackage(Request $request){
+        
         $package = $request->get('package');
+
         $username = $request->get('account_no'); //username becomes the account no to be activated
         if(!$package){
             alert()->error("Assign the account to a package first");
@@ -467,11 +501,10 @@ class userController extends Controller
         
         if ($package == 'nopackage'){
             $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$username)->delete();
-
             $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
             $remove_radusergroup = DB::table('radreply')->where('username','=',$username)->delete();
             $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
-                $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
+            $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
             $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
             $radcheckuser = DB::table('radcheck')->updateOrInsert(
                     ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
@@ -589,11 +622,11 @@ class userController extends Controller
                     toast("Success","success");
                     return redirect()->back();
                 }
-
-
         }
 
     }
+
+
     public static function changeAccountPackage($account,$package,$customer_username){
         $package = $package;
         $username = $account; //username becomes the account no to be activated
@@ -607,9 +640,6 @@ class userController extends Controller
         $packageusers = DB::table('packages')->where('packagename','=',$package)->pluck('users');
 
         $user_id = DB::table('customers')->where('username','=',$c_username)->pluck('id');
-
-
-
         if($username){
                 $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');
 
@@ -617,8 +647,6 @@ class userController extends Controller
                     ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
                 );
         }
-
-        
         if ($package == 'nopackage'){
             $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$username)->delete();
 
@@ -717,8 +745,6 @@ class userController extends Controller
                 $activated = DB::table('customer_accounts')->where('account_no',$username)->update(['status'=>'active']);
                  $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
                 return true;
-
-
         }
 
     }
@@ -789,6 +815,8 @@ class userController extends Controller
         }
 
     }
+
+
     
     public function perUserLimit(Request $request){
         $limit = $request->get('limit');
@@ -815,6 +843,8 @@ class userController extends Controller
         }
 
     }
+
+    
     public function editAttribute(Request $request){
         if($request->get('table') == 'check'){
             DB::table('radcheck')->where('id','=',$request->get('attr_id'))->update(
@@ -1025,25 +1055,66 @@ class userController extends Controller
         }        
 
     }
+
     public function getUserAccounts(Request $request){
         $customers = DB::table('customers')->get();
         $customer_accounts = array();
         $packages = DB::table('packages')->get();
-
-
         if($customers){
             foreach($customers as $c){
                 $accounts = DB::table('customer_accounts')->where([['owner','=',$c->username]])->get();
                 if($accounts){
-
                 array_push($customer_accounts, $accounts);
                 }
             }
         }
-
-        
         return view('user_accounts.user_accounts', compact('customers','customer_accounts','packages'));
     }
+
+    
+
+    
+
+
+    public function generateAccount($type){ 
+        if ($type == 'H') {
+            $pass='';
+            do {
+                $pass=rand(1000,999999); 
+                $exists = DB::table('customer_accounts')->where('account_no',$pass)->first();
+            } while ($exists);
+                   
+            return $pass;             
+        }if($type == 'P') {   
+            do {
+                $pass="P" . rand(10000,999999) . $this->generateRandomString(1); 
+                $exists = DB::table('customer_accounts')->where('account_no',$pass)->first();
+            } while ($exists);
+
+            return $pass;
+        }
+    }
+
+
+    function generateRandomString($length) {
+        $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+
+    function password_generate($chars) 
+    {
+        $data = '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcefghjkmnpqrstuvwxyz';
+        return substr(str_shuffle($data), 0, $chars);
+    }
+              
+
+
     public function postUserAccount(Request $request){
         // $account_exist = DB::table('customer_accounts')->where([['owner','=',$request->get('owner')],['package_name','=',$request->get('package')]])->get();
         // if(count($account_exist)>0){
@@ -1051,22 +1122,22 @@ class userController extends Controller
         //  return redirect()->back();   
         // }else{
             $customerishotspot = DB::table('customers')->where('username',$request->owner)->first();
-            if($customerishotspot->type=='hotspot'){
-                $accounts = DB::table('customer_accounts')->where('owner',$request->owner)->count();
+            if($request->account_name=='hotspot'){
+                $accounts = DB::table('customer_accounts')->where('owner',$request->owner)->where('account_name','hotspot')->count();
                 if($accounts>0){
                     alert()->error("An hotspot user cannot have multiple accounts!");
                     return redirect()->back(); 
                 }else{
                     //create new account for hotsport user
                     $newaccount = DB::table('customer_accounts')->insert([
-                        'owner'=>$request->owner,'account_no'=>$request->owner,'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package'),'account_name'=>$request->get('account_name')
+                        'owner'=>$request->owner,'account_no'=>$request->owner,'account_no'=>$this->generateAccount('H'),'status'=>'inactive','package_name'=>$request->get('package'),'account_name'=>$request->get('account_name')
                     ]);
                     alert()->success("A new hotspot account has been added successfully!");
                     return redirect()->back(); 
                 }
             }else{
                $account = DB::table('customer_accounts')->insert(
-                ['owner'=>$request->get('owner'),'account_name'=>$request->get('account_name'),'account_no'=>$request->get('account_no'),'status'=>'inactive','package_name'=>$request->get('package')]
+                ['owner'=>$request->get('owner'),'account_name'=>$request->get('account_name'),'access_code'=>$this->password_generate(8),'account_no'=>$this->generateAccount('P'),'status'=>'inactive','package_name'=>$request->get('package')]
                 );
                 if($account){
                     toast("Account added successfully!","success");
@@ -1076,12 +1147,10 @@ class userController extends Controller
                     return redirect()->back();
                 } 
             }
-
-            
         // }
-        
     }
     
+
     public function getAccountEdit(Request $request,$acc){
         $account = DB::table('customer_accounts')->where('account_no',$acc)->first();
         $usertype = DB::table('customers')->where('username',$account->owner)->first();

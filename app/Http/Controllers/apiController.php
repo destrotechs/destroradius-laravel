@@ -30,4 +30,9 @@ class apiController extends Controller
         $account = DB::table('customer_accounts')->where('id',$id)->get();
         return $account;
     }
+
+    public function getPackages(Request $request,$id){
+        $packages =DB::table('packages')->where('users',$id)->get();
+        return $packages;
+    }
 }
