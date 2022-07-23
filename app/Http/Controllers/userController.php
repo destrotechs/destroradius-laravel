@@ -472,11 +472,11 @@ class userController extends Controller
     }
 
 
-    public function changeCustomerPackage(Request $request){
-        
+    public function changeCustomerPackage(Request $request){        
         $package = $request->get('package');
-
         $username = $request->get('account_no'); //username becomes the account no to be activated
+        $count=DB::table('customer_accounts')->where('account_no',$request->get('account_no'))->first();
+        $accessCode=$count->access_code;
         if(!$package){
             alert()->error("Assign the account to a package first");
             return redirect()->back();
@@ -485,20 +485,12 @@ class userController extends Controller
         $user = Auth::user()->email;
         $log="Changed ".$username." Package to ".$package;
         $logwrite=Log::createTxtLog($user,$log);
-
         $package_id = DB::table('packages')->where('packagename','=',$package)->pluck('id');
-
         $packageusers = DB::table('packages')->where('packagename','=',$package)->pluck('users');
-
         $user_id = DB::table('customers')->where('username','=',$c_username)->pluck('id');
-
-
-
         if($username){
                 $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');                
-        }
-
-        
+        }        
         if ($package == 'nopackage'){
             $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$username)->delete();
             $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
@@ -507,7 +499,7 @@ class userController extends Controller
             $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
             $remove_suspended_acc = DB::table('user_access_suspensions')->where([['username','=',$username]])->delete();
             $radcheckuser = DB::table('radcheck')->updateOrInsert(
-                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$accessCode]
                 );
             echo "user activated on non-regulated mode";
 
@@ -533,22 +525,18 @@ class userController extends Controller
 
                 //remove from radusergroup
                 $remove_userpackage = DB::table('customerpackages')->where('customerid','=',$user_id[0])->delete();
-
-
                 $remove_radusergroup = DB::table('radusergroup')->where('username','=',$username)->delete();
-
                 $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','User-Profile']])->delete();
                 $remove_raduserprofiles = DB::table('radcheck')->where([['username','=',$username],['attribute','=','Expiration']])->delete();
 
                 $new_radusergrouprecord = DB::table('radusergroup')->insert([
                     'username'=>$username,'groupname'=>$package,'priority'=>10,
                 ]);
-
                 $new_userpackage = DB::table('customerpackages')->insert([
                     'customerid'=>$username,'packageid'=>$package_id[0],
                 ]);
                 $radcheckuser = DB::table('radcheck')->updateOrInsert(
-                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>'']
                 );
 
                 if ($new_radusergrouprecord){
@@ -576,7 +564,7 @@ class userController extends Controller
             }
         }else if ($packageusers[0] =='pppoe'){
             $radcheckuser = DB::table('radcheck')->updateOrInsert(
-                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$accessCode]
                 );
             $mpackage = DB::table('packages')->where('packagename','=',$package)->first();
             $user_on_package = DB::table('customerpackages')->where([['customerid','=',$username],['packageid','=',$package_id[0]]])->count();
@@ -630,6 +618,8 @@ class userController extends Controller
     public static function changeAccountPackage($account,$package,$customer_username){
         $package = $package;
         $username = $account; //username becomes the account no to be activated
+        $count=DB::table('customer_accounts')->where('account_no',$account)->first();
+        $accessCode=$count->access_code;
         $c_username = $customer_username;
         $user = Auth::user()->email;
         $log="Changed ".$username." Package to ".$package;
@@ -644,7 +634,7 @@ class userController extends Controller
                 $pass = DB::table('customers')->where('username','=',$username)->pluck('cleartextpassword');
 
                 $radcheckuser = DB::table('radcheck')->updateOrInsert(
-                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$username]
+                    ['username'=>$username,'attribute'=>'Cleartext-Password'],['op'=>':=','value'=>$accessCode]
                 );
         }
         if ($package == 'nopackage'){
