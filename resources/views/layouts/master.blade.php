@@ -339,15 +339,8 @@
             </li>
           </ul>
           @if(Auth::user()->role_id==1)
-          <!-- Divider -->
-          <hr class="my-3">
-          <!-- Heading -->
-          <h6 class="navbar-heading p-0 text-muted">
-            <span class="docs-normal">Store</span>
-          </h6>
-          <!-- Navigation -->
-          <ul class="navbar-nav mb-md-3">
-
+         
+          <ul class="navbar-nav">
             <li class="nav-item  {{ highlightNavigation(['inventory/categories','inventory/sub_categories','inventory/items/new','inventory/items','inventory/suppliers','inventory/vendors']) ? 'active': '' }}">
               <a class="nav-link" href="#inventory" data-toggle="collapse" role="button" aria-expanded=" {{ highlightNavigation(['inventory/categories','inventory/sub_categories','inventory/items/new','inventory/items','inventory/suppliers','inventory/vendors']) ? 'true': 'false' }}" aria-controls="navbar-examples">
                 <i class="fas fa-globe {{ highlightNavigation(['inventory/categories','inventory/sub_categories','inventory/items/new','inventory/items','inventory/suppliers','inventory/vendors']) ? 'text-white': 'text-orange' }}"></i>
@@ -398,14 +391,8 @@
             </li>
 
           </ul>
-          <!-- Divider -->
-          <hr class="my-3">
-          <!-- Heading -->
-          <h6 class="navbar-heading p-0 text-muted">
-            <span class="fa fas fa-cogs">&nbsp;SETTINGS</span>
-          </h6>
-          <!-- Navigation -->
-          <ul class="navbar-nav mb-md-3">
+          
+          <ul class="navbar-nav">
 
             <li class="nav-item" style="background: {{ highlightNavigation(['settings/system']) ? 'lightblue': '' }}">
               <a href="{{route('settings.index')}}" class="nav-link">
@@ -423,13 +410,7 @@
 
           </ul>
           @endif
-          <hr class="my-3">
-          <!-- Heading -->
-          <h6 class="navbar-heading p-0 text-muted">
-            <span class="docs-normal">Services</span>
-          </h6>
-          <!-- Navigation -->
-          <ul class="navbar-nav mb-md-3">
+          <ul class="navbar-nav">
                   <li class="nav-item" style="background: {{ highlightNavigation(['stale/connections']) ? 'lightblue': '' }}">
                   <a href="{{route('stale.conn')}}" class="nav-link">
                       <span class="fas fa-plus-circle {{ highlightNavigation(['stale/connections']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['stale/connections']) ? 'white': '' }}"></span>&nbsp;

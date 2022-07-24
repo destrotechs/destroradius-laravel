@@ -277,8 +277,27 @@ class userController extends Controller
             }
         }else if($usertype=='nas'){
             $nasid = $request->get('nasid');
-           $users = Mikrotik::connectToNas($nasid);
-                
+
+            if ($nasid =='All') {
+               $allNas=DB::table('nas')->get();
+               if ($allNas) {
+                    foreach ($allNas as $allNa) {
+                        $users = Mikrotik::connectToNas($allNa->id);                
+                        if($users && count($users)>0){
+                            foreach ($users as $key => $o) {
+                                $num++;
+                                $totaldownload=$o[3];
+                                $totalupload=$o[4];
+                                $output.="<tr>";
+                                $output.="<td>".$num."</td><td>".$o[0]."</td><td></td><td>".$o[1]."</td><td>".$o[5]."</td><td>".round($totalupload/(1024*1024),2)." MBs</td><td>".round($totaldownload/(1024*1024),2)."MBs</td>";
+                                $output.="</tr>";
+                            }
+                        }
+                    }
+                    echo $output;
+               }
+            } else {
+                $users = Mikrotik::connectToNas($nasid);                
                 if(count($users)>0){
                     foreach ($users as $key => $o) {
                         $num++;
@@ -291,7 +310,10 @@ class userController extends Controller
                 }else{
                     echo "none";
                 }
-            echo $output;
+                echo $output;
+            }
+            
+           
         }
     }
 

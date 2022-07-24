@@ -19,8 +19,9 @@ Online users
 				<div class="col nas" style="display:none;">
 					<select name="nasid" class="form-control nasid select2">
 						<option value="">Choose nas...</option>
+						<option value="All">All Nas</option>
 						@forelse($nas as $n)
-						<option value="{{ $n->id }}">{{ $n->nasname }}</option>
+						<option value="{{ $n->id }}">{{ $n->nasname }} >>>> {{ $n->shortname }}</option>
 						@empty
 						<option value="">No nas added</option>
 						@endforelse

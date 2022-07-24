@@ -18,7 +18,6 @@ class Mikrotik extends Model
 	public static function connectToNas($nasid){
 		try {
 			$nas = DB::table('nas')->where('id','=',$nasid)->first();
-
 		    $client = new RouterOS\Client($nas->nasname, 'admin', $nas->secret);
 		    $responses = $client->sendSync(new RouterOS\Request('/ip/hotspot/active/print'));
 		    $users = array();
