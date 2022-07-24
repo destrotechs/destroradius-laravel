@@ -32,14 +32,15 @@
 
 </div>
 @else
-<div class="card-body d-flex justify-content-center">
+<div class="card-body d-flex justify-content-center table-responsive p-0">
 	{{-- @if($user_info!='')
 	<h3>Hi <b>{{ $username }}</b>, Your access is valid until <b>{{ $user_info->value??'' }}</b></h3>
 	@else
 	<h3>You have no active internet access</h3>
 	@endif --}}
 	@if(count($accounts)>0)
-	<table class="table table-sm table-striped">
+		<table class="dTable table table-head-fixed text-nowrap table-sm">
+			<thead style="color: black">
 		<thead>
 			<tr>
 				<th>#</th>

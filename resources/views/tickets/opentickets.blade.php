@@ -13,8 +13,9 @@ Open Tickets
 		<div class="card">
 			<div class="card-header"><h5>Available Tickets</h5></div>
 			<div class="card-body">
-				<table class="table table-sm table-responsivetable-bordered">
-					<thead>
+				<div class="card-body table-responsive p-0">
+					<table class="dTable table table-head-fixed text-nowrap table-sm">
+						<thead style="color: black">
 						<tr>
 							<td>#</td>
 							<td>subject</td>
@@ -29,7 +30,7 @@ Open Tickets
 					</thead>
 					<tbody>
 						<?php $num=0;?>
-						@forelse($tickets as $t)
+						@foreach($tickets as $t)
 						<?php $num++;?>
 							<tr>
 								<td><?php echo $num;?></td>
@@ -42,18 +43,10 @@ Open Tickets
 								<td>{{ $t->assignedto }}</td>
 								<td><a href="#" class="btn btn-danger btn-sm trash" id="{{ $t->id }}"><i class="fas fa-trash"></i></a>&nbsp;<a href="#" id="{{ $t->id }}" class="btn btn-success btn-sm sell"><i class="fas fa-check text-white"></i>&nbsp;sell</a></td>
 							</tr>
-						@empty
-							<tr>
-								<td colspan="8">no tickets available</td>
-							</tr>
-						@endforelse
+						@endforeach
 					</tbody>
-                    <tfoot>
-                        <tr>
-                        <td colspan="9">{!! $tickets->links() !!}</td>
-                        </tr>
-                    </tfoot>
 				</table>
+				</div>
 			</div>
 		</div>
 

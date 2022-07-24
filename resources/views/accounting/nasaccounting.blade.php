@@ -22,7 +22,7 @@ nas accounting
 		<form id="useraccounting">
 			<div class="form-row">
 				<div class="col">
-					<select class="form-control nas">
+					<select class="form-control nas select2">
 						<option value="">Choose nas ...</option>
 						@forelse($nas as $n)
 						<option value="{{ $n->nasname }}">{{ $n->nasname }}</option>

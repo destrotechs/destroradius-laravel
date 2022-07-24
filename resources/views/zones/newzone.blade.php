@@ -68,7 +68,7 @@ New Zone
 					<div class="form-row">
 						<div class="col">
 							<label>Manager</label>
-							<select class="form-control" name="managerid">
+							<select class="form-control select2" name="managerid">
 								<option value="">select manager...</option>
 								@forelse($managers as $m)
 								<option value="{{ $m->id }}">{{ $m->name }}</option>
@@ -81,7 +81,7 @@ New Zone
 						<div class="form-row">
 						<div class="col">
 							<label>Zone</label>
-							<select class="form-control" name="zoneid">
+							<select class="form-control select2" name="zoneid">
 								<option value="">select zone ...</option>
 								@forelse($zones as $m)
 								<option value="{{ $m->id }}">{{ $m->zonename }}</option>

@@ -27,17 +27,18 @@ Vendors
 		  <?php $num=0;?>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example2" class="table table-sm table-responsivetable-bordered table-hover table-sm">
-		  		<thead>
-		  			<tr>
-		  				<th>#</th>
-		  				<th>Name</th>
-		  				<th>Description</th>
-		  				<th>Edit</th>
-		  			</tr>
-		  		</thead>
+				<div class="card-body table-responsive p-0">
+					<table class="dTable table table-head-fixed text-nowrap table-sm">
+						<thead style="color: black">
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Edit</th>
+							</tr>
+						</thead>
 		  		<tbody>
-		  			@forelse($vendors as $s)
+		  			@foreach($vendors as $s)
 		  			<?php $num++;?>
 		  				<tr>
 		  					<td><?php echo $num;?></td>
@@ -45,19 +46,11 @@ Vendors
 		  					<td>{{ $s->description }}</td>
 		  					<td><a href="{{ route('vendor.edit',['id'=>$s->id]) }}"><i class="fas fa-edit text-primary"></i></a>&nbsp;<a href="{{ route('vendor.delete',['id'=>$s->id]) }}"><i class="fas fa-trash text-danger"></i></a></td>
 		  				</tr>
-		  			@empty
-		  			<tr>
-		  				<td colspan="7" class="text-danger align-self-center">vendors not added</td>
-		  			</tr>
-		  			@endforelse
+		  			@endforeach
 		  		</tbody>
-		  		<tfoot>
-		  			<tr>
-		  				<td colspan="7" class="">{!! $vendors->links() !!}</td>
-		  			</tr>
-		  		</tfoot>
 		  	</table>
 		  </div>
+			</div>
 		</div>
 	</div>
 </div>

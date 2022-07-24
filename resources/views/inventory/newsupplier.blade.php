@@ -6,15 +6,15 @@ New supplier
 <div class="row">
 	<div class="col-md-7">
 		@if (session('success'))
-   <div class="alert alert-success alert-dismissible fade show" role="alert">
-  <strong>{{ session('success') }}</strong>
-</div>
-@endif
-@if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong>{{ session('error') }}</strong> 
-</div>
-@endif
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			<strong>{{ session('success') }}</strong>
+		</div>
+		@endif
+		@if (session('error'))
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				<strong>{{ session('error') }}</strong> 
+			</div>
+		@endif
 		<div class="card">
 			<div class="card-header">
 		    Add new supplier
@@ -63,48 +63,39 @@ New supplier
 		</div>
 	</div>
 	<div class="col-md-5">
-			<table class="table table-sm table-responsivebg-white table-sm table-bordered">
-				<?php $num=0;?>
-				<thead>
-					<tr>
-						<th colspan="6"><h5>Available suppliers</h5></th>
-					</tr>
-					<tr>
-						<th>#</th>
-						<th>Name</th>
-						<th>Address</th>
-						<th>Contact</th>
-						<th>Phone</th>
-						<th>Email</th>
-					</tr>
-				</thead>
-				<tbody>
-					@forelse($suppliers as $i)
-					<?php $num++;?>
+		<div class="card">
+			<div class="card-body table-responsive p-0">
+				<table class="dTable table table-head-fixed text-nowrap table-sm">
+					<?php $num=0;?>
+					<thead style="color: black">
 						<tr>
-							<td><?php echo $num;?></td>
-							<td>{{ $i->supplier_name }}</td>
-							<td>{{ $i->address }}</td>
-							<td>{{ $i->contact }}</td>
-							<td>{{ $i->phone }}</td>
-							<td>{{ $i->email }}</td>
+							<th colspan="6"><h5>Available suppliers</h5></th>
 						</tr>
-					@empty
-					<tr>
-						<td colspan="6" class="text-danger">suppliers not added</td>
-					</tr>
-					@endforelse
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="6">
-							@if(count($suppliers)>0)
-							<a href="{{ route('inventory.suppliers') }}" class="btn btn-primary btn-sm">More ...</a>
-							@endif
-						</td>
-					</tr>
-				</tfoot>
-			</table>
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+							<th>Address</th>
+							<th>Contact</th>
+							<th>Phone</th>
+							<th>Email</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($suppliers as $i)
+						<?php $num++;?>
+							<tr>
+								<td><?php echo $num;?></td>
+								<td>{{ $i->supplier_name }}</td>
+								<td>{{ $i->address }}</td>
+								<td>{{ $i->contact }}</td>
+								<td>{{ $i->phone }}</td>
+								<td>{{ $i->email }}</td>
+							</tr>
+						@endforeach
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 @endsection

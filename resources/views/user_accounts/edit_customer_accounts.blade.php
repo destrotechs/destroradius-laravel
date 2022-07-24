@@ -43,7 +43,7 @@ Edit user account
 			<div class="form-row">
 				{{-- <input type="hidden" name="package_name" id="packname" value="{{ $account->package_name }}"> --}}
 				<label>Package Subscribed</label>
-				<select class="form-control pack" name="package_name">
+				<select class="form-control pack select2" name="package_name">
 					<option value="">Choose package ...</option>
 					@forelse($packages as $p)
 					<option value="{{ $p->packagename }}" <?php echo $p->packagename==$account->package_name? 'selected':''?>>{{ $p->packagename }}</option>

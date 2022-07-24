@@ -38,7 +38,7 @@ Pay Via Mpesa
                 <div class="col-md-8 border p-3 br-2">
                 <form>
                     <label>Package</label>
-                    <select class="form-control" name="package" id="package">
+                    <select class="form-control select2" name="package" id="package">
                         <option value="">Choose Package to purchase...</option>
                         @forelse($packages as $p)
                             <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>

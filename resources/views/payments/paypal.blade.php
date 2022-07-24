@@ -10,7 +10,7 @@ Paypal Payment
     <form>
     	<div class="form-row">
     		<label>Choose package to pay for</label>
-    		<select class="form-control" name="package">
+    		<select class="form-control select2" name="package">
     			<option>Choose...</option>
     			<option>Package</option>
     		</select>

@@ -91,13 +91,13 @@ User accounts
         		@endforelse
         	</select>
         	<label>Account Type</label>
-        	<select name="account_name" class="form-control" id="account_name">
+        	<select name="account_name" class="form-control select2" id="account_name">
         		<option value="">select ...</option>
         		<option value="pppoe"> PPPoE</option>
         		<option value="hotspot">HOTSPOT</option>
         	</select>
         	<label>Select Package</label>
-        	<select name="package" required class="form-control" id="package">
+        	<select name="package" required class="form-control select2" id="package">
         		<option value="">select ...</option>
         		@forelse($packages as $p)
         		<option value="{{ $p->packagename }}">{{ $p->packagename }}</option>

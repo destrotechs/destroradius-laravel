@@ -21594,6 +21594,7 @@ textarea[resize='horizontal']
     margin-left: .5rem;
     padding-right: 1rem;
     padding-left: 1rem;
+    display: block;
 
     border-radius: .375rem; 
     background: #f6f9fc;

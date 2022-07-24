@@ -48,8 +48,9 @@ New product
 	<?php $num=0;?>
 	<div class="col-md-5">
 		<div class="card">
-			<table class="table table-sm table-responsivetable-sm table-bordered">
-				<thead>
+			<div class="card-body table-responsive p-0">
+				<table class="dTable table table-head-fixed text-nowrap table-sm">
+					<thead style="color: black">
 					<tr>
 						<th>#</th>
 						<th>Name</th>
@@ -59,7 +60,7 @@ New product
 					</tr>
 				</thead>
 				<tbody>
-					@forelse($products as $i)
+					@foreach($products as $i)
 					<?php $num++;?>
 						<tr>
 							<td><?php echo $num;?></td>
@@ -68,18 +69,10 @@ New product
 							<td>{{ $i->producttype }}</td>
 							<td>{{ $i->price }}</td>
 						</tr>
-					@empty
-					<tr>
-						<td colspan="5" class="text-danger">products not added</td>
-					</tr>
-					@endforelse
+					@endforeach
 				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="5"><a href="{{ route('inventory.products') }}" class="btn btn-primary btn-sm">More ...</a></td>
-					</tr>
-				</tfoot>
 			</table>
+		</div>
 		</div>
 	</div>
 </div>

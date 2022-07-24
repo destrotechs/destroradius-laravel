@@ -8,14 +8,48 @@
 Send Invoice
 @endsection
 @section('content')
-<div class="row">
+<div class="card">
+	<div class="card-body table-responsive p-0">
+		<table class="dTable table table-head-fixed text-nowrap table-sm">
+			<thead style="color: black">
+				<tr>
+					<th>#</th>
+					<th>Invoice Number</th>
+					<th>Customer</th>
+					<th>Rate</th>
+					<th>Invoice Date</th>
+					<th>Invoice Amount</th>
+					<th>From</th>
+					<th>To</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ( $invoices as $key=>$inv )
+					<tr>
+						<td>{{ $key+1 }}</td>
+						<td>{{ $inv->invoice_no }}</td>
+						<td>{{ $inv->customer_id }}</td>
+						<td>{{ $inv->rate }}</td>
+						<td>{{ $inv->invoice_date }}</td>
+						<td>{{ $inv->amount }}</td>
+						<td>{{ $inv->start_date }}</td>
+						<td>{{ $inv->end_date }}</td>
+						<td>{{ $inv->status }}</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
+</div>
+{{-- <div class="row">
 	<div class="col-md-12">
 		
 		<div class="card">
 			<div class="card-header"><h4>Invoice Details</h4></div>
-			<div class="card-body">
-				<table class="table table-sm table-responsive">
-					<thead>
+			<div class="card-body table-responsive p-0">
+				<table class="dTable table table-head-fixed text-nowrap table-sm">
+					<thead style="color: black">
 						<tr>
 							<th>#</th>
 							<th>Invoice Number</th>
@@ -47,6 +81,7 @@ Send Invoice
 					</tbody>
 				</table>
 			</div>
+			</div>
 		</div>
 	</div>
 	{{-- <div class="col-md-8">
@@ -58,7 +93,7 @@ Send Invoice
 		    width="100%"
 		></iframe>
 	</div> --}}
-</div>
+{{-- </div> --}}
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -75,7 +110,7 @@ Send Invoice
 		  </div>
 		  <div class="col-md-6">
 		    <label for="inputEmail4" class="form-label">Customer</label>
-		    <select class="form-control" name="customer">
+		    <select class="form-control select2" name="customer">
 		    	<option value="">Select Customer ...</option>
 		    	@forelse($customers as $c)
 		    	<option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -106,7 +141,7 @@ Send Invoice
 		  </div>
 		  <div class="col-6">
 		    <label for="inputAddress" class="form-label">Measure/Per</label>
-		    <select id="measure" class="form-control" name="measure">
+		    <select id="measure" class="form-control select2" name="measure">
 		    	<option value="">Choose Measure ...</option>
 		    	<option value="DAY">PER DAY</option>
 		    	<option value="MONTH">PER MONTH</option>

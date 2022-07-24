@@ -53,7 +53,7 @@ New Package
                     </div>
                     <div class="col">
                         <label for="bandwidth">Users</label>
-                        <select name="users" required class="form-control users">
+                        <select name="users" required class="form-control users select2">
                             <option value="">Select who will use the package</option>
                             <option value="hotspot">HotSpot</option>
                             <option value="pppoe">PPPOE</option>
@@ -79,7 +79,7 @@ New Package
                 <div class="form-row">
                     <div class="col">
                         <label>Package Zone</label>
-                        <select class="form-control" name="packagezone">
+                        <select class="form-control select2" name="packagezone">
                             <option value="">select zone ...</option>
                             <option value="all zones">All zones</option>
                             @forelse($zones as $m)
@@ -91,7 +91,7 @@ New Package
                     </div>
                     <div class="col">
                         <label for="bandwidth">Bandwidth/Speed unit</label>
-                        <select name="bandwidth" required class="form-control unit">
+                        <select name="bandwidth" required class="form-control unit select2">
                             <option value="">Select Bandwidth unit</option>
                             <option value="M">Mbps</option>
                             <option value="K">Kbps</option>
@@ -130,7 +130,7 @@ New Package
                 <div class="form-row">
                     <div class="col">
                         <label>Measure</label>
-                        <select class="form-control" name="period" required>
+                        <select class="form-control select2" name="period" required>
                             <option value="">select duration measure ...</option>
                             <option value="min">Minutes</option>
                             <option value="hour">Hours</option>
@@ -152,7 +152,7 @@ New Package
                 <div class="form-row">
                     <div class="col">
                         <label for="validdays">Priority</label>
-                        <select name="priority" class="form-control">
+                        <select name="priority" class="form-control select2">
                             <option>Select Priority</option>
                             <option value="10">HIGH</option>
                             <option value="5">MEDIUM</option>
@@ -172,7 +172,7 @@ New Package
                 <div class="form-row">
                     <div class="col">
                         <label>Currency</label>
-                        <select name="currency" class="form-control">
+                        <select name="currency" class="form-control select2">
                             <option value="USD($)">USD ($)</option>
                             <option value="KSH">KSH</option>
                         </select>

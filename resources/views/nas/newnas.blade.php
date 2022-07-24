@@ -39,7 +39,7 @@ New nas
                 <label>Nas Secret</label>
                 <input type="text" name="nassecret" class="form-control" placeholder="nas secret">
                 <label>Nas Zone</label>     
-                <select class="form-control" name="nasshortname">
+                <select class="form-control select2" name="nasshortname">
                     <option value="">select zone ...</option>
                     @forelse($zones as $m)
                     <option value="{{  $m->id }}">{{ $m->zonename }}</option>
@@ -52,7 +52,7 @@ New nas
                 <label>Nas Description</label>
                 <textarea rows="2" name="nasdescription" class="form-control"></textarea>
                 <br>
-                <select class="form-control" name="restartserver">
+                <select class="form-control select2" name="restartserver">
                     <option value="">Restart Server After Add?</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>

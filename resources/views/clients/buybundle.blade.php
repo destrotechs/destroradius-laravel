@@ -41,7 +41,7 @@ Pay Via Mpesa
                     <div class="err"></div>
                 <form>
                     <label>Package<small class="text-danger">*</small></label>
-                    <select class="form-control" required name="package" id="package">
+                    <select class="form-control select2" required name="package" id="package">
                         <option value="">Choose Package to purchase...</option>
                         @forelse($packages as $p)
                             <option value="{{ $p->packagename }}" {{ isset($packageid)?($packageid==$p->id? 'selected':null):null }}>{{ $p->packagename }}</option>

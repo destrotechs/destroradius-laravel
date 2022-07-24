@@ -18,9 +18,10 @@
         {{ session('success') }}
     </div>
 @endif
-    <div class="card card-body">
-        <table class="table table-sm table-responsivetable-sm">
-            <thead>
+    <div class="card">
+        <div class="card-body table-responsive p-0">
+            <table class="dTable table table-head-fixed text-nowrap table-sm">
+                <thead style="color: black">
                 <tr>All managers</tr>
                 <?php $num=0;?>
                 <tr>
@@ -34,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($managers as $key=>$m)
+                @foreach ($managers as $key=>$m)
                 <?php $num++;?>
                     <tr>
                         <td><?php echo $num;?></td>
@@ -48,14 +49,11 @@
                         
                         <td><a href="{{ route('manager.edit',['id'=>$m->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="#" id="{{ $m->id }}" class="btn btn-danger btn-sm trash"><i class="fas fa-trash"></i></a></td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="bg-secondary p-2">you have no managers available</td>
-                    </tr>
-                @endforelse
+                @endforeach
             </tbody>
 
         </table>
+        </div>
     </div>
 @endsection
 @section('js')

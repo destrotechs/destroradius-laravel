@@ -23,9 +23,9 @@ Categories
               <h3 class="card-title">Item Categories</h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-              <table id="example2" class="table table-sm table-responsivetable-bordered table-hover">
-                <thead>
+            <div class="card-body table-responsive p-0">
+              <table class="dTable table table-head-fixed text-nowrap table-sm">
+                  <thead style="color: black">
                   <?php $num=0;?>
                   <tr>
                     <th>#</th>
@@ -36,7 +36,7 @@ Categories
                   </tr>
                 </thead>
                 <tbody>
-                  @forelse($items as $key=>$c)
+                  @foreach($items as $key=>$c)
                     <tr>
                       <td>{{ $key+1 }}</td>
                       <td>{{ $c->category_code }}</td>
@@ -45,17 +45,9 @@ Categories
                         <a href="{{ route('inventory.sub_categories.get',['category'=>$c->category_code]) }}" class="btn btn-primary btn-sm" type="button" id="{{ $c->category_code }}">sub-categories</a>
                       </td>
                     </tr>
-                  @empty
-                  <tr>
-                    <td colspan="6" class="text-danger">item categories not added</td>
-                  </tr>
-                  @endforelse
+                  @endforeach
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="7">{{ $items->links() }}</td>
-                  </tr>
-                </tfoot>
+               
               </table>
             </div>
             <!-- /.card-body -->

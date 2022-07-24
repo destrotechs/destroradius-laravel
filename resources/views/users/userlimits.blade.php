@@ -14,9 +14,9 @@ Custom/User Limits
     </div>
 @endif
 <div class="card">
-	<div class="card-body">
-        <table class="table table-sm table-bordered">
-            <thead>
+	<div class="card-body table-responsive p-0">
+        <table class="dTable table table-head-fixed text-nowrap table-sm">
+            <thead style="color: black">
                 <tr>
                     <th colspan="5">Available Limits</th>
                     <th>
@@ -45,7 +45,7 @@ Custom/User Limits
                             <input type="text" name="limitmeasure" value="{{ $l->limitmeasure }}">
                         </td>
                         <td>
-                            <select name="pref_table" value="{{ $l->pref_table }}">
+                            <select name="pref_table" value="{{ $l->pref_table }}" class="select2">
 
                                 <option value="{{ $l->pref_table }}">{{ $l->pref_table }}</option>
                                 <option value="check">Check</option>
@@ -105,7 +105,7 @@ Custom/User Limits
                 <div class="form-row" id="addrow">
                     <div class="col">
                         <label>Prefered Table</label>
-                        <select class="form-control" name="pref_table" required>
+                        <select class="form-control select2" name="pref_table" required>
                             <option value="">select prefered table ...</option>
                             <option value="check">Check</option>
                             <option value="reply">Reply</option>

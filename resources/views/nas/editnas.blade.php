@@ -36,7 +36,7 @@ Edit nas
             <label>Nas Secret</label>
             <input type="text" name="nassecret" class="form-control"  value="{{ $n->secret }}">
             <label>Nas Zone</label>     
-                <select class="form-control" name="nasshortname">
+                <select class="form-control select2" name="nasshortname">
                     @forelse($zones as $m)
                     <option {{ $n->shortname == $m->id ? 'selected':''}} value="{{  $m->id }}">{{ $m->zonename }}</option>
                     @empty
@@ -49,7 +49,7 @@ Edit nas
             <textarea rows="2" name="nasdescription" class="form-control">{{ $n->description }}</textarea>
             <br>
             <input type="hidden" name="id" value="{{ $n->id }}">
-            <select class="form-control" name="restartserver">
+            <select class="form-control select2" name="restartserver">
                 <option value="">Restart Server After change?</option>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>

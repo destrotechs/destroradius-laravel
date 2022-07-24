@@ -77,7 +77,7 @@ User Information
                     <li class="list-group-item"><b>Email</b><input type="email" name="email" class="form-control" value="{{ $d->email }}"></li>
                     <li class="list-group-item"><b>Phone</b> <input type="text" name="phone" class="form-control" value="{{ $d->phone }}"></li>
                     <li class="list-group-item"><b>Zone</b> 
-                        <select name="zone" class="form-control">
+                        <select name="zone" class="form-control select2">
                             
                             @forelse($zones as $z)
                             <option value="{{  $z->id}}" {{ $z->id==$d->zoneid? 'selected':'' }}>{{ $z->zonename }}</option>
@@ -106,7 +106,9 @@ User Information
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                           <div class="card-body">
                             @if(count($customer_accounts)>0)
-                        <table class="table table-sm">
+                            <div class="card-body table-responsive p-0">
+                              <table class="dTable table table-head-fixed text-nowrap table-sm">
+                                <thead style="color: black">
                             <tr>
                                 <th>#</th>
                                 <th>Account Name</th>
@@ -153,6 +155,7 @@ User Information
                                 
                         @endif
                           </div>
+                          </div>
                         </div>
                       </div>
                 {{-- </div> --}}
@@ -176,8 +179,8 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 
                     <form>
                        @if(count($useritems)>0)
-                       <table class="table table-sm table-responsive table-striped">
-                           <thead>
+                        <table class="dTable table table-head-fixed text-nowrap table-sm">
+                          <thead style="color: black">
                            <tr>
                                <th>#</th>
                                <th>Item</th>
@@ -287,7 +290,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 		<div class="modal-body">
             <form method="post" action="{{ route('removeuser') }}">
                 <label>Remove Accounting records?</label>
-                <select class="form-control" name="del_acc" id="package">
+                <select class="form-control select2" name="del_acc" id="package">
 
                     <option value="no">No</option>
                     <option value="yes">Yes</option>
@@ -318,7 +321,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                 <label>Add limits</label>
                 <div class="form-row" id="addrow">
                     <div class="col">
-                        <select name="limit[]" class="form-control limit">
+                        <select name="limit[]" class="form-control limit select2">
                             <option value="">Choose limit...</option>
                             @forelse($customlimits as $cl)
                             <option value="{{ $cl->id }}">{{ $cl->limitname }} | {{ $cl->limitmeasure }} |{{ $cl->pref_table }}</option>
@@ -360,7 +363,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         <div class="modal-body">
             <form method="POST" action="{{ route('post.new.equipment') }}">
                 <label>Account</label>
-                <select name="account_no" class="form-control account_type">
+                <select name="account_no" class="form-control account_type select2">
                     <option value="">select ...</option>
                     @forelse($customer_accounts as $ac)
                     <option value="{{ $ac->account_no }}">{{ $ac->account_no }}</option>
@@ -369,7 +372,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                     @endforelse
                 </select>
                 <label>Item/Equipment</label>
-                <select class="form-control" name="item_id" id="item_id">
+                <select class="form-control select2" name="item_id" id="item_id">
 
                     <option value="">Select ... </option>
                     @forelse($items as $i)
@@ -380,7 +383,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                 </select>
                     <input type="hidden" id="username" name="userid" value="<?php echo $uid;?>">
                     <label>Lease Type</label>
-                    <select name="status" class="form-control" id="leasetype">
+                    <select name="status" class="form-control select2" id="leasetype">
                         <option value="">Select ...</option>
                         <option value="PERMANENT">PERMANENT/BOUGHT</option>
                         <option value="LEASED">LEASED</option>
@@ -444,13 +447,13 @@ echo "KSH ".CustomerHelper::availableFunds($username);
             <input type="hidden" name="owner" id="ownerf" value="{{ $username }}">
 
             <label>Account Type</label>
-            <select name="account_name" class="form-control account_type">
+            <select name="account_name" class="form-control account_type select2">
                 <option value="">select ...</option>
                 <option value="pppoe"> PPPoE</option>
                 <option value="hotspot">HOTSPOT</option>
             </select>
             <label>Select Package</label>
-            <select name="package" required class="form-control">
+            <select name="package" required class="form-control select2">
                 <option value="">select ...</option>
                 @forelse($packages as $p)
                 <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>

@@ -192,7 +192,9 @@ Route::get('zones/delete/{id}','zonesController@deleteZone')->name('delete.zone'
 Route::get('/payments/option','paymentsController@selectPayOption')->name('pay.option');
 //accounting records
 Route::get('/accounting/user','accountingController@getUserAccounting')->name('user.accounting');
+Route::get('/accounting/user1','accountingController@getUserAccounting')->name('user.accounting1');
 Route::get('/accounting/nas','accountingController@getNasAccounting')->name('nas.accounting');
+Route::get('/accounting/nas1','accountingController@getNasAccounting')->name('nas.accounting1');
 Route::get('/accounting/ip','accountingController@getIpAccounting')->name('ip.accounting');
 Route::get('/invoice/doc','salesController@invoicepdf')->name('invoice.doc');
 Route::get('/customer_form/doc/{account_no}','userController@customerformpdf')->name('customer_form.doc');

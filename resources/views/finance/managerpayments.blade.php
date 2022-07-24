@@ -20,7 +20,7 @@ Manager payments
 			@csrf
 			<div class="form-row">
 				<div class="col">
-					<select name="managerid" class="form-control managers">
+					<select name="managerid" class="form-control managers select2">
 						<option value="">Choose manager ...</option>
 						@forelse($managers as $m)
 						<option value="{{ $m->id }}">{{ $m->name }}</option>
@@ -35,8 +35,9 @@ Manager payments
 			</div>
 		</form>
 		<div class="dropdown-divider"></div>
-			<table class="table table-sm table-responsivetable-sm table-bordered">
-				<thead>
+		<div class="card-body table-responsive p-0">
+            <table class="dTable table table-head-fixed text-nowrap table-sm">
+                <thead style="color: black">
 					<tr>
 						<th>#</th>
 						<th>Manager</th>
@@ -46,7 +47,8 @@ Manager payments
 				<tbody class="result-container">
 					
 				</tbody>
-			</table>
+				</table>
+		</div>
 	</div>
 </div>
 @endsection

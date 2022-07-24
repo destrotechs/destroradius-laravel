@@ -16,9 +16,9 @@ All Zones
 				
 			</div>
 
-			<div class="card-body">
-				<table class="table table-sm table-responsivetable-bordered table-striped">
-					<thead>
+			<div class="card-body table-responsive p-0">
+				<table class="dTable table table-head-fixed text-nowrap table-sm">
+					<thead style="color: black">
 						<tr>
 							<th>#</th>
 							<th>Zone Name</th>

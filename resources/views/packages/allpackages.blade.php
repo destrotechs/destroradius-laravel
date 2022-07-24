@@ -21,9 +21,10 @@
 <div class="card">
     <div class="card-header"><h5>Available Packages</h5></div>
     <div class="card-body">
-        <table class="table table-sm table-responsivetable-sm table-responsive">
-            <thead>
-                <?php $num=0;?>
+       <div class="card-body table-responsive p-0">
+				<table class="dTable table table-head-fixed text-nowrap table-sm">
+					<?php $num=0;?>
+					<thead style="color: black">
                 <tr>
                     <th>#</th>
                     <th>Package Name</th>
@@ -39,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($packages as $p)
+                @foreach ($packages as $p)
                 <?php $num++;?>
                     <tr>
                         <td><?php echo $num;?></td>
@@ -58,14 +59,11 @@
                         <td>{{ $p->users }} users</td>
                         <td><a href="{{ route('packages.edit',['id'=>$p->id]) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a><a href="#" class="btn btn-danger btn-sm trash" id="{{ $p->id }}"><i class="fas fa-trash"></i></a></td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="8" class="bg-danger p-2">you have no Packages available</td>
-                    </tr>
-                @endforelse
+                @endforeach
             </tbody>
 
         </table>
+    </div>
     </div>
 </div>
 @endsection
