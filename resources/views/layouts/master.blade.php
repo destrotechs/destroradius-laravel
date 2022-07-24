@@ -30,14 +30,23 @@
         color: white;
     }
 
-    .scrollbar-inner {
+    .scrollbar-inner{
         overflow: auto;
         height: 200vh;
     }
 
-    /* .navbar-inner {
-        overflow-y: auto;
-    } */
+    #footer {
+        position: fixed;
+        bottom: 0;
+        margin-top: 5px;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        text-align: center;
+        background: green;
+        color: white;
+    }
 
         
   </style>
@@ -59,14 +68,15 @@
       // $userDetails=User::where('id',Auth::user()->id)->first();
   @endphp
   <!-- Sidenav -->
-  <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-white bg-white" id="sidenav-main">
+  <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-white bg-white mb-5" id="sidenav-main">
+     <!-- Brand -->
+     <div class="sidenav-header  align-items-left">
+      <a class="navbar-brand" href="javascript:void(0)">
+      <img src="{{asset('images/logo.png')}}">
+      </a>
+    </div>
     <div class="scrollbar-inner" id="scrollbar-inner">
-      <!-- Brand -->
-      <div class="sidenav-header  align-items-left">
-        <a class="navbar-brand" href="javascript:void(0)">
-        <img src="{{asset('images/u2.png')}}"> {{ env('APP_NAME') }}
-        </a>
-      </div>
+     
       <div class="navbar-inner">
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="sidenav-collapse-main">
@@ -449,7 +459,7 @@
   <!-- Main content -->
   <div class="main-content" id="panel">
     <!-- Topnav -->
-    <nav class="navbar navbar-top navbar-expand navbar-white bg-white border-bottom">
+    <nav class="navbar navbar-top navbar-expand navbar-white bg-white border-bottom fixed-top">
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Navbar links -->
@@ -469,7 +479,7 @@
               </a>
             </li> --}}
             <li class="nav-item dropdown">
-              <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded=" {{ highlightNavigation(['zones/all*']) ? 'true': 'false' }}">
+              <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="ni ni-bell-55"></i>
               </a>
               <div class="dropdown-menu dropdown-menu-xl  dropdown-menu-right  py-0 overflow-hidden">
@@ -534,7 +544,7 @@
           </ul>
           <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
             <li class="nav-item dropdown">
-              <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded=" {{ highlightNavigation(['zones/all*']) ? 'true': 'false' }}">
+              <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
                   <span class="avatar avatar-sm rounded-circle">
                     <img alt="Image placeholder" src="{{asset('images/u1.png')}}">
@@ -582,30 +592,35 @@
     </nav>
     <!-- Header -->
     <!-- Header -->
-    <div class="header pb-5">
+    {{-- <div class="header pb-5">
       <div class="container-fluid">
         <div class="header-body">
           <div class="row align-items-center py-4">
-            <div class="col-lg-6 col-7">
+            {{-- <div class="col-lg-6 col-7">
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-0">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                   <li class="breadcrumb-item"><a href="{{route('home')}}"><i class="fas fa-home"></i></a></li>
                   <li class="breadcrumb-item">@yield('content_header')</li>
                 </ol>
               </nav>
-            </div>
+            </div> 
             @yield('buttons')
           </div>
           <!-- Card stats -->
 
         </div>
       </div>
-    </div>
-    <div class="container-fluid mt--6">
+    </div> --}}
+    <div class="container-fluid mt-8">
       @yield('content')
       @include('sweetalert::alert')
 
-    </div>
+  </div>
+
+  <div id="footer">
+    <p style="text-align: center"> Copyright &copy; 2021-<script>document.write(new Date().getFullYear())</script> Realcode Kenya Ltd</p>
+</div>
+    
   <!-- Argon Scripts -->
   <!-- Core -->
   <script src="{{asset('assets/vendor/jquery/dist/jquery.min.js')}}"></script>

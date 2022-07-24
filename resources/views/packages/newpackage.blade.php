@@ -47,11 +47,11 @@ New Package
                 </style>
 
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="uploadspeed">Package Name</label>
-                         <input type="text" required name="packagename" class="form-control" placeholder="package name ...">
+                         <input type="text" required name="packagename" class="form-control sm" placeholder="package name ...">
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="bandwidth">Users</label>
                         <select name="users" required class="form-control users select2">
                             <option value="">Select who will use the package</option>
@@ -66,18 +66,18 @@ New Package
                 
                 
                 <div class="form-row pool" style="display: none;">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Pool name (Mikrotik PPPoE pool name)</label>
                         <input type="text" name="poolname" class="form-control">
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Profile name (Mikrotik PPPoE profile name)</label>
                         <input type="text" name="profile" class="form-control">
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Package Zone</label>
                         <select class="form-control select2" name="packagezone">
                             <option value="">select zone ...</option>
@@ -89,7 +89,7 @@ New Package
                             @endforelse
                         </select>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="bandwidth">Bandwidth/Speed unit</label>
                         <select name="bandwidth" required class="form-control unit select2">
                             <option value="">Select Bandwidth unit</option>
@@ -104,11 +104,11 @@ New Package
 
                 <p class="p-1 text-danger mes"></p>
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="uploadspeed">Upload Speed</label>
                         <input type="digit" required name="uploadspeed" class="form-control up" placeholder="1 or 2 ...">
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="uploadspeed">Download Speed</label>
                         <input type="hidden" name="upbandwidth" id="upbnd">
                         <input type="hidden" name="downbandwidth" id="downbnd">
@@ -116,11 +116,11 @@ New Package
                     </div>
                 </div>
                 <div class="form-row pool" style="display: none;">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Burst Upload</label>
                         <input type="digit" name="burstup" class="form-control" placeholder="burst up">
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Burst Download</label>
                         <input type="digit" name="burstdown" class="form-control" placeholder="burst down">
                     </div>                    
@@ -128,7 +128,7 @@ New Package
                 <label>Max Number of Devices</label>
                 <input required type="digit" name="numberofdevices" class="form-control">
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Measure</label>
                         <select class="form-control select2" name="period" required>
                             <option value="">select duration measure ...</option>
@@ -139,7 +139,7 @@ New Package
                             <option value="month">Months</option>
                         </select>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="validdays">Duration</label>
                         <input name="validdays" type="digit" class="form-control" required>
                     </div>
@@ -150,7 +150,7 @@ New Package
 
 
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="validdays">Priority</label>
                         <select name="priority" class="form-control select2">
                             <option>Select Priority</option>
@@ -158,7 +158,7 @@ New Package
                             <option value="5">MEDIUM</option>
                         </select>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Valid Until (optional)</label>
                         <input type="date" name="validuntil" class="form-control">
                     </div>                    
@@ -170,14 +170,14 @@ New Package
                 <textarea class="form-control" name="description"></textarea>
 
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Currency</label>
                         <select name="currency" class="form-control select2">
                             <option value="USD($)">USD ($)</option>
                             <option value="KSH">KSH</option>
                         </select>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Amount</label>
                         <input type="text" name="amount" class="form-control" placeholder="amount">
                     </div>                    
