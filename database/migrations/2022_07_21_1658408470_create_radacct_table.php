@@ -9,7 +9,7 @@ class CreateRadacctTable extends Migration
     public function up()
     {
         Schema::create('radacct', function (Blueprint $table) {
-			$table->integer('radacctid',21)->nullable();
+			$table->integer('radacctid',21);
 			$table->string('acctsessionid',64)->default('');
 			$table->string('acctuniqueid',32)->default('');
 			$table->string('username',64)->default('');
