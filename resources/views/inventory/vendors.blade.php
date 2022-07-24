@@ -3,9 +3,7 @@
 Vendors
 @endsection
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-  <a href="{{ route('inventory.vendors.new') }}" class="btn btn-sm btn-neutral"><i class="fas fa-plus"></i>&nbsp; New item</a>
-</div>
+
 @endsection
 @section('content')
 <div class="row">
@@ -23,6 +21,9 @@ Vendors
 @endif
 		  <div class="card-header">
 		    Vendors 
+			<div class="col-lg-6 col-5 text-right float-right">
+				<a href="{{ route('inventory.vendors.new') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i>&nbsp; New item</a>
+			  </div>
 		  </div>
 		  <?php $num=0;?>
             <!-- /.card-header -->

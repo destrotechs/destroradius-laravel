@@ -1,8 +1,6 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-  <button class="btn btn-white btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus-circle"></i> New</button>
-</div>
+
 @endsection
 @section('content_header')
 Categories
@@ -20,7 +18,10 @@ Categories
 @endif
 <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Item Categories</h3>
+              Item Categories
+              <div class="col-lg-6 col-5 text-right float-right">
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus-circle"></i> New</button>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">

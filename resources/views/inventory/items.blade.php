@@ -1,8 +1,6 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-  <a href="{{ route('inventory.item.new') }}" class="btn btn-sm btn-neutral"><i class="fas fa-plus"></i>&nbsp; New item</a>
-</div>
+
 @endsection
 @section('content_header')
 Items
@@ -20,7 +18,10 @@ Items
 @endif
 <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Inventory Items</h4>
+              Inventory Items
+              <div class="col-lg-6 col-5 text-right float-right">
+                <a href="{{ route('inventory.item.new') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i>&nbsp; New item</a>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
