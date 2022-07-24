@@ -167,18 +167,18 @@
               </div>
             </li>
             
-            <li class="nav-item  {{ highlightNavigation(['users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'active': '' }}">
-              <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded=" {{ highlightNavigation(['users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'true': 'false' }}" aria-controls="navbar-examples">
-                <i class="fas fa-users {{ highlightNavigation(['users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'text-white': 'text-orange' }}"></i>
+            <li class="nav-item  {{ highlightNavigation(['user/change*','users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'active': '' }}">
+              <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded=" {{ highlightNavigation(['user/change*','users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'true': 'false' }}" aria-controls="navbar-examples">
+                <i class="fas fa-users {{ highlightNavigation(['user/change*','users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'text-white': 'text-orange' }}"></i>
                 <span class="nav-link-text">Users</span>
               </a>
-              <div class="collapse" id="users" style="toggle: {{ highlightNavigation(['users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'true': 'false' }};display: {{ highlightNavigation(['users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'inline': '' }};">
+              <div class="collapse" id="users" style="toggle: {{ highlightNavigation(['user/change*','users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'true': 'false' }};display: {{ highlightNavigation(['user/change*','users/all*','users/new*','users/online*','user/accounts*','user/customlimits*','bundlebalance*','accounting/user']) ? 'inline': '' }};">
                 <ul class="nav nav-sm flex-column">
                   
-                  <li class="nav-item" style="background: {{ highlightNavigation(['users/all*']) ? 'lightblue': '' }}">
+                  <li class="nav-item" style="background: {{ highlightNavigation(['user/change*','users/all*']) ? 'lightblue': '' }}">
                     <a href="{{ route('user.all')}}" class="nav-link">
-                      <span class="fas fa-users" style="color: {{ highlightNavigation(['users/all*']) ? 'white': '' }}"></span>&nbsp;
-                      <span class="sidenav-normal" style="color: {{ highlightNavigation(['users/all*']) ? 'white': '' }}"> All users </span>
+                      <span class="fas fa-users" style="color: {{ highlightNavigation(['user/change*','users/all*']) ? 'white': '' }}"></span>&nbsp;
+                      <span class="sidenav-normal" style="color: {{ highlightNavigation(['user/change*','users/all*']) ? 'white': '' }}"> All users </span>
                     </a>
                   </li>
                   <li class="nav-item" style="background: {{ highlightNavigation(['users/new*']) ? 'lightblue': '' }}">
@@ -423,31 +423,31 @@
           <ul class="navbar-nav">
                   <li class="nav-item" style="background: {{ highlightNavigation(['stale/connections']) ? 'lightblue': '' }}">
                   <a href="{{route('stale.conn')}}" class="nav-link">
-                      <span class="fas fa-plus-circle {{ highlightNavigation(['stale/connections']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['stale/connections']) ? 'white': '' }}"></span>&nbsp;
+                      <i class="fas fa-plus-circle {{ highlightNavigation(['stale/connections']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['stale/connections']) ? 'white': '' }}"></i>
                       <span class="sidenav-normal" style="color: {{ highlightNavigation(['stale/connections']) ? 'white': '' }}"> Clean stale connections </span>
                     </a>
                   </li>
                   <li class="nav-item" style="background: {{ highlightNavigation(['services/testconnectivity']) ? 'lightblue': '' }}">
                     <a href="{{route('services.testconnectivity')}}" class="nav-link">
-                      <span class="fas fa-bars {{ highlightNavigation(['services/testconnectivity']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['services/testconnectivity']) ? 'white': '' }}"></span>&nbsp;
+                      <i class="fas fa-bars {{ highlightNavigation(['services/testconnectivity']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['services/testconnectivity']) ? 'white': '' }}"></i>
                       <span class="sidenav-normal" style="color: {{ highlightNavigation(['services/testconnectivity']) ? 'white': '' }}"> Test connectivity </span>
                     </a>
                   </li>
                   <li class="nav-item" style="background: {{ highlightNavigation(['services/status']) ? 'lightblue': '' }}">
                     <a href="{{route('services.status')}}" class="nav-link">
-                      <span class="fas fa-plus-circle {{ highlightNavigation(['services/status']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['services/status']) ? 'white': '' }}"></span>&nbsp;
+                      <i class="fas fa-plus-circle {{ highlightNavigation(['services/status']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['services/status']) ? 'white': '' }}"></i>
                       <span class="sidenav-normal" style="color: {{ highlightNavigation(['services/status']) ? 'white': '' }}"> Services status</span>
                     </a>
                   </li>
                   <li class="nav-item" style="background: {{ highlightNavigation(['services/last-connections']) ? 'lightblue': '' }}">
                     <a href="{{route('last.conn.attempts')}}" class="nav-link">
-                      <span class="fas fa-plus-circle {{ highlightNavigation(['services/last-connections']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['services/last-connections']) ? 'white': '' }}"></span>&nbsp;
+                      <i class="fas fa-plus-circle {{ highlightNavigation(['services/last-connections']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['services/last-connections']) ? 'white': '' }}"></i>
                       <span class="sidenav-normal" style="color: {{ highlightNavigation(['services/last-connections']) ? 'white': '' }}">Last-Connection attempts</span>
                     </a>
                   </li>
                   <li class="nav-item" style="background: {{ highlightNavigation(['system/logs']) ? 'lightblue': '' }}">
                     <a href="{{route('service.logs')}}" class="nav-link">
-                      <span class="fas fa-plus-circle {{ highlightNavigation(['system/logs']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['system/logs']) ? 'white': '' }}"></span>&nbsp;
+                      <i class="fas fa-plus-circle {{ highlightNavigation(['system/logs']) ? 'text-white': 'text-orange' }}" style="color: {{ highlightNavigation(['system/logs']) ? 'white': '' }}"></i>
                       <span class="sidenav-normal" style="color: {{ highlightNavigation(['system/logs']) ? 'white': '' }}">System Logs</span>
                     </a>
                   </li>

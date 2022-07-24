@@ -10,9 +10,11 @@ use App\Zone;
 use App\Package;
 use App\Customer;
 use App\Mikrotik;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use App\Helpers\CustomerHelper;
 use Illuminate\Support\Facades\DB;
+
 class userController extends Controller
 {
     public function __construct(){
@@ -494,7 +496,23 @@ class userController extends Controller
     }
 
 
-    public function changeCustomerPackage(Request $request){        
+    public function changeCustomerPackage(Request $request){
+        if ($request->get('activationType') == '') {
+            alert()->error("You must select activation type!");
+            return redirect()->back();
+        }
+        if ($request->get('activationType') == 'existing' && $request->get('period') == '') {
+            alert()->error("You must select Measure!");
+            return redirect()->back();
+        } 
+        if ($request->get('activationType') == 'existing' && $request->get('validdays') == '') {
+            alert()->error("You must enter Duration!");
+            return redirect()->back();
+        } 
+        if ($request->get('activationType') == 'existing' && $request->get('validdays') <= 0) {
+            alert()->error("You must enter valid Duration greater than 0!");
+            return redirect()->back();
+        } 
         $package = $request->get('package');
         $username = $request->get('account_no'); //username becomes the account no to be activated
         $count=DB::table('customer_accounts')->where('account_no',$request->get('account_no'))->first();
@@ -539,7 +557,13 @@ class userController extends Controller
                 //get valid days for the said package and add disconnect time
                 $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
                 $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
-                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0]);
+                if ($request->get('activationType') == 'new') {
+                    $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0]);
+                } else {
+                    $dateToDisconnect = self::calculateTime($request->get('period'),$request->get('validdays'));                    
+                }
+                
+                
 
                 $rad_reply = DB::table('radreply')->updateOrInsert(
                     ['username'=>$username,'attribute'=>'WISPr-Session-Terminate-Time'],['op'=>':=','value'=>$dateToDisconnect]
@@ -606,7 +630,12 @@ class userController extends Controller
             );
                 $packagemeasure = DB::table('packages')->where('packagename','=',$package)->pluck('durationmeasure');
                 $packagenum= DB::table('packages')->where('packagename','=',$package)->pluck('validdays');
-                $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0],'pppoe');
+                if ($request->get('activationType') == 'new') {
+                    $dateToDisconnect = self::calculateTime($packagemeasure[0],$packagenum[0],'pppoe');
+                } else {
+                    $dateToDisconnect = self::calculateTime($request->get('period'),$request->get('validdays'),'pppoe');
+                }
+                
                 $expiration = explode("H",$dateToDisconnect)[0];
                 $wispr = explode("H",$dateToDisconnect)[1];
 
@@ -762,38 +791,43 @@ class userController extends Controller
     }
 
     public static function calculateTime($timemeasure,$num,$usertype='hotspot'){
-        $year=date("Y");
-        $month=date("n");
-        $day=date("j");
-        $hour=date("H");
-        $min=date("i");
-        $sec=date("s");
-
+        $year=date("Y"); //A full numeric representation of a year, at least 4 digits, with - for years BCE.	Examples: -0055, 0787, 1999, 2003, 10191
+        $month=date("n"); //Numeric representation of a month, without leading zeros	1 through 12
+        $day=date("j"); //Day of the month without leading zeros	1 to 31
+        $hour=date("H"); //24-hour format of an hour with leading zeros	00 through 23
+        $min=date("i"); //Minutes with leading zeros	00 to 59
+        $sec=date("s"); //Seconds with leading zeros	00 through 59
         $duration = 0;
 
         $packageValidDate = '';
 
         switch($timemeasure){
             case 'month':
-                $packageValidDate = mktime($hour,$min,$sec,($month+$num),$day,$year);
-
+                $packageValidDate = mktime($hour,$min,$sec,($month+$num),$day,$year);              
             break;
+
             case 'day':
                 $packageValidDate = mktime($hour,$min,$sec,$month,($day+$num),$year);
-
             break;
             case 'week':
                 $packageValidDate = mktime($hour,$min,$sec,$month,($day+(7*$num)),$year);
 
             break;
-            default:
-                $packageValidDate = mktime($hour,$min,$sec,$month,$day+$num,$year);
+            case 'hour':
+                $packageValidDate = mktime($hour+$num,$min,$sec,$month,$day,$year);
+
+            break;
+            case 'min':
+                $packageValidDate = mktime($hour,$min+$num,$sec,$month,$day,$year);
+
+            break;
 
         }
 
         if ($usertype=='hotspot'){
 
             $dateToDisconnect = date("Y-m-dTH:i:s",$packageValidDate);
+            
             $dateToDisconnect=str_replace('CET', 'T', $dateToDisconnect);
 
             $dateToDisconnect=str_replace('am', '', $dateToDisconnect);
@@ -803,7 +837,6 @@ class userController extends Controller
             $dateToDisconnect=str_replace('CES', 'T', $dateToDisconnect);
 
             $dateToDisconnect=str_replace('pm', '', $dateToDisconnect);
-
             return $dateToDisconnect;
         }else if ($usertype=='pppoe'){
 

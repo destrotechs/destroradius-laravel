@@ -481,7 +481,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Activate Account</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to Activate this account?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -489,10 +489,33 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         <input type="hidden" name="username" id="ausername">
         <input type="hidden" name="account_no" id="aaccount_no">
         <input type="hidden" name="package" id="apackage">
-        <h3>Are you sure you want to Activate this account?</h3>        
+        <div class="form-row">
+          <div class="col-md-12">
+            <label>Select Activation Type</label>
+            <select class="form-control select2" name="activationType" id="activationType" required>
+                <option value="">select duration measure ...</option>
+                <option value="new">New Activation</option>
+                <option value="existing">Existing Activation</option>
+            </select>
+        </div>
+
+          <div class="col-md-12" id="hide1">
+              <label>Measure</label>
+              <select class="form-control select2 col-md-12" name="period" id="period" >
+                  <option value="">select duration measure ...</option>
+                  <option value="min">Minutes</option>
+                  <option value="hour">Hours</option>
+                  <option value="day">Days</option>
+                  <option value="week">Weeks</option>
+                  <option value="month">Months</option>
+              </select>
+              <label for="validdays">Duration</label>
+              <input name="validdays" type="digit" id="validdays" class="form-control col-md-12" >
+          </div>
+      </div>   
 
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" id="hide2">
         <button type="button" class="btn btn-danger" data-dismiss="modal">NOPE</button>
         <button type="submit" class="btn btn-success">YES!</button>
       </div>
@@ -505,6 +528,52 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 @section('js')
 <script type="text/javascript">
 $(document).ready(function(){
+    var divx1 = document.getElementById("hide1");
+    var divx2 = document.getElementById("hide2");
+
+    var inputDays = document.getElementById("validdays");
+    var inputPeriod = document.getElementById("period");
+
+    divx1.style.display = "none";
+    divx2.style.display = "none";
+
+
+  $('#activationType').change(function(event){
+    
+      if (this.value == 'new') {
+        if (divx1.style.display = "block") {
+          inputDays.value == '';
+          inputPeriod.value =='';
+          divx1.style.display = "none";
+        }
+        divx1.style.display = "none";
+        divx2.style.display = "block";
+      } 
+      if(this.value == 'existing') {
+        divx1.style.display = "block";
+        divx2.style.display = "none";
+        inputDays.value == '';
+        inputPeriod.value =='';
+      }
+  });
+
+  inputDays.oninput = () => {
+    if (inputPeriod.value == '') {
+      alert('You must first select the measure!');
+      inputDays.value='';
+    } 
+    if (inputDays.value <=0 || inputDays.value == '') {
+      divx2.style.display = "none";
+    }
+    if(inputDays.value > 0 && inputPeriod.value != '') {
+      divx2.style.display = "block";
+    }
+  }
+
+
+
+
+
     var account_no = null;
     $(".usac").change(function(){
         alert();
@@ -647,6 +716,7 @@ $(document).ready(function(){
                         url:'/client/account/suspend/'+account,
                         success:function(data){
                             alert(data);
+                            window.location.reload();
                         }
                     })
                 }
@@ -665,10 +735,10 @@ $(document).ready(function(){
             }
         })
 
-        function generateNumber(){
-            var account_no = Math.floor((Math.random() * 1000000) + 1);
-            return "P"+account_no+"E";  
-        }
+        // function generateNumber(){
+        //     var account_no = Math.floor((Math.random() * 1000000) + 1);
+        //     return "P"+account_no+"E";  
+        // }
 })
 </script>
 @endsection
