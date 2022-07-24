@@ -1,11 +1,9 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-  <a href="{{ route('manager.new.get') }}" class="btn btn-sm btn-neutral"><i class="fas fa-plus"></i>&nbsp; New Manager</a>
-</div>
+
 @endsection
 @section('content_header')
-    All Managers
+    
 @endsection
 @section('content')
 @if (session('error'))
@@ -19,10 +17,15 @@
     </div>
 @endif
     <div class="card">
+        <div class="card-header">
+            All Managers
+            <div class="col-lg-6 col-5 text-right float-right">
+                <a href="{{ route('manager.new.get') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i>&nbsp; New Manager</a>
+              </div>
+        </div>
         <div class="card-body table-responsive p-0">
             <table class="dTable table table-head-fixed text-nowrap table-sm">
                 <thead style="color: black">
-                <tr>All managers</tr>
                 <?php $num=0;?>
                 <tr>
                     <th>#</th>

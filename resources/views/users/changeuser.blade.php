@@ -1,8 +1,6 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-<a href="#" class="btn btn-white btn-sm" data-toggle="modal" data-target="#exampleModal7"><i class="fas fa-plus"></i>&nbsp;New User Account</a>
-</div>
+
 @endsection
 @section('content_header')
 User Information
@@ -96,7 +94,7 @@ User Information
             </div>
             </div>
                     <div class="card">
-                        <div class="card-header" id="headingTwo">
+                        <div class="card-header" id="headingTwo">                          
                           <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                               <i class="fa fa-info" aria-hidden="true"></i>&nbsp; User Accounts
@@ -105,6 +103,10 @@ User Information
                         </div>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                           <div class="card-body">
+                            <div class="row mb-2 float-right" style="background: lightyellow">
+                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal7"><i class="fas fa-plus"></i>&nbsp;New User Account</a>
+                              
+                            </div>
                             @if(count($customer_accounts)>0)
                             <div class="card-body table-responsive p-0">
                               <table class="dTable table table-head-fixed text-nowrap table-sm">

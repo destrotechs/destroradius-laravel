@@ -1,10 +1,6 @@
 @extends('layouts.master')
 @section('buttons')
-@if(Auth::user()->role_id==1)
-<div class="col-lg-6 text-right">
-  <a href="{{route('user.new')}}" class="btn btn-sm btn-white"><i class="fas fa-plus-circle"></i> New User</a>
-</div>
-@endif
+
 @endsection
 @section('content_header')
     All Users
@@ -21,6 +17,13 @@
     </div>
 @endif
     <div class="card">
+        <div class="card-header">
+            @if(Auth::user()->role_id==1)
+                <div class="col-lg-6 text-right float-right">
+                    <a href="{{route('user.new')}}" class="btn btn-sm btn-primary"><i class="fas fa-plus-circle"></i> New User</a>
+                </div>
+            @endif
+        </div>
         <div class="card-body table-responsive p-0">
             <table class="dTable table table-head-fixed text-nowrap table-sm">
                 <thead style="color: black">

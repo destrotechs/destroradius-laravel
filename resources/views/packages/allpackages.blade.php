@@ -1,8 +1,6 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-  <a href="{{ route('packages.new') }}" class="btn btn-sm btn-neutral"><i class="fas fa-plus"></i>&nbsp; New package</a>
-</div>
+
 @endsection
 @section('content_header')
  Available Packages
@@ -19,7 +17,12 @@
     </div>
 @endif
 <div class="card">
-    <div class="card-header"><h5>Available Packages</h5></div>
+    <div class="card-header">
+      Available Packages
+      <div class="col-lg-6 col-5 text-right float-right">
+        <a href="{{ route('packages.new') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i>&nbsp; New package</a>
+      </div>
+    </div>
     <div class="card-body">
        <div class="card-body table-responsive p-0">
 				<table class="dTable table table-head-fixed text-nowrap table-sm">
