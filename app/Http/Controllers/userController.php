@@ -1158,19 +1158,24 @@ class userController extends Controller
         return substr(str_shuffle($data), 0, $chars);
     }
               
-
+    public function getPackagesByUsers(Request $request){
+        // Fetch Employees by Departmentid
+        $empData['data'] = DB::table('packages')->where("users",$request->id)->get();  
+        return response()->json($empData);
+    
+    }
 
     public function postUserAccount(Request $request){
         // $account_exist = DB::table('customer_accounts')->where([['owner','=',$request->get('owner')],['package_name','=',$request->get('package')]])->get();
         // if(count($account_exist)>0){
         //  alert()->error("User has an account linked to this package!");
-        //  return redirect()->back();   
+        //  return redirect()->back();    
         // }else{
             $customerishotspot = DB::table('customers')->where('username',$request->owner)->first();
             if($request->account_name=='hotspot'){
                 $accounts = DB::table('customer_accounts')->where('owner',$request->owner)->where('account_name','hotspot')->count();
                 if($accounts>0){
-                    alert()->error("An hotspot user cannot have multiple accounts!");
+                    alert()->error("A hotspot user cannot have multiple accounts!");
                     return redirect()->back(); 
                 }else{
                     //create new account for hotsport user

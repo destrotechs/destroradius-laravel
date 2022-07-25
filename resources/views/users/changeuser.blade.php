@@ -449,25 +449,20 @@ echo "KSH ".CustomerHelper::availableFunds($username);
             <input type="hidden" name="owner" id="ownerf" value="{{ $username }}">
 
             <label>Account Type</label>
-            <select name="account_name" class="form-control account_type select2">
+            <select name="account_name" class="form-control account_type select2" id="account_nameHotspot">
                 <option value="">select ...</option>
                 <option value="pppoe"> PPPoE</option>
                 <option value="hotspot">HOTSPOT</option>
             </select>
             <label>Select Package</label>
-            <select name="package" required class="form-control select2">
-                <option value="">select ...</option>
-                @forelse($packages as $p)
-                <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
-                @empty
-                <option value="">No Packages available</option>
-                @endforelse
+            <select id="packageByUsers" name="package" required class="form-control select2">
+                
             </select>
-            <label>Account Name</label>
+            {{-- <label>Account Name</label>
             <input name="account_name" type="text" class="form-control" placeholder="Account Name" required>
             <label>Account No</label>
             <input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
-            <hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
+            <hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button> --}}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -530,6 +525,25 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 @section('js')
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $('#account_nameHotspot').change(function(){
+    $('#packageByUsers').empty().append('<option selected="selected" value="">Select...</option>');
+      $.get("{{ url('getPackagesByUsers') }}"+'?id='+$(this).val(), function(data, status){
+        if(data.data.length > 0){
+          $.each(data.data, function(index, element) {
+              console.log(element.packagename);
+              $('#packageByUsers').append(new Option(element.packagename, element.packagename));
+          });
+        }
+      })
+  })
+
+ 
+      
+
+
+
+
     var divx1 = document.getElementById("hide1");
     var divx2 = document.getElementById("hide2");
 
@@ -600,14 +614,11 @@ $(document).ready(function(){
                     location.reload();                   
 
                 }
-                
-
                 // location.reload();
             });
         }else{
             alert("Please choose a package");
         }
-
         event.preventDefault()
     })
 
@@ -623,7 +634,8 @@ $(document).ready(function(){
         var inp = $("#addrow").clone();
         $(".rowsfield").append(inp);
         $(".rowsfield").append("<br>");
-    })
+    });
+
     $(".trashc").click(function(){
         var id = $(this).attr("id");
         if (confirm("Are you sure you want to delete this limit?")){
@@ -636,7 +648,8 @@ $(document).ready(function(){
                 }
             })
         }
-    })
+    });
+
     $(".trashr").click(function(){
         var id = $(this).attr("id");
         if (confirm("Are you sure you want to delete this limit?")){
@@ -649,7 +662,8 @@ $(document).ready(function(){
                 }
             })
         }
-    })
+    });
+
     $(".trashrec").click(function(){
         var user = $(this).attr("id");
         if (confirm("Are you sure you want to delete user accounting records?")){
@@ -662,7 +676,8 @@ $(document).ready(function(){
                 }
             })
         }
-    })
+    });
+
     $("#leasetype").change(function(){
         var leasetype = $(this).val();
         if(leasetype!=='PERMANENT'){
@@ -670,7 +685,8 @@ $(document).ready(function(){
         }else{
             $(".return_date").hide();
         }
-    })
+    });
+
     $(".remove_allocation").click(function(){
         var id = $(this).attr('id');
         if (confirm("Are you sure you want to delete this record?")){
@@ -683,12 +699,11 @@ $(document).ready(function(){
                 }
             })
         }
-
-    })
+    });
 
     $(".return_item").click(function(){
         $("#alloc_id").val($(this).attr('id'));
-    })
+    });
 
     $(".gen").click(function(){
             var account = generateNumber();
@@ -724,7 +739,7 @@ $(document).ready(function(){
                 }
                 
             }
-        })
+        });
 
         $(".account_type").change(function(){
             var type = $(this).val();
@@ -735,12 +750,12 @@ $(document).ready(function(){
                 $(".num").val("")
                 $(".num").val(account).removeAttr('disabled')
             }
-        })
+        });
 
         // function generateNumber(){
         //     var account_no = Math.floor((Math.random() * 1000000) + 1);
         //     return "P"+account_no+"E";  
         // }
-})
+});
 </script>
 @endsection

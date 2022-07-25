@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use DB;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
 class apiController extends Controller
 {
     public function getHotspotPackages(Request $request){
@@ -32,7 +34,20 @@ class apiController extends Controller
     }
 
     public function getPackages(Request $request,$id){
+        dd($request->all());
         $packages =DB::table('packages')->where('users',$id)->get();
         return $packages;
+    }
+
+    public function getPackagesbyuser(Request $request){
+            $packages =DB::table('packages')->where('users',$request->user)->get();
+            return $packages;
+        }
+
+
+    public function show($id)
+    {  
+        $packages =DB::table('packages')->where('users',$id)->get();
+        return Response::json($packages);
     }
 }
