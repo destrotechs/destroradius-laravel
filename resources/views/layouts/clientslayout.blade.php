@@ -151,7 +151,7 @@
         <div class="modal-body">
             <form method="POST" action="{{ route('activate.account') }}">
               <label>Account to Activate</label>
-              <select name="username" required class="form-control">
+              <select name="username" required class="form-control select2">
                 <option value="">select ...</option>
                 @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
                 <option value="{{ $p->account_no }}">{{ $p->account_name }}</option>
@@ -191,7 +191,7 @@
             <input type="hidden" name="owner" value="{{ Auth::guard('customer')->user()->username??'' }}">
             
             <label>Select Account</label>
-            <select name="username" required class="form-control">
+            <select name="username" required class="form-control select2">
                 <option value="">select ...</option>
                 @forelse(CustomerHelper::getUserAccounts(Auth::guard('customer')->user()->username??'') as $p)
                 <option value="{{ $p->account_no }}">{{ $p->account_name }}</option>

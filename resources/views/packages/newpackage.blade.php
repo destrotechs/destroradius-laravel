@@ -22,53 +22,93 @@ New Package
     </div>
 @endif
 <div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('packages.all')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+        
+	</div>
+</div>
+<div class="row">
     <div class="col-md-7">
-        <div class="card card-body">
+        <div class="card card-body" style="background: rgb(247, 189, 83)">
             <form action="{{ route('package.save') }}" method="post" class="form-group">
                 {{ csrf_field() }}
-                <label for="uploadspeed">Package Name</label>
-                <input type="text" required name="packagename" class="form-control" placeholder="package name ...">
-                <label for="bandwidth">Users</label>
-                <select name="users" required class="form-control users">
-                    <option value="">Select who will use the package</option>
-                    <option value="hotspot">HotSpot</option>
-                    <option value="pppoe">PPPOE</option>
-                    <option value="resellers">Resellers</option>
-                </select>
+
+                <style>
+                    label{
+                        color: black;
+                    }
+                </style>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label for="uploadspeed">Package Name</label>
+                         <input type="text" required name="packagename" class="form-control sm" placeholder="package name ...">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bandwidth">Users</label>
+                        <select name="users" required class="form-control users select2">
+                            <option value="">Select who will use the package</option>
+                            <option value="hotspot">HotSpot</option>
+                            <option value="pppoe">PPPOE</option>
+                            <option value="resellers">Resellers</option>
+                        </select>
+                    </div>                    
+                </div>     
+                
+
+                
+                
                 <div class="form-row pool" style="display: none;">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Pool name (Mikrotik PPPoE pool name)</label>
                         <input type="text" name="poolname" class="form-control">
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Profile name (Mikrotik PPPoE profile name)</label>
                         <input type="text" name="profile" class="form-control">
                     </div>
                 </div>
-                <label>Package Zone</label>
-                <select class="form-control" name="packagezone">
-                    <option value="">select zone ...</option>
-                    <option value="all zones">All zones</option>
-                    @forelse($zones as $m)
-                    <option value="{{  $m->zonename }}">{{ $m->zonename }}</option>
-                    @empty
-                    <option value="">No zones without managers</option>
-                    @endforelse
-                </select>
-                <label for="bandwidth">Bandwidth/Speed unit</label>
-                <select name="bandwidth" required class="form-control unit">
-                    <option value="">Select Bandwidth unit</option>
-                    <option value="M">Mbps</option>
-                    <option value="K">Kbps</option>
-                </select>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label>Package Zone</label>
+                        <select class="form-control select2" name="packagezone">
+                            <option value="">select zone ...</option>
+                            <option value="all zones">All zones</option>
+                            @forelse($zones as $m)
+                            <option value="{{  $m->zonename }}">{{ $m->zonename }}</option>
+                            @empty
+                            <option value="">No zones without managers</option>
+                            @endforelse
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bandwidth">Bandwidth/Speed unit</label>
+                        <select name="bandwidth" required class="form-control unit select2">
+                            <option value="">Select Bandwidth unit</option>
+                            <option value="M">Mbps</option>
+                            <option value="K">Kbps</option>
+                        </select>
+                    </div>                    
+                </div>    
+
+                
+                
 
                 <p class="p-1 text-danger mes"></p>
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="uploadspeed">Upload Speed</label>
                         <input type="digit" required name="uploadspeed" class="form-control up" placeholder="1 or 2 ...">
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="uploadspeed">Download Speed</label>
                         <input type="hidden" name="upbandwidth" id="upbnd">
                         <input type="hidden" name="downbandwidth" id="downbnd">
@@ -76,11 +116,11 @@ New Package
                     </div>
                 </div>
                 <div class="form-row pool" style="display: none;">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Burst Upload</label>
                         <input type="digit" name="burstup" class="form-control" placeholder="burst up">
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Burst Download</label>
                         <input type="digit" name="burstdown" class="form-control" placeholder="burst down">
                     </div>                    
@@ -88,9 +128,9 @@ New Package
                 <label>Max Number of Devices</label>
                 <input required type="digit" name="numberofdevices" class="form-control">
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <label>Measure</label>
-                        <select class="form-control" name="period" required>
+                        <select class="form-control select2" name="period" required>
                             <option value="">select duration measure ...</option>
                             <option value="min">Minutes</option>
                             <option value="hour">Hours</option>
@@ -99,7 +139,7 @@ New Package
                             <option value="month">Months</option>
                         </select>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="validdays">Duration</label>
                         <input name="validdays" type="digit" class="form-control" required>
                     </div>
@@ -108,16 +148,41 @@ New Package
                 <label for="validdays">Maximum Usage Quota (MBS)</label>
                 <input required placeholder="use 0 for no limit" name="quota" type="text" class="form-control quota">
 
-                <label for="validdays">Priority</label>
-                <select name="priority" class="form-control">
-                    <option>Select Priority</option>
-                    <option value="10">HIGH</option>
-                    <option value="5">MEDIUM</option>
-                </select>
-                <label>Valid Until (optional)</label>
-                <input type="date" name="validuntil" class="form-control">
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label for="validdays">Priority</label>
+                        <select name="priority" class="form-control select2">
+                            <option>Select Priority</option>
+                            <option value="10">HIGH</option>
+                            <option value="5">MEDIUM</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Valid Until (optional)</label>
+                        <input type="date" name="validuntil" class="form-control">
+                    </div>                    
+                </div>     
+
+                
+                
                 <label>Description</label>
                 <textarea class="form-control" name="description"></textarea>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label>Currency</label>
+                        <select name="currency" class="form-control select2">
+                            <option value="USD($)">USD ($)</option>
+                            <option value="KSH">KSH</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Amount</label>
+                        <input type="text" name="amount" class="form-control" placeholder="amount">
+                    </div>                    
+                </div>                
+                
                 <hr>
                 <button class="btn btn-success btn-md"><i class="fas fa-save"></i>&nbsp;Save</button>
             </form>

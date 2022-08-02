@@ -5,9 +5,9 @@ last connection attempts
 @section('content')
 <div class="card">
 	<div class="card-header">last connection attempts</div>
-	<div class="card-body">
-		<table class="table table-sm table-responsivetable-bordered table-sm">
-			<thead>
+	<div class="card-body table-responsive p-0">
+		<table class="dTable table table-head-fixed text-nowrap table-sm">
+			<thead style="color: black">
 				<tr>
 					<th>Username</th>
 					<th>Password</th>
@@ -16,7 +16,7 @@ last connection attempts
 				</tr>
 			</thead>
 			<tbody>
-				@forelse($attempts as $a)
+				@foreach($attempts as $a)
 				@if($a->reply=='Access-Accept')
 				<tr class="bg-success text-white fw-bold p-2">
 					<td>{{ $a->username }}</td>
@@ -32,18 +32,10 @@ last connection attempts
 					<td>{{ $a->authdate }}</td>
 				</tr>
 				@endif
-				@empty
-				<tr>
-					<td colspan="4" class="alert alert-danger">No connections have been tried yet</td>
-				</tr>
-				@endforelse
+				@endforeach
 			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="4">{!! $attempts->links() !!}</td>
-				</tr>
-			</tfoot>
 		</table>
 	</div>
+</div>
 </div>
 @endsection

@@ -31,7 +31,7 @@ Transfer Zone
 					<div class="form-row">
 						<div class="col">
 							<label>Manager</label>
-							<select class="form-control" name="managerid">
+							<select class="form-control select2" name="managerid">
 								<option value="">select manager...</option>
 								@forelse($managers as $m)
 								<option value="{{ $m->id }}">{{ $m->name }}</option>

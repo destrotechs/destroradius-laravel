@@ -5,10 +5,10 @@ Paid users
 @section('content')
 <div class="card">
 	<div class="card-header">Paid Users</div>
-	<div class="card-body">
+	<div class="card-body table-responsive p-0">
 		<?php $num=0;?>
-		<table class="table table-sm table-responsivetable-bordered table-md">
-			<thead>
+			<table class="dTable table table-head-fixed text-nowrap table-sm">
+				<thead style="color: black">
 				<tr>
 					<th colspan="4">Paid Users</th>
 				</tr>
@@ -20,7 +20,7 @@ Paid users
 				</tr>
 			</thead>
 			<tbody>
-				@forelse($paidusers as $p)
+				@foreach($paidusers as $p)
 				<?php $num++;?>
 				<tr>
 					<td><?php echo $num;?></td>
@@ -28,11 +28,7 @@ Paid users
 					<td></td>
 					<td></td>
 				</tr>
-				@empty
-				<tr>
-					<td colspan="4" class="alert alert-danger">No Paid Users</td>
-				</tr>
-				@endforelse
+				@endforeach
 			</tbody>
 		</table>
 	</div>

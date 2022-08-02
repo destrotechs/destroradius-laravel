@@ -16,9 +16,9 @@ Sales
 
 <div class="card">
     <div class="card-header"><h4>Item Allocations</h4></div>
-    <div class="card-body">
-        <table class="table table-sm table-responsive table-bordered data-table">
-            <thead>
+    <div class="card-body table-responsive p-0">
+        <table class="dTable table table-head-fixed text-nowrap table-sm">
+            <thead style="color: black">
                 <tr>
                     <th>#</th>
                     <th>Item</th>

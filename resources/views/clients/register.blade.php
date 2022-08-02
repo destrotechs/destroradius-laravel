@@ -31,7 +31,11 @@
             <div class="form-row">
                 <div class="col-md-6 col-sm-12">
                     <label for="exampleInputPassword1">Zone</label>
+<<<<<<< HEAD
                     <select name="zone" class="form-control">
+=======
+                    <select name="zone" class="form-control select2">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
                         <option value="">Select zone</option>
                         @forelse($zones as $key => $zone)
                             <option value="{{ $zone->id }}">{{ $zone->zonename }}</option>
@@ -42,7 +46,11 @@
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <label for="exampleInputPassword1">Gender</label>
+<<<<<<< HEAD
                     <select name="gender" class="form-control">
+=======
+                    <select name="gender" class="form-control select2">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
                         <option value="">Select gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>

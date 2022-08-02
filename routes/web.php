@@ -176,8 +176,12 @@ Route::get('/user/accounts','userController@getUserAccounts')->name('customer.ac
 Route::get('/user/accounts/edit/{acc?}','userController@getAccountEdit')->name('edit.customer.account');
 Route::post('/user/accounts/edit','userController@postAccountUpdate')->name('edit.customer.account.post');
 Route::get('/user/accounts/{id}','apiController@getAccount')->name('customer.accounts.one');
+Route::get('/get/packages/{id}','apiController@getPackages')->name('get.packages.special');
+// Route::get('/get/packages','apiController@getPackagesbyuser')->name('get.packages.byUser');
+Route::get('show-packages', [apiController::class, 'show']);
 Route::get('/user/accounts/all/{username?}/{packageid?}','clientsController@getAllUserAccounts')->name('customer.accounts.all');
 Route::post('/user/accounts','userController@postUserAccount')->name('customer.accounts.post');
+Route::get('getPackagesByUsers', "userController@getPackagesByUsers");
 
 //settings routes
 
@@ -191,7 +195,9 @@ Route::get('zones/delete/{id}','zonesController@deleteZone')->name('delete.zone'
 Route::get('/payments/option','paymentsController@selectPayOption')->name('pay.option');
 //accounting records
 Route::get('/accounting/user','accountingController@getUserAccounting')->name('user.accounting');
+Route::get('/accounting/user1','accountingController@getUserAccounting')->name('user.accounting1');
 Route::get('/accounting/nas','accountingController@getNasAccounting')->name('nas.accounting');
+Route::get('/accounting/nas1','accountingController@getNasAccounting')->name('nas.accounting1');
 Route::get('/accounting/ip','accountingController@getIpAccounting')->name('ip.accounting');
 Route::get('/invoice/doc','salesController@invoicepdf')->name('invoice.doc');
 Route::get('/customer_form/doc/{account_no}','userController@customerformpdf')->name('customer_form.doc');

@@ -14,6 +14,19 @@ Edit Package
     </div>
 @endif
 <div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('packages.all')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+        
+	</div>
+</div>
+<div class="row">
     <div class="col-md-7">
         <div class="card card-body">
             <form action="{{ route('packages.edit.save') }}" method="post" class="form-group">
@@ -21,8 +34,8 @@ Edit Package
                 <label for="uploadspeed">Package Name</label>
                 <input type="text" name="packagename" class="form-control" value="{{ $package->packagename }}" placeholder="package name ..." readonly="readonly">
                 <label for="bandwidth">Users</label>
-                <select name="users" class="form-control">
-                    <option value="{{ $package->users }}">{{ $package->users }}</option>
+                <select name="users" class="form-control select2">
+                    {{-- <option value="{{ $package->users }}">{{ $package->users }}</option> --}}
                     <option value="hotspot">HotSpot</option>
                     <option value="pppoe">PPPOE</option>
                     <option value="resellers">Resellers</option>
@@ -32,8 +45,8 @@ Edit Package
                 <input type="text" name="poolname" value="{{ $package->poolname }}" class="form-control">
                 @endif
                 <label>Package Zone</label>     
-                <select class="form-control" name="packagezone">
-                    <option value="{{ $package->packagezone }}">{{ $package->packagezone }}</option>
+                <select class="form-control select2" name="packagezone">
+                    {{-- <option value="{{ $package->packagezone }}">{{ $package->packagezone }}</option> --}}
                     <option value="all zones">All zones</option>
                     @forelse($zones as $m)
                     <option value="{{  $m->zonename }}">{{ $m->zonename }}</option>
@@ -42,7 +55,7 @@ Edit Package
                     @endforelse
                 </select>
                 <label for="bandwidth">Bandwidth/Speed unit</label>
-                <select name="bandwidth" class="form-control unit">
+                <select name="bandwidth" class="form-control unit select2">
                     <option value="M">Mbps</option>
                     <option value="K">Kbps</option>
                 </select>
@@ -60,7 +73,7 @@ Edit Package
                 <div class="form-row">
                     <div class="col">
                         <label>Duration</label>
-                        <select class="form-control" name="period">
+                        <select class="form-control select2" name="period">
                             <option value="{{ $package->durationmeasure }}">{{ $package->durationmeasure }}</option>
                             <option value="min">Minutes</option>
                             <option value="hour">Hours</option>
@@ -75,7 +88,7 @@ Edit Package
                     </div>
                 </div>
                 <label>Priority</label>
-                <select name="priority" class="form-control">
+                <select name="priority" class="form-control select2">
                     <option>Select Priority</option>
                     <option value="10">HIGH</option>
                     <option value="5">MEDIUM</option>

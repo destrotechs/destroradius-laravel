@@ -1,8 +1,12 @@
 @extends('layouts.master')
 @section('buttons')
+<<<<<<< HEAD
 <div class="col-lg-6 col-5 text-right">
   <button class="btn btn-white btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus-circle"></i> New</button>
 </div>
+=======
+
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 @endsection
 @section('content_header')
 Categories
@@ -20,12 +24,24 @@ Categories
 @endif
 <div class="card">
             <div class="card-header">
+<<<<<<< HEAD
               <h3 class="card-title">Item Categories</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example2" class="table table-sm table-responsivetable-bordered table-hover">
                 <thead>
+=======
+              Item Categories
+              <div class="col-lg-6 col-5 text-right float-right">
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus-circle"></i> New</button>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+              <table class="dTable table table-head-fixed text-nowrap table-sm">
+                  <thead style="color: black">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
                   <?php $num=0;?>
                   <tr>
                     <th>#</th>
@@ -36,7 +52,11 @@ Categories
                   </tr>
                 </thead>
                 <tbody>
+<<<<<<< HEAD
                   @forelse($items as $key=>$c)
+=======
+                  @foreach($items as $key=>$c)
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
                     <tr>
                       <td>{{ $key+1 }}</td>
                       <td>{{ $c->category_code }}</td>
@@ -45,6 +65,7 @@ Categories
                         <a href="{{ route('inventory.sub_categories.get',['category'=>$c->category_code]) }}" class="btn btn-primary btn-sm" type="button" id="{{ $c->category_code }}">sub-categories</a>
                       </td>
                     </tr>
+<<<<<<< HEAD
                   @empty
                   <tr>
                     <td colspan="6" class="text-danger">item categories not added</td>
@@ -56,6 +77,11 @@ Categories
                     <td colspan="7">{{ $items->links() }}</td>
                   </tr>
                 </tfoot>
+=======
+                  @endforeach
+                </tbody>
+               
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
               </table>
             </div>
             <!-- /.card-body -->

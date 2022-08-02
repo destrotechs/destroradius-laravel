@@ -1,8 +1,5 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-  <button class="btn btn-white btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus-circle"></i> New</button>
-</div>
 @endsection
 @section('content_header')
 Sub Categories
@@ -20,12 +17,16 @@ Sub Categories
 @endif
 <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Item Sub Categories</h3>
+              Item Sub Categories
+              <div class="col-lg-6 col-5 text-right float-right">
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus-circle"></i> New</button>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example2" class="table table-sm table-responsivetable-bordered table-hover">
-                <thead>
+              <div class="card-body table-responsive p-0">
+                <table class="dTable table table-head-fixed text-nowrap table-sm">
+                  <thead style="color: black">
                   <?php $num=0;?>
                   <tr>
                     <th>#</th>
@@ -37,7 +38,7 @@ Sub Categories
                   </tr>
                 </thead>
                 <tbody>
-                  @forelse($sub_cat as $key=>$c)
+                  @foreach($sub_cat as $key=>$c)
                     <tr>
                       <td>{{ $key+1 }}</td>
                       <td>{{ $c->category_code }}</td>
@@ -47,18 +48,10 @@ Sub Categories
                         {{-- <a href="{{ route('inventory.categories.get',['category'=>$c->category_code]) }}" class="btn btn-primary btn-sm" type="button" id="{{ $c->category_code }}">sub-categories</a> --}}
                       </td>
                     </tr>
-                  @empty
-                  <tr>
-                    <td colspan="6" class="text-danger">item subcategories not added</td>
-                  </tr>
-                  @endforelse
+                  @endforeach
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="7">{{ $sub_cat->links() }}</td>
-                  </tr>
-                </tfoot>
               </table>
+            </div>
             </div>
             <!-- /.card-body -->
 </div>

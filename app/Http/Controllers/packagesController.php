@@ -22,12 +22,20 @@ class packagesController extends Controller
     }
 
     public function newPackage(Request $request){
+<<<<<<< HEAD
 
         $zones=Zone::all();
         return view('packages.newpackage',compact('zones'));
     }
     public function savePackage(Request $request){
       
+=======
+        $zones=Zone::all();
+        return view('packages.newpackage',compact('zones'));
+    }
+
+    public function savePackage(Request $request){      
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
         $request->validate([
             'packagename'=>'required|unique:packages',
             'uploadspeed'=>'required',
@@ -75,6 +83,10 @@ class packagesController extends Controller
         $package->validdays=$request->get('validdays');
 
         $newpackage= $package->save();
+<<<<<<< HEAD
+=======
+        
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 
         $period=$request->get('period');
         $validtime=$request->get('validdays');
@@ -133,6 +145,7 @@ class packagesController extends Controller
             DB::table('radusergroup')->insert([
                 'username'=>$request->get('profile')?? $request->get('packagename').'_Profile','groupname'=>$request->get('packagename'),'priority'=>'10']);
         }
+<<<<<<< HEAD
         
         
 
@@ -145,6 +158,27 @@ class packagesController extends Controller
     }
     public function savePackageChanges(Request $request){
 
+=======
+        if($newpackage){
+            $savedId=$package->id;
+            if($request->get('amount')<0){
+                return redirect()->back()->with("error","price of a package should be real value plus"); 
+             }else{
+                 $packageprice=DB::table('package_prices')->updateOrInsert(
+                     ['packageid'=>$savedId],
+                     ['currency'=>$request->get('currency'),
+                     'amount'=>$request->get('amount'),
+                     'rate'=>'null']
+                 );
+             }
+            alert()->success('Success','Package created successfully, Please set a price for this package');
+            return redirect()->route('packages.all')->with("success","Package created successfully!");
+        }
+    }
+
+
+    public function savePackageChanges(Request $request){
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
         $quota=($request->get('quota'))*1024*1024;
         $packagename=$request->get('packagename');
         $uploadspeed=$request->get('upbandwidth');
@@ -227,11 +261,21 @@ class packagesController extends Controller
         toast('Package details updated successfully!','success');
         return redirect()->route("packages.all")->with("success","Package details updated successfully");
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
     public function allPackages(){
         $packages=Package::all();
         
         return view('packages.allpackages', compact('packages'));
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
     public function editPackage(Request $request,$id){
         $package = Package::find($id);
         $zones=Zone::all();
@@ -284,24 +328,41 @@ class packagesController extends Controller
         }
         
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
     public function packagePrices(Request $request){
         $packages=Package::all();
         $pricedpackages=DB::table('packages')->join('package_prices','package_prices.packageid','=','packages.id')->get();
         return view('packages.pricing',compact('packages','pricedpackages'));
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
     public function savePackagePrice(Request $request){
         if($request->get('amount')<0){
            return redirect()->back()->with("error","price of a package should be real value plus"); 
         }else{
+<<<<<<< HEAD
 
+=======
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
             $packageprice=DB::table('package_prices')->updateOrInsert(
                 ['packageid'=>$request->get('packageid')],
                 ['currency'=>$request->get('currency'),'amount'=>$request->get('amount'),'rate'=>'null']
             );
             alert()->success("Package price set successfully");
             return redirect()->back()->with("success","Package price added successfully");
+<<<<<<< HEAD
         }
 
         
+=======
+        }        
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
     }
 }

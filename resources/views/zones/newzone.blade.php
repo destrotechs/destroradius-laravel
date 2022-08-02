@@ -18,6 +18,18 @@ New Zone
     </div>
 @endif
 <div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('zone.all')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
 	<div class="col-md-6">
 		<div class="card">
 			<div class="card-header"><h5>Add New Zone Here</h5></div>
@@ -29,7 +41,7 @@ New Zone
 							<input type="text" name="zonename" class="form-control" placeholder="zone name ...">
 						</div>
 					</div>
-					<div class="form-row">
+					{{-- <div class="form-row">
 						<div class="col">
 							<label>Network Type</label>
 							<select class="form-control" name="networktype">
@@ -38,7 +50,7 @@ New Zone
 								<option value="PPPoE">PPPoE</option>
 							</select>
 						</div>
-					</div>
+					</div> --}}
 					<hr>
 					<div class="form-row">
 						<button type="submit" class="btn btn-success btn-md"><i class="fas fa-save"></i> Add Zone</button>
@@ -56,7 +68,7 @@ New Zone
 					<div class="form-row">
 						<div class="col">
 							<label>Manager</label>
-							<select class="form-control" name="managerid">
+							<select class="form-control select2" name="managerid">
 								<option value="">select manager...</option>
 								@forelse($managers as $m)
 								<option value="{{ $m->id }}">{{ $m->name }}</option>
@@ -69,7 +81,7 @@ New Zone
 						<div class="form-row">
 						<div class="col">
 							<label>Zone</label>
-							<select class="form-control" name="zoneid">
+							<select class="form-control select2" name="zoneid">
 								<option value="">select zone ...</option>
 								@forelse($zones as $m)
 								<option value="{{ $m->id }}">{{ $m->zonename }}</option>

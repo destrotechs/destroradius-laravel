@@ -19,6 +19,19 @@ Package pricing
 
 <?php $num=0; ?>
 <div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('packages.all')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+        
+	</div>
+</div>
+<div class="row">
 	<div class="col-md-5">
 		<div class="card card-body">
 			<h5>New Package Price</h5><hr>
@@ -26,7 +39,7 @@ Package pricing
 		 @csrf
 		
 		<label>Package</label>
-		<select name="packageid" class="form-control">
+		<select name="packageid" class="form-control select2">
 			<option value="">Select Package...</option>
 			@forelse($packages as $p)
 			<option value="{{ $p->id }}">{{ $p->packagename }}</option>
@@ -35,7 +48,7 @@ Package pricing
 			@endforelse
 		</select>
 		<label>Currency</label>
-		<select name="currency" class="form-control">
+		<select name="currency" class="form-control select2">
 			<option value="USD($)">USD ($)</option>
 			<option value="KSH">KSH</option>
 		</select>
@@ -46,10 +59,11 @@ Package pricing
 	</form>
 </div>
 	</div>
-	<div class="card card-body col-md-7">
+	<div class="card col-md-7">
 		<h5>Priced Packages</h5><hr>
-		<table id="example2" class="table table-sm table-responsivetable-bordered table-sm">
-			<thead>
+		<div class="card-body table-responsive p-0">
+			<table class="dTable table table-head-fixed text-nowrap table-sm">
+				<thead style="color: black">
 				<tr>
 					<th>#</th>
 					<th>Package</th>
@@ -59,7 +73,7 @@ Package pricing
 			</thead>
 			
 			<tbody>
-				@forelse($pricedpackages as $p)
+				@foreach($pricedpackages as $p)
 				<?php $num++;?>
 				<tr>
 					<td><?php echo $num;?></td>
@@ -67,14 +81,10 @@ Package pricing
 					<td>{{ $p->currency }}</td>
 					<td>{{ $p->amount }}</td>
 				</tr>
-				@empty
-
-				<tr>
-					<td colspan="5" class="text-danger">No packages have been priced yet</td>
-				</tr>
-				@endforelse
+				@endforeach
 			</tbody>
 		</table>
+	</div>
 	</div>
 
 @endsection

@@ -3,13 +3,33 @@
 nas accounting
 @stop
 @section('content')
+<<<<<<< HEAD
+=======
+<div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('nas.view')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+        
+	</div>
+</div>
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 <div class="card">
 	<div class="card-header"></div>
 	<div class="card-body">
 		<form id="useraccounting">
 			<div class="form-row">
 				<div class="col">
+<<<<<<< HEAD
 					<select class="form-control nas">
+=======
+					<select class="form-control nas select2">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 						<option value="">Choose nas ...</option>
 						@forelse($nas as $n)
 						<option value="{{ $n->nasname }}">{{ $n->nasname }}</option>

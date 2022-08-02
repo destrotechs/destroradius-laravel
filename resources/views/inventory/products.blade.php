@@ -19,35 +19,32 @@ Products
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example2" class="table table-sm table-responsivetable-bordered table-hover">
-              	<?php $num=0;?>
-                <thead>
-					<tr>
-						<th>#</th>
-						<th>Name</th>
-						<th>Vendor</th>
-						<th>Type</th>
-						<th>Price</th>
-						<th>Edit</th>
-					</tr>
-				</thead>
-				<tbody>
-					@forelse($products as $i)
-					<?php $num++;?>
-						<tr>
-							<td><?php echo $num;?></td>
-							<td>{{ $i->name }}</td>
-							<td>{{ $i->vendor }}</td>
-							<td>{{ $i->producttype }}</td>
-							<td>{{ $i->price }}</td>
-							<td><a href="{{ route('edit.product',['id'=>$i->id]) }}"><i class="fas fa-edit"></i>&nbsp;</a>&nbsp;<a href="{{ route('product.delete',['id'=>$i->id]) }}"><i class="fas fa-trash text-danger"></i>&nbsp;</a></td>
-						</tr>
-					@empty
-					<tr>
-						<td colspan="5" class="text-danger">products not added</td>
-					</tr>
-					@endforelse
-				</tbody>
+              <div class="card-body table-responsive p-0">
+                <table class="dTable table table-head-fixed text-nowrap table-sm">
+                  <?php $num=0;?>
+                  <thead style="color: black">
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Vendor</th>
+                      <th>Type</th>
+                      <th>Price</th>
+                      <th>Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($products as $i)
+                    <?php $num++;?>
+                      <tr>
+                        <td><?php echo $num;?></td>
+                        <td>{{ $i->name }}</td>
+                        <td>{{ $i->vendor }}</td>
+                        <td>{{ $i->producttype }}</td>
+                        <td>{{ $i->price }}</td>
+                        <td><a href="{{ route('edit.product',['id'=>$i->id]) }}"><i class="fas fa-edit"></i>&nbsp;</a>&nbsp;<a href="{{ route('product.delete',['id'=>$i->id]) }}"><i class="fas fa-trash text-danger"></i>&nbsp;</a></td>
+                      </tr>
+                    @endforeach
+                  </tbody>
               </table>
             </div>
             <!-- /.card-body -->

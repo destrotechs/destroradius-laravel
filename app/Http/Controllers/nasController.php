@@ -42,6 +42,7 @@ class nasController extends Controller
         $zones=Zone::all();
         return view('nas.newnas',compact('zones'));
     }
+
     public function editNas(Request $request,$id){
         $nas=DB::table('nas')->where('id','=',$id)->get();
         $zones=Zone::all();
@@ -54,7 +55,11 @@ class nasController extends Controller
             'nasshortname'=>['required'],
         ]);
         $nasid=DB::table('nas')->insertGetId([
-            'secret'=>$request->get('nassecret'),'nasname'=>$request->get('nasname'),'shortname'=>$request->get('nasshortname'),'type'=>$request->get('nastype'),'description'=>$request->get('nasdescription'),
+            'secret'=>$request->get('nassecret'),
+            'nasname'=>$request->get('nasname'),
+            'shortname'=>$request->get('nasdescription'),
+            'type'=>ucWords(strToLower($request->get('nastype'))),
+            'description'=>ucWords(strToLower($request->get('nasdescription'))),
         ]);
         
         //associate nas with zone
@@ -96,9 +101,16 @@ class nasController extends Controller
             'nasshortname'=>['required'],
         ]);
         $naschange=DB::table('nas')->where('id',$request->get('id'))->update([
-            'secret'=>$request->get('nassecret'),'nasname'=>$request->get('nasname'),'shortname'=>$request->get('nasshortname'),'type'=>$request->get('nastype'),'description'=>$request->get('nasdescription'),
+            'secret'=>$request->get('nassecret'),
+            'nasname'=>$request->get('nasname'),
+            'shortname'=>$request->get('nasdescription'),
+            'type'=>ucWords(strToLower($request->get('nastype'))),
+            'description'=>ucWords(strToLower($request->get('nasdescription'))),
         ]);
-        if($naschange==true){
+        $nasZode=DB::table('naszones')->where('nasid',$request->get('id'))->update(array(
+            'zoneid'=>$request->get('nasshortname')
+        ));
+        if($naschange==1 || $nasZode == 1){
             //log query
             if ($this->logs_enabled==1) {
                 $log=" edited nas id ".$request->get('id');

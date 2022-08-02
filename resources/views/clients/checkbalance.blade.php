@@ -32,20 +32,32 @@
 
 </div>
 @else
+<<<<<<< HEAD
 <div class="card-body d-flex justify-content-center">
+=======
+<div class="card-body d-flex justify-content-center table-responsive p-0">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 	{{-- @if($user_info!='')
 	<h3>Hi <b>{{ $username }}</b>, Your access is valid until <b>{{ $user_info->value??'' }}</b></h3>
 	@else
 	<h3>You have no active internet access</h3>
 	@endif --}}
 	@if(count($accounts)>0)
+<<<<<<< HEAD
 	<table class="table table-sm table-striped">
+=======
+		<table class="dTable table table-head-fixed text-nowrap table-sm">
+			<thead style="color: black">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 		<thead>
 			<tr>
 				<th>#</th>
 				<th>Account Name</th>
 				<th>Status</th>
+<<<<<<< HEAD
 				<th>Expiry</th>
+=======
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 				<th>Action</th>
 			</tr>
 		</thead>
@@ -54,8 +66,12 @@
 			<tr>
 				<td>{{ $k+1 }}</td>
 				<td>{{ $ac->account_name }}</td>
+<<<<<<< HEAD
 				<td><span class="badge badge-{{$ac->status=='active'?'success':'danger'}}"> {{ $ac->status }}</span></td>
 				<td>{{$valid_until[$k]}}</td>
+=======
+				<td>{{ $ac->status }}</td>
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 				<td>
 					@if(CustomerHelper::isSuspended($ac->account_no) || $ac->status=='inactive')
 		            <a class="btn btn-primary btn-sm p-2 activate" href="#" id="{{ $ac->account_no }}" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-wifi text-danger"></i> Activate Connection</a>

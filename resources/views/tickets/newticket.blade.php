@@ -25,7 +25,7 @@ New Tickets
         	<div class="form-row">
         		<div class="col">
         			<label for="exampleFormControlSelect1">Select Package</label>
-					    <select name="package" class="form-control package" id="exampleFormControlSelect1">
+					    <select name="package" class="form-control package select2" id="exampleFormControlSelect1">
 					      <option>choose package ...</option>
 					      @forelse($packages as $p)
 					      <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>

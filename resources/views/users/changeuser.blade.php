@@ -1,8 +1,5 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-<a href="#" class="btn btn-white btn-sm" data-toggle="modal" data-target="#exampleModal7"><i class="fas fa-plus"></i>&nbsp;New User Account</a>
-</div>
 @endsection
 @section('content_header')
 User Information
@@ -77,7 +74,7 @@ User Information
                     <li class="list-group-item"><b>Email</b><input type="email" name="email" class="form-control" value="{{ $d->email }}"></li>
                     <li class="list-group-item"><b>Phone</b> <input type="text" name="phone" class="form-control" value="{{ $d->phone }}"></li>
                     <li class="list-group-item"><b>Zone</b> 
-                        <select name="zone" class="form-control">
+                        <select name="zone" class="form-control select2">
                             
                             @forelse($zones as $z)
                             <option value="{{  $z->id}}" {{ $z->id==$d->zoneid? 'selected':'' }}>{{ $z->zonename }}</option>
@@ -96,7 +93,7 @@ User Information
             </div>
             </div>
                     <div class="card">
-                        <div class="card-header" id="headingTwo">
+                        <div class="card-header" id="headingTwo">                          
                           <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                               <i class="fa fa-info" aria-hidden="true"></i>&nbsp; User Accounts
@@ -105,8 +102,14 @@ User Information
                         </div>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                           <div class="card-body">
+                            <div class="row mb-2 float-right" style="background: lightyellow">
+                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal7"><i class="fas fa-plus"></i>&nbsp;New User Account</a>
+                              
+                            </div>
                             @if(count($customer_accounts)>0)
-                        <table class="table table-sm">
+                            <div class="card-body table-responsive p-0">
+                              <table class="dTable table table-head-fixed text-nowrap table-sm">
+                                <thead style="color: black">
                             <tr>
                                 <th>#</th>
                                 <th>Account Name</th>
@@ -153,6 +156,7 @@ User Information
                                 
                         @endif
                           </div>
+                          </div>
                         </div>
                       </div>
                 {{-- </div> --}}
@@ -176,8 +180,8 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 
                     <form>
                        @if(count($useritems)>0)
-                       <table class="table table-sm table-responsive table-striped">
-                           <thead>
+                        <table class="dTable table table-head-fixed text-nowrap table-sm">
+                          <thead style="color: black">
                            <tr>
                                <th>#</th>
                                <th>Item</th>
@@ -287,7 +291,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 		<div class="modal-body">
             <form method="post" action="{{ route('removeuser') }}">
                 <label>Remove Accounting records?</label>
-                <select class="form-control" name="del_acc" id="package">
+                <select class="form-control select2" name="del_acc" id="package">
 
                     <option value="no">No</option>
                     <option value="yes">Yes</option>
@@ -318,7 +322,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                 <label>Add limits</label>
                 <div class="form-row" id="addrow">
                     <div class="col">
-                        <select name="limit[]" class="form-control limit">
+                        <select name="limit[]" class="form-control limit select2">
                             <option value="">Choose limit...</option>
                             @forelse($customlimits as $cl)
                             <option value="{{ $cl->id }}">{{ $cl->limitname }} | {{ $cl->limitmeasure }} |{{ $cl->pref_table }}</option>
@@ -360,7 +364,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         <div class="modal-body">
             <form method="POST" action="{{ route('post.new.equipment') }}">
                 <label>Account</label>
-                <select name="account_no" class="form-control account_type">
+                <select name="account_no" class="form-control account_type select2">
                     <option value="">select ...</option>
                     @forelse($customer_accounts as $ac)
                     <option value="{{ $ac->account_no }}">{{ $ac->account_no }}</option>
@@ -369,7 +373,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                     @endforelse
                 </select>
                 <label>Item/Equipment</label>
-                <select class="form-control" name="item_id" id="item_id">
+                <select class="form-control select2" name="item_id" id="item_id">
 
                     <option value="">Select ... </option>
                     @forelse($items as $i)
@@ -380,7 +384,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
                 </select>
                     <input type="hidden" id="username" name="userid" value="<?php echo $uid;?>">
                     <label>Lease Type</label>
-                    <select name="status" class="form-control" id="leasetype">
+                    <select name="status" class="form-control select2" id="leasetype">
                         <option value="">Select ...</option>
                         <option value="PERMANENT">PERMANENT/BOUGHT</option>
                         <option value="LEASED">LEASED</option>
@@ -444,25 +448,20 @@ echo "KSH ".CustomerHelper::availableFunds($username);
             <input type="hidden" name="owner" id="ownerf" value="{{ $username }}">
 
             <label>Account Type</label>
-            <select name="account_name" class="form-control account_type">
+            <select name="account_name" class="form-control account_type select2" id="account_nameHotspot">
                 <option value="">select ...</option>
                 <option value="pppoe"> PPPoE</option>
                 <option value="hotspot">HOTSPOT</option>
             </select>
             <label>Select Package</label>
-            <select name="package" required class="form-control">
-                <option value="">select ...</option>
-                @forelse($packages as $p)
-                <option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
-                @empty
-                <option value="">No Packages available</option>
-                @endforelse
+            <select id="packageByUsers" name="package" required class="form-control select2">
+                
             </select>
-            <label>Account Name</label>
+            {{-- <label>Account Name</label>
             <input name="account_name" type="text" class="form-control" placeholder="Account Name" required>
             <label>Account No</label>
             <input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
-            <hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
+            <hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button> --}}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -478,7 +477,7 @@ echo "KSH ".CustomerHelper::availableFunds($username);
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Activate Account</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to Activate this account?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -486,10 +485,33 @@ echo "KSH ".CustomerHelper::availableFunds($username);
         <input type="hidden" name="username" id="ausername">
         <input type="hidden" name="account_no" id="aaccount_no">
         <input type="hidden" name="package" id="apackage">
-        <h3>Are you sure you want to Activate this account?</h3>        
+        <div class="form-row">
+          <div class="col-md-12">
+            <label>Select Activation Type</label>
+            <select class="form-control select2" name="activationType" id="activationType" required>
+                <option value="">select duration measure ...</option>
+                <option value="new">New Activation</option>
+                <option value="existing">Existing Activation</option>
+            </select>
+        </div>
+
+          <div class="col-md-12" id="hide1">
+              <label>Measure</label>
+              <select class="form-control select2 col-md-12" name="period" id="period" >
+                  <option value="">select duration measure ...</option>
+                  <option value="min">Minutes</option>
+                  <option value="hour">Hours</option>
+                  <option value="day">Days</option>
+                  <option value="week">Weeks</option>
+                  <option value="month">Months</option>
+              </select>
+              <label for="validdays">Duration</label>
+              <input name="validdays" type="digit" id="validdays" class="form-control col-md-12" >
+          </div>
+      </div>   
 
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" id="hide2">
         <button type="button" class="btn btn-danger" data-dismiss="modal">NOPE</button>
         <button type="submit" class="btn btn-success">YES!</button>
       </div>
@@ -502,6 +524,71 @@ echo "KSH ".CustomerHelper::availableFunds($username);
 @section('js')
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $('#account_nameHotspot').change(function(){
+    $('#packageByUsers').empty().append('<option selected="selected" value="">Select...</option>');
+      $.get("{{ url('getPackagesByUsers') }}"+'?id='+$(this).val(), function(data, status){
+        if(data.data.length > 0){
+          $.each(data.data, function(index, element) {
+              console.log(element.packagename);
+              $('#packageByUsers').append(new Option(element.packagename, element.packagename));
+          });
+        }
+      })
+  })
+
+ 
+      
+
+
+
+
+    var divx1 = document.getElementById("hide1");
+    var divx2 = document.getElementById("hide2");
+
+    var inputDays = document.getElementById("validdays");
+    var inputPeriod = document.getElementById("period");
+
+    divx1.style.display = "none";
+    divx2.style.display = "none";
+
+
+  $('#activationType').change(function(event){
+    
+      if (this.value == 'new') {
+        if (divx1.style.display = "block") {
+          inputDays.value == '';
+          inputPeriod.value =='';
+          divx1.style.display = "none";
+        }
+        divx1.style.display = "none";
+        divx2.style.display = "block";
+      } 
+      if(this.value == 'existing') {
+        divx1.style.display = "block";
+        divx2.style.display = "none";
+        inputDays.value == '';
+        inputPeriod.value =='';
+      }
+  });
+
+  inputDays.oninput = () => {
+    if (inputPeriod.value == '') {
+      alert('You must first select the measure!');
+      inputDays.value='';
+    } 
+    if (inputDays.value <=0 || inputDays.value == '') {
+      divx2.style.display = "none";
+    }
+    if(inputDays.value > 0 && inputPeriod.value != '') {
+      divx2.style.display = "block";
+    }
+  }
+
+
+
+
+
     var account_no = null;
     $(".usac").change(function(){
         alert();
@@ -526,14 +613,11 @@ $(document).ready(function(){
                     location.reload();                   
 
                 }
-                
-
                 // location.reload();
             });
         }else{
             alert("Please choose a package");
         }
-
         event.preventDefault()
     })
 
@@ -549,7 +633,8 @@ $(document).ready(function(){
         var inp = $("#addrow").clone();
         $(".rowsfield").append(inp);
         $(".rowsfield").append("<br>");
-    })
+    });
+
     $(".trashc").click(function(){
         var id = $(this).attr("id");
         if (confirm("Are you sure you want to delete this limit?")){
@@ -562,7 +647,8 @@ $(document).ready(function(){
                 }
             })
         }
-    })
+    });
+
     $(".trashr").click(function(){
         var id = $(this).attr("id");
         if (confirm("Are you sure you want to delete this limit?")){
@@ -575,7 +661,8 @@ $(document).ready(function(){
                 }
             })
         }
-    })
+    });
+
     $(".trashrec").click(function(){
         var user = $(this).attr("id");
         if (confirm("Are you sure you want to delete user accounting records?")){
@@ -588,7 +675,8 @@ $(document).ready(function(){
                 }
             })
         }
-    })
+    });
+
     $("#leasetype").change(function(){
         var leasetype = $(this).val();
         if(leasetype!=='PERMANENT'){
@@ -596,7 +684,8 @@ $(document).ready(function(){
         }else{
             $(".return_date").hide();
         }
-    })
+    });
+
     $(".remove_allocation").click(function(){
         var id = $(this).attr('id');
         if (confirm("Are you sure you want to delete this record?")){
@@ -609,12 +698,11 @@ $(document).ready(function(){
                 }
             })
         }
-
-    })
+    });
 
     $(".return_item").click(function(){
         $("#alloc_id").val($(this).attr('id'));
-    })
+    });
 
     $(".gen").click(function(){
             var account = generateNumber();
@@ -644,12 +732,13 @@ $(document).ready(function(){
                         url:'/client/account/suspend/'+account,
                         success:function(data){
                             alert(data);
+                            window.location.reload();
                         }
                     })
                 }
                 
             }
-        })
+        });
 
         $(".account_type").change(function(){
             var type = $(this).val();
@@ -660,12 +749,12 @@ $(document).ready(function(){
                 $(".num").val("")
                 $(".num").val(account).removeAttr('disabled')
             }
-        })
+        });
 
-        function generateNumber(){
-            var account_no = Math.floor((Math.random() * 1000000) + 1);
-            return "P"+account_no+"E";  
-        }
-})
+        // function generateNumber(){
+        //     var account_no = Math.floor((Math.random() * 1000000) + 1);
+        //     return "P"+account_no+"E";  
+        // }
+});
 </script>
 @endsection

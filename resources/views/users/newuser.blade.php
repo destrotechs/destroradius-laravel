@@ -24,7 +24,7 @@
                     <label>Password</label>
                     <input name="password" class="form-control" placeholder="password">
                     <label>Zone</label>
-                <select class="form-control zone" name="zoneid">
+                <select class="form-control zone select2" name="zoneid">
                     <option value="">select zone ...</option>
                     @forelse($zones as $m)
                     <option value="{{  $m->id }}">{{ $m->zonename }}</option>
@@ -33,11 +33,11 @@
                     @endforelse
                 </select>
                 <label>Default Nas for this user</label>
-                    <select class="form-control" name="nasid" id="nases"></select>
+                    <select class="form-control select2" name="nasid" id="nases"></select>
                     <label>Phone</label>
                     <input name="phone" class="form-control" placeholder="users phone number">
                     <label>Is Reseller</label>
-                        <select name="isreseller" class="form-control">
+                        <select name="isreseller" class="form-control select2">
                             <option value="">Is Reseller? </option>
                             <option value="reseller">Yes</option>
                             <option value="not reseller">No</option>
@@ -69,7 +69,7 @@
                         <label>Email</label>
                         <input type="email" name="email" class="form-control" placeholder="email address ..">
                         <label>Type</label>
-                        <select name="type" class="form-control">
+                        <select name="type" class="form-control select2">
                             <option value="">Choose user type ...</option>
                             <option value="hotspot">Hotspot User</option>
                             <option value="pppoe">PPPOE User</option>
@@ -77,7 +77,7 @@
                         <label>Address</label>
                         <input type="text" name="address" class="form-control" placeholder="e.g 123 street">
                         <label>Gender</label>
-                        <select name="gender" class="form-control">
+                        <select name="gender" class="form-control select2">
                             <option value="">Choose customer gender ...</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>

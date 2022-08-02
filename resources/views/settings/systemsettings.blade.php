@@ -65,7 +65,7 @@ system settings
 			<div class="card-body">
 				<form class="form-row" method="POST" action="{{ route('post-risk-fee') }}">
 					<div class="col">
-						<select class="form-control" name="packageid" required>
+						<select class="form-control select2" name="packageid" required>
 							<option value="">Select package...</option>
 							@forelse($packages as $p)
 							<option value="{{ $p->id }}">{{ $p->packagename }}</option>
@@ -87,8 +87,8 @@ system settings
 		</div>
 			</div>
 			<div class="col-md-6">
-				<table class="table table-sm table-responsivetable-bordered">
-					<thead>
+					<table class="dTable table table-head-fixed text-nowrap table-sm">
+						<thead style="color: black">
 						<tr><th colspan="4">Manager commission rates</th></tr>
 						<tr>
 							<th>#</th>
@@ -99,24 +99,20 @@ system settings
 					</thead>
 					<tbody>
 						<?php $num=0;?>
-					@forelse($managerrates as $mr)
+					@foreach($managerrates as $mr)
 					<?php $num++;?>
 					<tr>
 						<td><?php echo $num;?></td>
 						<td>{{ $mr->name }}</td>
 						<td>{{ $mr->email }}</td>
 						<td>{{ $mr->rate }}%</td>
-					</tr>	
-					@empty
-					<tr>
-						<td colspan="4">No managers assigned commission rates</td>
 					</tr>
-					@endforelse
+					@endforeach
 					</tbody>
 				</table>
 				<hr>
-				<table class="table table-sm table-responsivetable-bordered">
-					<thead>
+					<table class="dTable table table-head-fixed text-nowrap table-sm">
+						<thead style="color: black">
 						<tr><th colspan="4">Package Risk Fees</th></tr>
 						<tr>
 							<th>#</th>
@@ -125,17 +121,13 @@ system settings
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($package_risk_fees as $key=>$f)
+					@foreach($package_risk_fees as $key=>$f)
 					<tr>
 						<td>{{ $key+1 }}</td>
 						<td>{{ $f->packagename }}</td>
 						<td>{{ $f->amount }}</td>
-					</tr>	
-					@empty
-					<tr>
-						<td colspan="4">No risk fees defined yet</td>
 					</tr>
-					@endforelse
+					@endforeach
 					</tbody>
 				</table>
 			</div>

@@ -82,7 +82,7 @@ User accounts
       <div class="modal-body">
         <form method="POST" action="{{ route('customer.accounts.post') }}">
         	<label>User </label>
-        	<select class="form-control" name="owner">
+        	<select class="form-control select2" name="owner">
         		<option value="">Choose ...</option>
         		@forelse($customers as $c)
         		<option value="{{ $c->username }}">{{ $c->name }}</option>
@@ -91,13 +91,13 @@ User accounts
         		@endforelse
         	</select>
         	<label>Account Type</label>
-        	<select name="account_name" class="form-control">
+        	<select name="account_name" class="form-control select2" id="account_name">
         		<option value="">select ...</option>
         		<option value="pppoe"> PPPoE</option>
         		<option value="hotspot">HOTSPOT</option>
         	</select>
         	<label>Select Package</label>
-        	<select name="package" required class="form-control">
+        	<select name="package" required class="form-control select2" id="package">
         		<option value="">select ...</option>
         		@forelse($packages as $p)
         		<option value="{{ $p->packagename }}">{{ $p->packagename }}</option>
@@ -105,9 +105,9 @@ User accounts
         		<option value="">No Packages available</option>
         		@endforelse
         	</select>
-        	<label>Account No</label>
+        	{{-- <label>Account No</label>
         	<input type="text" required name="account_no" class="form-control num" placeholder="Account No ...">
-        	<hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button>
+        	<hr><button class="btn btn-primary btn-sm gen" type="button">Generate</button> --}}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -147,10 +147,6 @@ User accounts
 @section('js')
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(".gen").click(function(){
-			var account = generateNumber();
-			$(".num").val(account);
-		})
 
 		$(".activate").click(function(){
 			var account_id = $(this).attr('id');
@@ -166,9 +162,22 @@ User accounts
 			})
 		})
 
-		function generateNumber(){
-			return Math.floor((Math.random() * 10000) + 1);
-		}
+		$("#account_name").change(function(){
+			var user = $(this).val();
+			$.ajax({
+				method:'GET',
+				url:'/get/packages/'+user,
+				success:function(data){
+					console.log(data);
+					$('#package').empty();
+					$('#package').append($('<option></option>').attr('value', '').text('select package'));
+					$.each(data, function (key, entry) {
+						$('#package').append($('<option></option>').attr('value', entry.packagename).text(entry.packagename));
+					})
+				}
+			})
+		})
+		
 	})
 </script>
 @endsection

@@ -18,6 +18,18 @@ Edit Zone
     </div>
 @endif
 <div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<a href="{{route('zone.all')}}" class="float-right">
+					<span class="fas fa-arrow-left "></span>&nbsp;
+					<span class="sidenav-normal">go back</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
 	<div class="col-md-6">
 		<div class="card">
 			<div class="card-header"><h5>Edit Zone Here</h5></div>
@@ -30,7 +42,7 @@ Edit Zone
 							<input type="hidden" name="id" value="{{ $zone->id }}">
 						</div>
 					</div>
-					<div class="form-row">
+					{{-- <div class="form-row">
 						<div class="col">
 							<label>Network Type</label>
 							<select class="form-control" name="networktype">
@@ -39,7 +51,7 @@ Edit Zone
 								<option value="PPPoE">PPPoE</option>
 							</select>
 						</div>
-					</div>
+					</div> --}}
 					<hr>
 					<div class="form-row">
 						<button type="submit" class="btn btn-success btn-md"><i class="fas fa-save"></i> save changes</button>

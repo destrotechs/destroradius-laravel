@@ -21,7 +21,11 @@ Edit item
 				<div class="row">
   					<div class="col">
 						<label>Category</label>
+<<<<<<< HEAD
 						<select name="category_code" class="form-control" required id="category">
+=======
+						<select name="category_code" class="form-control select2" required id="category">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 							<option value="{{ $item->category_code }}">{{ $item->category_code }}</option>
 							@forelse($categories as $c)
 							<option value="{{ $c->category_code }}">{{ $c->description }}</option>
@@ -32,7 +36,11 @@ Edit item
 					</div>
 					<div class="col">
 						<label>SubCategory</label>
+<<<<<<< HEAD
 						<select id="subcategories" name="sub_category_code" class="form-control" required>
+=======
+						<select id="subcategories" name="sub_category_code" class="form-control select2" required>
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 							<option value="{{ $item->sub_category_code }}">{{ $item->sub_category_code }}</option>
 							
 						</select>
@@ -62,7 +70,11 @@ Edit item
 				<div class="row">
 					<div class="col">
 						<label>Supplier</label>
+<<<<<<< HEAD
 						<select class="form-control sm" name="supplierid">
+=======
+						<select class="form-control sm select2" name="supplierid">
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 							<option value="">select supplier</option>
 						</select>
 					</div>

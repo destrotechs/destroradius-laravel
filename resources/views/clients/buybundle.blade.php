@@ -128,17 +128,23 @@ Pay Via Mpesa
                 }
 
             }else{
+<<<<<<< HEAD
                 var package= $("#package").va();
                 getCost(package);
+=======
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
                 $(".err").html("All Fields are Required!").addClass("alert alert-danger");
             }
             e.preventDefault();
         })
         $("#package").change(function(){
             var package = $(this).val();
+<<<<<<< HEAD
             getCost(package);
         })
         function getCost(package){
+=======
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
             var _token=$("input[name='_token']").val();
 
             if(package){
@@ -160,7 +166,11 @@ Pay Via Mpesa
             }else{
                 $(".amnt").val('');
             }
+<<<<<<< HEAD
         }
+=======
+        })
+>>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
         function startTimer() {
           var presentTime = document.getElementById('timer').innerHTML;
           var timeArray = presentTime.split(/[:]+/);

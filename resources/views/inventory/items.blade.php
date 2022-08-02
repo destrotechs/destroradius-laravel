@@ -1,8 +1,5 @@
 @extends('layouts.master')
 @section('buttons')
-<div class="col-lg-6 col-5 text-right">
-  <a href="{{ route('inventory.item.new') }}" class="btn btn-sm btn-neutral"><i class="fas fa-plus"></i>&nbsp; New item</a>
-</div>
 @endsection
 @section('content_header')
 Items
@@ -20,12 +17,15 @@ Items
 @endif
 <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Inventory Items</h4>
+              Inventory Items
+              <div class="col-lg-6 col-5 text-right float-right">
+                <a href="{{ route('inventory.item.new') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i>&nbsp; New item</a>
+              </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-              <table id="example2" class="table table-sm table-responsive table-striped table-hover">
-                <thead>
+            <div class="card-body table-responsive p-0">
+              <table class="dTable table table-head-fixed text-nowrap table-sm">
+                  <thead style="color: black">
                   <?php $num=0;?>
                   <tr>
                     <th>#</th>
@@ -42,7 +42,7 @@ Items
                   </tr>
                 </thead>
                 <tbody>
-                  @forelse($items as $key=>$i)
+                  @foreach($items as $key=>$i)
                   <?php $num++;?>
                     <tr>
                       <td><?php echo $num;?></td>
@@ -57,17 +57,8 @@ Items
                       <td>{{ $i->quantity+($leased_items[$key]+$stock_items[$key]) }}</td>
                       <td><a href="{{ route('edit.item',['id'=>$i->id]) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i>&nbsp;</a>&nbsp;<a href="#" class="btn btn-danger btn-sm trash" id="{{ $i->id }}"><i class="fas fa-trash text-white"></i>&nbsp;</a></td>
                     </tr>
-                  @empty
-                  <tr>
-                    <td colspan="6" class="text-danger">items not added</td>
-                  </tr>
-                  @endforelse
+                  @endforeach
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="7">{{ $items->links() }}</td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
             <!-- /.card-body -->

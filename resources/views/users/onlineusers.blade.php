@@ -10,17 +10,18 @@ Online users
 			@csrf
 			<div class="form-row">
 				<div class="col">
-					<select name="usertype" class="form-control usertype">
+					<select name="usertype" class="form-control usertype select2">
 						<option value="">Choose ...</option>
 						<option value="radius">Radius Server</option>
 						<option value="nas">Nas</option>
 					</select>
 				</div>
 				<div class="col nas" style="display:none;">
-					<select name="nasid" class="form-control nasid">
+					<select name="nasid" class="form-control nasid select2">
 						<option value="">Choose nas...</option>
+						<option value="All">All Nas</option>
 						@forelse($nas as $n)
-						<option value="{{ $n->id }}">{{ $n->nasname }}</option>
+						<option value="{{ $n->id }}">{{ $n->nasname }} >>>> {{ $n->shortname }}</option>
 						@empty
 						<option value="">No nas added</option>
 						@endforelse
@@ -31,25 +32,29 @@ Online users
 		<hr>
 		<div class="row">
 			<div class="col-md-12">
-				<table class="table table-sm table-responsivetable-bordered table-md">
-					<thead>
-						<tr>
-							<th colspan="7">Online users </th>
-						</tr>
-						<tr>
-							<th>#</th>
-							<th>Username</th>
-							<th>Session Start Time</th>
-							<th>Ip Address</th>
-							<th>Nas Ip Address</th>
-							<th>Total download</th>
-							<th>Total Upload</th>
-						</tr>
-					</thead>
-					<tbody class="tbody">
-						
-					</tbody>
-				</table>
+				<div class="card">
+					<div class="card-body table-responsive p-0">
+						<table class="dTable table table-head-fixed text-nowrap table-sm">
+							<thead style="color: black">
+								<tr>
+									<th colspan="7">Online users </th>
+								</tr>
+								<tr>
+									<th>#</th>
+									<th>Username</th>
+									<th>Session Start Time</th>
+									<th>Ip Address</th>
+									<th>Nas Ip Address</th>
+									<th>Total download</th>
+									<th>Total Upload</th>
+								</tr>
+							</thead>
+							<tbody class="tbody">
+								
+							</tbody>
+						</table>
+					</div>			
+				</div>
 			</div>
 		</div>
 	</div>
