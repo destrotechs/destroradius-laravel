@@ -9,41 +9,6 @@
 @endsection
 @section('content')
 <div class="card">
-<<<<<<< HEAD
-	<div class="card-body">
-		<table class="table table-sm table-responsivetable-bordered table-sm table striped">
-			<thead>
-				<tr>
-					<th colspan="7">{{ Auth::guard('customer')->user()->name }}&nbsp; Transactions</th>
-				</tr>
-				<tr>
-					<th>Username</th>
-					<th>Plan Bought</th>
-					<th>Amount Paid</th>
-					<th>Receipt No</th>
-					<th>Phone Number</th>
-					<th>Date</th>
-				</tr>
-			</thead>
-			<tbody>
-				@forelse($transactions as $t)
-				<tr>
-					<td>{{ $t->username }}</td>
-					<td>{{ $t->packagebought }}</td>
-					<td>{{ $t->amount }}</td>
-					<td>{{ $t->transactionid }}</td>
-					<td>{{ $t->phonenumber }}</td>
-					<td>{{ date('d/m/Y', strtotime($t->transactiondate))}}</td>
-				</tr>
-				@empty
-				<tr>
-					<td colspan="7"><div class="alert alert-danger">You have no transactions yet</div></td>
-				</tr>
-				@endforelse
-			</tbody>
-		</table>
-	</div>
-=======
 	<div class="card-body table-responsive p-0">
             <table class="dTable table table-head-fixed text-nowrap table-sm table-striped">
 				<thead>
@@ -73,6 +38,5 @@
 				</tbody>
 			</table>
 		</div>
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 </div>
 @endsection

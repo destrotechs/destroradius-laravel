@@ -22,11 +22,7 @@
 			<center>
 				<label>Enter Phone to receive Access Code</label>
 				<div class="ml-5 mr-5 row col-md-4 col-sm-12">					
-<<<<<<< HEAD
-				<input type="text" required name="phone" class="form-control phn" placeholder="07....." value="{{Auth::guard('customer')->user()->phone??''}}"></center>
-=======
 				<input type="text" required name="phone" class="form-control phn" placeholder="0......" value="{{Auth::guard('customer')->user()->phone??''}}"></center>
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 				<hr>
 			<input type="hidden" name="account" value="{{$account??null}}">
 			<input type="hidden" name="package" value="{{$thispackage->packagename}}">

@@ -32,11 +32,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
    $(".acc").click(function(){
-<<<<<<< HEAD
-      $(".package").val($(this).attr('id'));
-=======
       alert($(this).attr('id'));
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
    })
 })
 </script>

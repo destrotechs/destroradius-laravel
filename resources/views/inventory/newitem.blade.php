@@ -23,12 +23,8 @@ New item
 				<div class="row">
   					<div class="col">
 						<label>Category</label>
-<<<<<<< HEAD
-						<select name="category_code" class="form-control" required id="category">
-=======
 						<select name="category_code" class="form-control select2" required id="category">
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
-							<option>Select sub category</option>
++							<option>Select sub category</option>
 							@forelse($categories as $c)
 							<option value="{{ $c->category_code }}">{{ $c->description }}</option>
 							@empty
@@ -38,11 +34,7 @@ New item
 					</div>
 					<div class="col">
 						<label>SubCategory</label>
-<<<<<<< HEAD
-						<select id="subcategories" name="sub_category_code" class="form-control" required>
-=======
 						<select id="subcategories" name="sub_category_code" class="form-control select2" required>
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 							
 						</select>
 					</div>
@@ -76,11 +68,7 @@ New item
 					</div>
 					<div class="col">
 						<label>Supplier</label>
-<<<<<<< HEAD
-						<select class="form-control sm" name="supplierid">
-=======
 						<select class="form-control sm select2" name="supplierid">
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 							<option value="">select supplier</option>
 						</select>
 					</div>
@@ -105,14 +93,9 @@ New item
 	<?php $num=0;?>
 	<div class="col-md-5">
 		<div class="card">
-<<<<<<< HEAD
-			<table class="table table-sm table-responsivetable-sm table-responsive">
-				<thead>
-=======
 			<div class="card-body table-responsive p-0">
 				<table class="dTable table table-head-fixed text-nowrap table-sm">
 					<thead style="color: black">
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 					<tr>
 						<th>#</th>
 						<th>Name</th>
@@ -123,11 +106,7 @@ New item
 					</tr>
 				</thead>
 				<tbody>
-<<<<<<< HEAD
-					@forelse($items as $i)
-=======
 					@foreach($items as $i)
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 					<?php $num++;?>
 						<tr>
 							<td><?php echo $num;?></td>
@@ -137,27 +116,11 @@ New item
 							<td>{{ $i->serial }}</td>
 							<td>{{ $i->quantity }}</td>
 						</tr>
-<<<<<<< HEAD
-					@empty
-					<tr>
-						<td colspan="6" class="text-danger">items not added</td>
-					</tr>
-					@endforelse
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="6"><a href="{{ route('inventory.items') }}" class="btn btn-primary btn-sm">More ...</a></td>
-					</tr>
-				</tfoot>
-			</table>
-		</div>
-=======
 					@endforeach
 				</tbody>
 			</table>
 		</div>
 		</div>
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 	</div>
 </div>
 @endsection

@@ -10,54 +10,6 @@ User accounts
 @section('content')
 <div class="card">
 	{{-- <div class="card-header"><h5>Logs</h5></div> --}}
-<<<<<<< HEAD
-	<div class="card-body">
-		
-						@if(count($accounts)>0)
-                        <table class="table table-sm">
-                            <tr>
-                                <th>#</th>
-                                <th>Account Code</th>
-                                <th>Package</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                            @foreach($accounts as $k=>$c)
-                            <tr>
-                                <td>{{ $k+1 }}</td>
-                                <td>{{ $c->account_no }}</td>
-                                <td>{{ $c->package_name }}</td>
-                                <td>
-                                    @if($c->status=='active')
-                                    <span class="badge badge-success">Active</span>
-                                    @else
-                                    <span class="badge badge-danger">Inactive</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($c->status=='active')
-                                    <a href="#" id="{{ $c->account_no }}" class="btn btn-sm btn-danger diact">Suspend</a>
-                                    <a href="{{ route('services.testconnectivity',['user'=>$c->account_no]) }}" class="btn btn-info btn-sm">Test Connectivity</a>
-                                    @else
-                                    <a href="#" id="{{ $c->id }}" class="btn btn-primary btn-sm activate" data-toggle="modal" data-target="#exampleModal8">Activate</a>
-                                    @endif
-                                    <a href="#" class="btn btn-sm btn-success"><i class="fas fa-download"></i>&nbsp;Business Form</a>
-                                    <a href="{{ route('edit.customer.account',['acc'=>$c->account_no]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
-
-                                </td>
-                            </tr>
-                            @endforeach
-                            
-                        </table>                            
-
-
-                        @else
-                    
-                        <div class="text-danger text-sm">User has no associated accounts</div>
-                                
-                        @endif
-	</div>
-=======
     <div class="card-body table-responsive p-0">
             @if(count($accounts)>0)
             <table class="dTable table table-head-fixed text-nowrap table-sm table-striped">
@@ -102,7 +54,6 @@ User accounts
         <div class="text-danger text-sm">User has no associated accounts</div>
                 
         @endif
->>>>>>> feede6987acc94ec406849e2b8af3a4543003eae
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
