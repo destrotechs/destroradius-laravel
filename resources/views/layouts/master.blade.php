@@ -18,9 +18,18 @@
 
   <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
   <link rel="stylesheet" href="{{asset('assets/css/argon.css')}}" type="text/css">
+  {{-- <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css"> --}}
+  <!-- DataTables CSS -->
+<link href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<!-- DataTables Buttons CSS -->
+<link href="//cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
   <script src="https://unpkg.com/chart.js@^2.9.3/dist/Chart.min.js"></script>
   <!-- Chartisan -->
   <script src="https://unpkg.com/@chartisan/chartjs@^2.1.0/dist/chartisan_chartjs.umd.js"></script>
+  
   @yield('styles')
 </head>
 
@@ -610,6 +619,14 @@
   <!-- Argon JS -->
   <!-- <script src="{{asset('js/app.js')}}"></script> -->
   <script src="{{asset('assets/js/argon.js')}}"></script>
+  {{-- <script src="//code.jquery.com/jquery-3.5.1.js"></script> --}}
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.flash.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
 @yield('js')
 </body>
 

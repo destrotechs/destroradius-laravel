@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use DB;
 use App\Log;
+use Alert;
 use Illuminate\Http\Request;
 
 class servicesController extends Controller
@@ -22,15 +23,19 @@ class servicesController extends Controller
         return view('maintenance.servicesstatus');
     }
     public function postTestConn(Request $request){
-        //radtest testing password localhost 0 testing123
+        // radtest testing password localhost 0 testing123
         // $cmd="radtest ".escapeshellarg($request->get('username'))." ".escapeshellarg($request->get('password'))." ".escapeshellarg($request->get('server'))." ".escapeshellarg($request->get('nasport'))." ".escapeshellarg($request->get('nassecret'));
         $cmd="radtest ".$request->get('username')." ".$request->get('password')." ".$request->get('server')." ".$request->get('nasport')." ".$request->get('nassecret')." 1";
-        $res=system($cmd);
-        if($res==" " || $res==NULL){
-            echo "The command was not executed successfully";
+        $res=exec($cmd);
+        if($res==" " && $res==NULL){
+            // echo "The command was not executed successfully";
+            alert()->error('Oops!','The command was not executed successfully');
+            return redirect()->back();
 
         }else{
-            echo $res;
+            // echo $res;
+            alert()->success('Success',$res);
+            return redirect()->back();
         }
     }
     public function restartService($service){

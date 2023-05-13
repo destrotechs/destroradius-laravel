@@ -7,6 +7,7 @@ use App\Log;
 use Validator;
 use App\Product;
 use App\Supply;
+use Alert;
 use App\Vendor;
 use Illuminate\Http\Request;
 
@@ -98,7 +99,8 @@ class inventoryController extends Controller
         	$item->save();
 
         	if ($item) {
-        		return redirect()->route('inventory.items')->with('success','Item added successfully');
+                toast('Item added successfully','success');
+        		return redirect()->route('inventory.items');
         	}else{
         		return redirect()->back()->with('error','new item could not be added, try again ...
         			');
@@ -127,8 +129,10 @@ class inventoryController extends Controller
         	$p->save();
 
         	if ($p) {
-        		return redirect()->back()->with('success','product added successfully');
+                toast('Product added successfully','Success');
+        		return redirect()->back();
         	}else{
+
         		return redirect()->back()->with('error','new product could not be added, try again ...
         			');
         	}
