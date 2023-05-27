@@ -227,7 +227,18 @@ class packagesController extends Controller
         toast('Package details updated successfully!','success');
         return redirect()->route("packages.all")->with("success","Package details updated successfully");
     }
-    public function allPackages(){
+    public function allPackages(Request $request){
+        if ($request->ajax()) {
+            $data = Package::latest()->get();
+            // return Datatables::of($data)
+            //         ->addIndexColumn()
+            //         ->addColumn('action', function($row){
+            //             $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';return $btn;
+            //         })->rawColumns(['action'])->make(true);
+            //     }
+        return datatables()->query(DB::table('packages'))->addColumn('action', function($row){
+                        $btn = '<a href="#edit-'.$row->id.'" onClick="show('.$row->id.')" id="'.$row->id.'" class="edit btn btn-primary btn-sm view">View</a>';return $btn;})->toJson();
+        }
         $packages=Package::all();
         
         return view('packages.allpackages', compact('packages'));

@@ -22,7 +22,7 @@
 @endif
     <div class="card">
     <div class="card-body">
-         <table class="table table-bordered table-active" id="users-table">
+         <table class="table table-bordered table-active data-table">
     <thead>
         <tr>
             <th>ID</th>
@@ -30,6 +30,7 @@
             <th>Email</th>
         </tr>
     </thead>
+    <tbody></tbody>
 </table>
 </div>
 </div>
@@ -37,23 +38,41 @@
 @endsection
 @section('js')
 <script>
-    $(document).ready(function() {
-        $('#users-table').dataTable({
+    // $(document).ready(function() {
+    //     $('#users-table').dataTable({
 
-            processing: true,
-            // serverSide: true,
-            dom: 'Bfrtip',
-            buttons: [
+    //         processing: true,
+    //         // serverSide: true,
+    //         dom: 'Bfrtip',
+    //         buttons: [
+    //         {extend:'csv',className:'btn btn-red'},{extend:'copy',className:'btn btn-primary'},{extend:'excel',className:'btn btn-primary'},{extend:'print',className:'btn btn-primary'}
+    //     ],
+    //         ajax: "{{ route('user.get.all') }}",
+    //         columns: [
+    //             { data: 'id', name: 'id' },
+    //             { data: 'name', name: 'name' },
+    //             { data: 'email', name: 'email' },
+    //         ],
+            
+    //     });
+    // });
+    $(function () {
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        dom: 'Bfrtip',
+        buttons: [
             {extend:'csv',className:'btn btn-red'},{extend:'copy',className:'btn btn-primary'},{extend:'excel',className:'btn btn-primary'},{extend:'print',className:'btn btn-primary'}
         ],
-            ajax: "{{ route('user.get.all') }}",
-            columns: [
-                { data: 'id', name: 'id' },
-                { data: 'name', name: 'name' },
-                { data: 'email', name: 'email' },
-            ],
-            
-        });
+        ajax: "{{ route('user.get.all') }}",
+
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'name', name: 'name'},
+            {data: 'email', name: 'email',orderable:true,searchable:true},
+
+        ]
     });
+  });
 </script>
 @endsection

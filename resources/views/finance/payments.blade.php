@@ -13,10 +13,10 @@ Sales
         {{ session('success') }}
     </div>
 @endif
-    <div class="card card-body">
-        <table class="table table-sm table-responsive table-sm data-table">
+    <div class="card card-body card-responsive">
+        <table class="table table-sm table-responsive table-active table-sm data-table">
             <thead>
-                <tr><th colspan="8">All Sales</th></tr>
+                <tr><th colspan="9">All Sales</th></tr>
                 <?php $num=0;?>
                 <tr>
                     <th>#</th>
@@ -77,17 +77,15 @@ Sales
 </div>
 @endsection
 @section('js')
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
 <script type="text/javascript">
   $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {extend:'csv',className:'btn btn-red'},{extend:'copy',className:'btn btn-primary'},{extend:'excel',className:'btn btn-primary'},{extend:'print',className:'btn btn-primary'}
+        ],
         ajax: "{{ route('payment.all') }}",
         columns: [
             {data: 'id', name: 'id'},
@@ -98,6 +96,7 @@ Sales
             {data: 'amount', name: 'amount'},
             {data: 'transactiondate', name: 'transactiondate'},
             {data: 'action', name: 'action', orderable: true, searchable: true},
+
         ]
     });
   });

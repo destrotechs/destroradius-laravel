@@ -20,8 +20,8 @@
 @endif
 <div class="card">
     <div class="card-header"><h5>Available Packages</h5></div>
-    <div class="card-body">
-        <table class="table table-sm table-responsivetable-sm table-responsive">
+    <div class="card-body table-responsive">
+        <table class="table table-sm  data-table">
             <thead>
                 <?php $num=0;?>
                 <tr>
@@ -39,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($packages as $p)
+                {{-- @forelse ($packages as $p)
                 <?php $num++;?>
                     <tr>
                         <td><?php echo $num;?></td>
@@ -62,7 +62,7 @@
                     <tr>
                         <td colspan="8" class="bg-danger p-2">you have no Packages available</td>
                     </tr>
-                @endforelse
+                @endforelse --}}
             </tbody>
 
         </table>
@@ -85,6 +85,41 @@
         })
       }
     })
+  })
+</script>
+<script type="text/javascript">
+  $(function () {
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {extend:'csv',className:'btn btn-red'},{extend:'copy',className:'btn btn-primary'},{extend:'excel',className:'btn btn-primary'},{extend:'print',className:'btn btn-primary'}
+        ],
+        ajax: "{{ route('packages.all') }}",
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'packagename', name: 'packagename'},
+            {data: 'packagezone', name: 'packagezone'},
+            {data: 'downloadspeed', name: 'downloadspeed'},
+            {data: 'uploadspeed', name: 'uploadspeed'},
+            {data: 'quota', name: 'quota'},
+            {data: 'numberofdevices', name: 'numberofdevices'},
+            {data: 'numberofdevices', name: 'numberofdevices'},
+            {data: 'numberofdevices', name: 'numberofdevices'},
+            {data: 'numberofdevices', name: 'numberofdevices'},
+            {data: 'action', name: 'action', orderable: true, searchable: true},
+
+        ]
+    });
+  });
+  function show(id){
+    console.log("clicked..."+id);
+    $('#exampleModal').modal('show')
+  }
+  $(".closebtn").click(function(){
+    $('#exampleModal').modal('hide')
+
   })
 </script>
 @endsection

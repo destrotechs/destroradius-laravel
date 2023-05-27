@@ -43,7 +43,7 @@ class paymentsController extends Controller
             //             $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';return $btn;
             //         })->rawColumns(['action'])->make(true);
             //     }
-return datatables()->query(DB::table('payments'))->addColumn('action', function($row){
+        return datatables()->query(DB::table('payments'))->addColumn('action', function($row){
                         $btn = '<a href="#edit-'.$row->id.'" onClick="show('.$row->id.')" id="'.$row->id.'" class="edit btn btn-primary btn-sm view">View</a>';return $btn;})->toJson();
         }
 

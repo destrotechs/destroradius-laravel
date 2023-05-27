@@ -5,6 +5,7 @@ use App\Setting;
 use DB;
 use App\User;
 use Auth;
+use Alert;
 USE App\Log;
 use App\Manager;
 use Illuminate\Http\Request;
@@ -50,12 +51,17 @@ class settingsController extends Controller
             $log=$enable;
             $logwrite=Log::createTxtLog($user,$log);
             if ($ef) {
-                return redirect()->back()->with('success','settings applied successfully');
+                toast('settings applied successfully','success');
+
+                return redirect()->back();
             }else{
-                return redirect()->back()->with('error','settings could not be effected, try again');
+                toast('settings could not be effected, try again','error');
+                return redirect()->back();
             }
         }else{
-                return redirect()->back()->with('error','you are not allowed to change settings');
+                alert()->warning('Disallowed','you are not allowed to change settings');
+
+                return redirect()->back();
 
         }
         
@@ -70,9 +76,11 @@ class settingsController extends Controller
     		['rate'=>$request->get('rate'),'type'=>'ticket']
     	);
     	if ($rate) {
-    		return redirect()->back()->with('success','manager commission rate updated successfully');
+            toast('manager commission rate updated successfully','success');
+    		return redirect()->back();
     	}else{
-    		return redirect()->back()->with('error','There was an error updating the manager commission rate, please try again');
+            toast("There was an error updating the manager commission rate, please try again","error");
+    		return redirect()->back();
     	}
     }
     public function postRiskFee(Request $request){

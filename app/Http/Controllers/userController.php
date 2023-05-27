@@ -130,10 +130,7 @@ class userController extends Controller
                 ->leftJoin("zones",'zones.id','=','customers.zone')
                 ->select('customers.*','packages.packagename','zones.zonename');
 
-        // return DataTables::queryBuilder($customers)->toJson();
-            
-        return Datatables::of($customers)->make(true);
-    // return view('users.all', compact('data'));
+        return DataTables::queryBuilder($customers)->toJson();
 
     }
     public function allUsers(){
