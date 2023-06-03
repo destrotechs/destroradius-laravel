@@ -8,7 +8,7 @@
 <div class="card">
 	<div class="card-header">Fill the details and click test</div>
 	<div class="card-body">
-		<form method="POST" action="{{ route('testconn') }}">
+		<form>
 			<label>Username</label>
 			<input type="text" name="username" id="username" class="form-control" value="{{ $user }}">
 			<label>Password</label>
@@ -22,7 +22,7 @@
 			<label>Nas Secret</label>
 			<input type="text" name="secret" id="nassecret" class="form-control" value="testing123">
 			<hr>
-			<button type="submit" class="btn btn-success btn-sm">Test</button>
+			<button type="button" class="btn btn-success btn-sm test">Test</button>
 			{{ csrf_field() }}
 		</form>
 	</div>

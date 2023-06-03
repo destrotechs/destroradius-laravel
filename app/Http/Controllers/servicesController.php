@@ -34,8 +34,9 @@ class servicesController extends Controller
 
         }else{
             // echo $res;
-            alert()->success('Success',$res);
-            return redirect()->back();
+            // alert()->success(strval($res),"success");
+            echo $res;
+            // return redirect()->back()->with("success",$res);
         }
     }
     public function restartService($service){
