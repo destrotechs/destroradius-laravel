@@ -28,7 +28,7 @@ class Message extends Model
             "MessageParameters"=>[
                 [
                     // "Number"=>$MobileNumbers,
-                    "Number"=>"254791875066",
+                    "Number"=>"",
                     "Text"=>$Message1
                 ]
             ],
