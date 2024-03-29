@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     public static function sendSMS($phone,$message){
-        $MobileNumbers="254701530647";
+        $MobileNumbers="";
         //write sms sending logic here
          $response=null;
         // $Message1=$message . " To STOP sms from BUL S.H.G *456*9*5#";
