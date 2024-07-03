@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use ConsoleTVs\Charts\Registrar as Charts;
+//use ConsoleTVs\Charts\Registrar as Charts;
 use Illuminate\Support\Facades\Validator;
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,13 +22,13 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(Charts $charts)
+    public function boot()
     {
-        $charts->register([
-            \App\Charts\PackageSalesChart::class,
-            \App\Charts\MonthlySales::class,
-            \App\Charts\ItemsChart::class,
-        ]);
+        // $charts->register([
+        //     \App\Charts\PackageSalesChart::class,
+        //     \App\Charts\MonthlySales::class,
+        //     \App\Charts\ItemsChart::class,
+        // ]);
 
         Validator::extend('allowed_username', function ($attribute, $value, $parameters, $validator)
         {
