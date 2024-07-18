@@ -72,7 +72,7 @@ class clientsController extends Controller
         if(count($user)>0){
             $userdata = DB::table('radgroupreply')->where([['attribute','=','Max-All-MB'],['groupname','=',$userpackage->groupname??'']])->first();
             if(!$userdata){
-            $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->get();
+            $userdata=DB::table('radcheck')->where([['username','=',$username],['attribute','=','Max-All-MB']])->first();
 
             }
             if($userdata){
