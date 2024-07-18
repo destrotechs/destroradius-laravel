@@ -95,37 +95,6 @@
               </div>
             </div>
           </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center"><h4>Monthly Sales</h4></div>
-                <div class="card-body" id="monthly_sale">
-
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center"><h4>Package Sales</h4></div>
-                <div class="card-body" id="sales_chart">
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header text-center"><h4>Inventory Items</h4></div>
-            <div class="card-body" id="inv_chart">
-              
-            </div>
-          </div>
-        </div>
-    </div>
 @stop
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
