@@ -44,15 +44,6 @@ Profile
                 <h5 class="h3">
                   {{ Auth::user()->name }}
                 </h5>
-                <div class="h5 font-weight-300">
-                  <i class="ni location_pin mr-2"></i>Bucharest, Romania
-                </div>
-                <div class="h5 mt-4">
-                  <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
-                </div>
-                <div>
-                  <i class="ni education_hat mr-2"></i>University of Computer Science
-                </div>
               </div>
             </div>
           </div>
@@ -103,39 +94,32 @@ Profile
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label class="form-control-label" for="input-address">Address</label>
-                        <input id="input-address" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text" value="{{ Auth::user()->address }}">
+                        <label class="form-control-label" for="input-address">Phone</label>
+                        <input id="input-address" class="form-control" placeholder="Home Address" type="text" value="{{ Auth::user()->phone }}">
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-md-12">
                       <div class="form-group">
-                        <label class="form-control-label" for="input-city">City</label>
-                        <input type="text" id="input-city" class="form-control" placeholder="City" value="New York" value="{{ Auth::user()->city }}">
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-country">Country</label>
-                        <input type="text" id="input-country" class="form-control" placeholder="Country" value="United States">
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-country">Postal code</label>
-                        <input type="number" id="input-postal-code" class="form-control" placeholder="Postal code">
+                        <label class="form-control-label" for="input-address">Address</label>
+                        <input id="input-address" class="form-control" placeholder="Home Address" type="text" value="{{ Auth::user()->address }}">
                       </div>
                     </div>
                   </div>
-                </div>
-                <hr class="my-4" />
-                <!-- Description -->
-                <h6 class="heading-small text-muted mb-4">About me</h6>
-                <div class="pl-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label">About Me</label>
-                    <textarea rows="4" class="form-control" placeholder="A few words about you ...">A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-city">City</label>
+                        <input type="text" id="input-city" class="form-control" placeholder="City" value="{{ Auth::user()->city }}">
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Country</label>
+                        <input type="text" id="input-country" class="form-control" placeholder="Country" value="Kenya">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </form>
