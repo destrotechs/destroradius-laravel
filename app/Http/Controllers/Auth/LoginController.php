@@ -59,6 +59,7 @@ class LoginController extends Controller
             toast('Login success','success');
             return redirect()->intended('/client/bundles');
         }else{
+            toast('Wrong username or password','error');
             return redirect()->back()->with("error","Wrong username or password");//->withInput($request->only('username', 'remember'));
         }
     }
