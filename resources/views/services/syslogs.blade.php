@@ -3,7 +3,7 @@
 System Logs
 @endsection
 @section('content')
-@if($error)
+@if(isset($error))
 <div class="card card-body card-sm bg-danger">
 <div class="text-white">{{$error}}</div>
 </div>
