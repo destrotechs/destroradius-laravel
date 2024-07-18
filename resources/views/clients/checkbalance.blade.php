@@ -21,7 +21,7 @@
 	<form id="checkbalance">
 		<div id="err"></div>
 
-		<label>Account Code</label>
+		<label>Account Code/Username</label>
 		<input type="text" class="form-control" name="username" placeholder="Access Code" id="username">
 		<small>Enter the account code here and click check</small>
 		<br>

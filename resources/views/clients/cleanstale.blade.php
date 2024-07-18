@@ -25,7 +25,7 @@
 	<form id="cleanconnections">
 		<div id="err"></div>
 
-		<label>Access Code</label>
+		<label>Access Code/Username</label>
 		<input type="text" class="form-control" name="username" value="@if(isset(Auth::user()->username )){{ Auth::user()->username }}@else {{ '' }}@endif" id="username">
 		<small>Enter the Access code here and click clean connection</small>
 		<br>

@@ -11,7 +11,7 @@
       <input type="hidden" name="package" class="package">
 		@foreach($accounts as $acc)
          <input type="radio" name="account" class="acc" id="{{$acc->package_name}}" value="{{$acc->account_no}}">
-         <label>{{$acc->account_name}} &nbsp;<span class="badge badge-{{$acc->status=='active'?'success':'danger'}}">{{$acc->status}}</label>
+         <label>{{$acc->account_name??$acc->account_no}} &nbsp;<span class="badge badge-{{$acc->status=='active'?'success':'danger'}}">{{$acc->status}}</label>
          <br>
       @endforeach
          <hr>

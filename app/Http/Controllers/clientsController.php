@@ -106,7 +106,8 @@ class clientsController extends Controller
             $balance = self::getBBalance($username);
         }
         if($balance>0){
-            alert()->warning("You have an active package, you cannot purchase a new one");
+            $package = DB::table('customer_accounts')->where('owner',Auth::guard('customer')->user()->username)->first();
+            alert()->warning("You have an active package (".$package->package_name."), you cannot purchase a new one");
             return redirect()->route('client.bundles');
         }else{
             if(Auth::guard('customer')->check()){

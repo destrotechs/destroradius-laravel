@@ -31,7 +31,8 @@ Pay Via Mpesa
     
 </div>
         <div class="card mn">
-            <div class="card-header">Paying for account <b>{{ $account_name->account_name??''}}</b>, Please select Package Here</div>
+            <div class="card-header">
+                @if(isset($account_name)) Paying for account <b>{{$account_name->account_name??''}},@endif</b> Please select Package Here</div>
             <div class="card-body row">
                 <div class="col-md-4 mt-5">
                 <img height="250" width="250" src="{{ asset('images/mp.png') }}" class="rounded-circle">
