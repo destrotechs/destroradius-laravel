@@ -3,6 +3,11 @@
 System Logs
 @endsection
 @section('content')
+@if($error)
+<div class="card card-body card-sm bg-danger">
+<div class="text-white">{{$error}}</div>
+</div>
+@else
 <div class="card">
 	<div class="card-header"><h5>Logs</h5></div>
 	<div class="card-body">
@@ -23,4 +28,6 @@ System Logs
 		@endforelse
 	</div>
 </div>
+@endif
+
 @endsection

@@ -13,14 +13,17 @@ class Radcheck extends Migration
      */
     public function up()
     {
-        Schema::create('radcheck', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->references('id')->on('users');
-            $table->string('attribute');
-            $table->string('op')->default('=');
-            $table->string('value');
-            $table->timestamps();
-        });
+       DB::unprepared("CREATE TABLE radcheck (
+        id int(11) unsigned NOT NULL auto_increment,
+        username varchar(64) NOT NULL default '',
+        attribute varchar(64)  NOT NULL default '',
+        op char(2) NOT NULL DEFAULT '==',
+        value varchar(253) NOT NULL default '',
+        PRIMARY KEY  (id),
+        KEY username (username(32))
+        );
+
+       ");
     }
 
     /**

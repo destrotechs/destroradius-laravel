@@ -138,6 +138,7 @@ Route::get('/tickets/close/{id}','ticketsController@closeTicket')->name('sell.ti
 Route::get('/nas/view','nasController@viewNas')->name('nas.view');
 //users routes
 
+
 Route::get('/users/all','userController@allUsers')->name('user.all');
 Route::get('/users/get/all','userController@getUsers')->name('user.get.all');
 Route::get('/users/changepackage','userController@changeUserPackage')->name('user.changepackage');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Radreply extends Migration
+class Radgroupcheck extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class Radreply extends Migration
      */
     public function up()
     {
-        DB::unprepared("CREATE TABLE radreply (
+        DB::unprepared("CREATE TABLE radgroupcheck (
             id int(11) unsigned NOT NULL auto_increment,
-            username varchar(64) NOT NULL default '',
-            attribute varchar(64) NOT NULL default '',
-            op char(2) NOT NULL DEFAULT '=',
-            value varchar(253) NOT NULL default '',
+            groupname varchar(64) NOT NULL default '',
+            attribute varchar(64)  NOT NULL default '',
+            op char(2) NOT NULL DEFAULT '==',
+            value varchar(253)  NOT NULL default '',
             PRIMARY KEY  (id),
-            KEY username (username(32))
-            );
-
+            KEY groupname (groupname(32))
+            )ENGINE = INNODB;
         ");
     }
 
@@ -33,6 +32,6 @@ class Radreply extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('radreply');
+        Schema::dropIfExists('radgroupcheck');
     }
 }

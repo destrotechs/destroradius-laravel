@@ -5,6 +5,7 @@ use DB;
 use App\Log;
 use Alert;
 use Illuminate\Http\Request;
+use Exception;
 
 class servicesController extends Controller
 {
@@ -60,11 +61,21 @@ class servicesController extends Controller
         return view('services.lastconnection',compact('attempts'));
     }
     public function getSysLogs(){
-        $path=base_path()."/app.logs";
-        $logfile=fopen($path,'r');
-        $log = fread($logfile,filesize($path));
-        $logs = explode("\\n", $log);
-        fclose($logfile);
-        return view('services.syslogs',compact('logs'));
+        try{
+            $path=base_path()."/app.logs";
+            if (!file_exists($path)) {
+                throw new Exception("File not found.");
+            }
+    
+            $logfile=fopen($path,'r');
+            $log = fread($logfile,filesize($path));
+            $logs = explode("\\n", $log);
+            fclose($logfile);
+            return view('services.syslogs',compact('logs'));
+        }catch (Exception $e){
+            $error = "No logs found";
+            return view('services.syslogs',compact('error'));
+        }
+        
     }
 }

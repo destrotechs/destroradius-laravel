@@ -15,12 +15,14 @@ class Nas extends Migration
     {
         Schema::create('nas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('shortname');
             $table->string('secret')->default('123456');
-            $table->string('ipaddress');
-            $table->text('description');
+            $table->string('nasname');
+            $table->string('type')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**

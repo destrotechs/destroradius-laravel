@@ -46,82 +46,83 @@ class userController extends Controller
         }
         return $output;
     }
-    // public function allUsers(){
-    //     $customers=array();
-    //     $role_id=Auth::user()->role_id;
-    //     $myzones=DB::table('zonemanagers')->where('managerid',$role_id)->pluck('zoneid');
-    //     if ($role_id==1) {
-    //         $customers=DB::table('customers')
-    //             // ->leftJoin('customer_accounts','customer_accounts.owner','=','customer')
-    //             ->leftJoin('customerpackages','customerpackages.customerid','=','customers.id')
-    //             ->leftJoin('packages','packages.id','=','customerpackages.packageid')
-    //             ->leftJoin("zones",'zones.id','=','customers.zone')
-    //             ->select('customers.*','packages.packagename','zones.zonename')->paginate(10);
-    //     }else{
-    //         $customers=DB::table('customers')->join('zones','zones.id','=','customers.zone')
-    //         ->whereIn('zones.id',$myzones)
-    //         ->select('customers.*')->paginate(10);
-    //     }
+    public function allUsers(){
+        $customers=array();
+        $role_id=Auth::user()->role_id;
+        $myzones=DB::table('zonemanagers')->where('managerid',$role_id)->pluck('zoneid');
+        if ($role_id==1) {
+            $customers=DB::table('customers')
+                // ->leftJoin('customer_accounts','customer_accounts.owner','=','customer')
+                ->leftJoin('customerpackages','customerpackages.customerid','=','customers.id')
+                ->leftJoin('packages','packages.id','=','customerpackages.packageid')
+                ->leftJoin("zones",'zones.id','=','customers.zone')
+                ->select('customers.*','packages.packagename','zones.zonename')->paginate(10);
+        }else{
+            $customers=DB::table('customers')->join('zones','zones.id','=','customers.zone')
+            ->whereIn('zones.id',$myzones)
+            ->select('customers.*')->paginate(10);
+        }
 
-    //     $remainingdays=array();
-    //     $remainingtime=0;
-    //     $totaltimespent=0;
-    //     $totalalocatedtime=0;
-    //     $remaindays="";
-    //     $totaltime=0;
-    //     $package="";
-    //     foreach ($customers as $c) {
-    //         $p=DB::table('radusergroup')->where('username','=',$c->username)->get();
-    //         foreach($p as $pack){
-    //             $package=$pack->groupname;
-    //         }
+        $remainingdays=array();
+        $remainingtime=0;
+        $totaltimespent=0;
+        $totalalocatedtime=0;
+        $remaindays="";
+        $totaltime=0;
+        $package="";
+        foreach ($customers as $c) {
+            $p=DB::table('radusergroup')->where('username','=',$c->username)->get();
+            foreach($p as $pack){
+                $package=$pack->groupname;
+            }
 
-    //     $totalalocatedtime=DB::table('radgroupcheck')->where([['groupname','=',$package],['attribute','=','Max-All-Session']])->get();
+        $totalalocatedtime=DB::table('radgroupcheck')->where([['groupname','=',$package],['attribute','=','Max-All-Session']])->get();
 
-    //     if(count($totalalocatedtime)>0){
-    //         foreach($totalalocatedtime as $t){
-    //             $totaltime=$t->value;
-    //         }
-    //     }else{
-    //         $totaltime=0;
-    //     }
-    //   // dd((int)$totaltime);
-    //     $totaltimespent=DB::table('radacct')->where('username','=',$c->username)->sum('AcctSessionTime');
-    //   //  $l=$totalalocatedtime->value;
+        if(count($totalalocatedtime)>0){
+            foreach($totalalocatedtime as $t){
+                $totaltime=$t->value;
+            }
+        }else{
+            $totaltime=0;
+        }
+      // dd((int)$totaltime);
+        $totaltimespent=DB::table('radacct')->where('username','=',$c->username)->sum('AcctSessionTime');
+      //  $l=$totalalocatedtime->value;
 
-    //         $remainingtime=(int)$totaltime-(int)$totaltimespent;
+            $remainingtime=(int)$totaltime-(int)$totaltimespent;
 
-    //     if($remainingtime<=0){
-    //             $remaindays='Expired/unalocated time limit';
-    //             array_push($remainingdays, $remaindays);
-    //         }else{
-    //            $convertedtime=$remainingtime;
+        if($remainingtime<=0){
+                $remaindays='Expired/unalocated time limit';
+                array_push($remainingdays, $remaindays);
+            }else{
+               $convertedtime=$remainingtime;
 
-    //             if($convertedtime<60){
+                if($convertedtime<60){
 
-    //                 $remaindays=$convertedtime. " Seconds";
-    //                 array_push($remainingdays, $remaindays);
-    //             } else if($convertedtime>=60 && $convertedtime<3600){
-    //                 $convertedtime=intval($convertedtime/60);
-    //                 $remaindays=$convertedtime." Minutes";
-    //                 array_push($remainingdays, $remaindays);
-    //             }else if($remainingtime>=3600 && $remainingtime<86400){
-    //                 $convertedtime=intval($remainingtime/(3600));
-    //                 $remaindays=$convertedtime. " Hours";
-    //                 array_push($remainingdays, $remaindays);
-    //         }else if($remainingtime>=86400){
-    //           $convertedtime=intval($remainingtime/(3600*24));
-    //                     $remaindays=$convertedtime. " Days";
-    //                     array_push($remainingdays, $remaindays);
-    //         }
-    // }
+                    $remaindays=$convertedtime. " Seconds";
+                    array_push($remainingdays, $remaindays);
+                } else if($convertedtime>=60 && $convertedtime<3600){
+                    $convertedtime=intval($convertedtime/60);
+                    $remaindays=$convertedtime." Minutes";
+                    array_push($remainingdays, $remaindays);
+                }else if($remainingtime>=3600 && $remainingtime<86400){
+                    $convertedtime=intval($remainingtime/(3600));
+                    $remaindays=$convertedtime. " Hours";
+                    array_push($remainingdays, $remaindays);
+            }else if($remainingtime>=86400){
+              $convertedtime=intval($remainingtime/(3600*24));
+                        $remaindays=$convertedtime. " Days";
+                        array_push($remainingdays, $remaindays);
+            }
+    }
     
 
 
-    // }
+    }
 
-    //     return view('users.allusers',compact('customers','remainingdays'));
-    // }
+        return view('users.allusers',compact('customers','remainingdays'));
+    }
+
     public function getUsers(Builder $builder){
         $customers=DB::table('customers')
                 // ->leftJoin('customer_accounts','customer_accounts.owner','=','customer')
@@ -133,9 +134,9 @@ class userController extends Controller
         return DataTables::queryBuilder($customers)->toJson();
 
     }
-    public function allUsers(){
-        return view('users.all');
-    }
+    // public function allUsers(){
+    //     return view('users.all');
+    // }
     public function saveNewCustomer(Request $request){
         //validate details
         $request->validate([
